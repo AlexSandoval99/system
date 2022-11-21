@@ -23,7 +23,7 @@
 				">
 				<a href="#">
 					<i class="fa fa-gear"></i>
-					<span>SETTINGS</span>
+					<span>Configuracion</span>
 					<span class="pull-right-container">
 						<i class="fa fa-angle-left pull-right"></i>
 					</span>
@@ -42,6 +42,54 @@
 						">
 						<a href="{{ route('user') }}" title="Users">
 							<i class="fa fa-user"></i> <span> Users</span>
+						</a>
+					</li>
+				</ul>
+				<a href="#">
+					<i class="fa fa fa-shopping-basket"></i>
+					<span>Articulo</span>
+					<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					@if (Auth::user()->can('root-dev', ''))
+						<li class="{{ Request::segment(1) === 'config' && Request::segment(2) === null ? 'active' : null }}">
+							<a href="{{ route('config') }}" title="App Config">
+								<i class="fa fa-gear"></i> <span> Settings App</span>
+							</a>
+						</li>
+					@endif					
+					<li class="
+						{{ Request::segment(1) === 'user' ? 'active' : null }}
+						{{ Request::segment(1) === 'role' ? 'active' : null }}
+						">
+						<a href="{{ route('articulo') }}" title="Articulo">
+							<i class="fa-solid fa-cart-shopping"></i> <span> Articulo</span>
+						</a>					
+					</li>
+				</ul>
+				<a href="#">
+					<i class="fa fa-group"></i>
+					<span>Clientes</span>
+					<span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					@if (Auth::user()->can('root-dev', ''))
+						<li class="{{ Request::segment(1) === 'config' && Request::segment(2) === null ? 'active' : null }}">
+							<a href="{{ route('config') }}" title="App Config">
+								<i class="fa fa-gear"></i> <span> Settings App</span>
+							</a>
+						</li>
+					@endif					
+					<li class="
+						{{ Request::segment(1) === 'user' ? 'active' : null }}
+						{{ Request::segment(1) === 'role' ? 'active' : null }}
+						">
+						<a href="{{ route('cliente') }}" title="Cliente">
+							<span> Cliente</span>
 						</a>
 					</li>
 				</ul>

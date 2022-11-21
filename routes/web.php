@@ -10,6 +10,15 @@ Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 Route::get('/config', 'App\Http\Controllers\ConfigController@index')->name('config');
 Route::put('/config/update/{id}', 'App\Http\Controllers\ConfigController@update')->name('config.update');
 
+Route::get('articulo', 'App\Http\Controllers\ArticuloController@index')->name('articulo');
+Route::get('articulo/create', 'App\Http\Controllers\ArticuloController@create')->name('articulo-create');
+Route::post('articulo', 'App\Http\Controllers\ArticuloController@store')->name('articulo.store');
+
+Route::get('cliente', 'App\Http\Controllers\ClienteController@index')->name('cliente');
+Route::get('cliente/create', 'App\Http\Controllers\ClienteController@create')->name('cliente-create');
+Route::post('cliente', 'App\Http\Controllers\ClienteController@store')->name('cliente.store');
+
+
 Route::group(['namespace' => 'App\Http\Controllers\Profile'], function (){ 
 	Route::get('/profile', 'ProfileController@index')->name('profile');
 	Route::put('/profile/update/profile/{id}', 'ProfileController@updateProfile')->name('profile.update.profile');
