@@ -25,7 +25,7 @@ class RoleUserTablesSeeder extends Seeder
     private function createAdmins()
     {
         User::create([
-            'email' => 'dev@dev.com', 
+            'email' => 'admin@admin.com', 
             'name'  => 'Developer',
             'password' => bcrypt('root'),
             'avatar'  => 'img/config/nopic.png',
