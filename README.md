@@ -10,9 +10,10 @@ Start a new Laravel 8 project with the AdminLTE template installed.
 1) Create database.
 2) Clone repository `git clone https://github.com/AlexSandoval99/system.git`
 3) Copy `.env.example` to `.env`
-3.1) cp .env.example .env
+3) cp .env.example .env
 4) Set valid database credentials of env variables `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD`
-5) Run `composer install`
+5) Run `composer install` ,` composer require "laravelcollective/html":"^5.5.0"`
+
 6) Create symbolic link for AdminLTE (Run the commands as an administrator)
 
 - Windows example:

@@ -8,27 +8,27 @@
             <div class="ibox-content">
                     @include('partials.messages')
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label>Nombre</label><br>
-                        <input id="name" name="name" type="text"  value="{{ old('name') }}"> 
+                        <input id="name" class="form-control" name="name" type="text"  value="{{ old('name') }}">
                     </div>
                 </div>
                 <div class="row">
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-6">
                     <label>Apellido</label><br>
-                    <input id="apellido" name="apellido" type="text"  value="{{ old('apellido')}}"> 
+                    <input id="apellido" class="form-control" name="apellido" type="text"  value="{{ old('apellido')}}">
                 </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-6">
                         <label>CI</label><br>
-                        <input id="ci" name="ci" type="text"  value="{{ old('ci')}}"> 
+                        <input id="ci" class="form-control" name="ci" type="text"  value="{{ old('ci')}}">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-6">
                         <label>Telefono</label><br>
-                        <input id="phone" name="phone" type="text"  value="{{ old('phone')}}"> 
+                        <input id="phone" class="form-control" name="phone" type="text"  value="{{ old('phone')}}">
                     </div>
                 </div>
             </div>

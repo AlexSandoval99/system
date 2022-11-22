@@ -1,25 +1,22 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Articulo ')
+@section('title', 'AGREGAR ARTICULO ')
 @section('content')
   <div class="row">
       <div class="col-lg-12">
           <div class="ibox float-e-margins">
-              <div class="ibox-title">
-                  <h5>Agregar Articulo</h5>
-              </div>
               {{ Form::open(['route' => 'articulo.store']) }}
                   <div class="ibox-content">
                       @include('partials.messages')
                       <div class="row">
-                          <div class="form-group col-md-4">
+                          <div class="form-group col-md-6">
                               <label>Nombre</label><br>
-                              <input id="name" name="name" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}"> 
+                              <input id="name" class="form-control" name="name" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}">
                             </div>
                       </div>
                       <div class="row">
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-6">
                             <label>Cod Barra</label><br>
-                            <input id="barcode" name="barcode" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}"> 
+                            <input id="barcode" name="barcode" class="form-control" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}">
                           </div>
                     </div>
                       <div class="row">
