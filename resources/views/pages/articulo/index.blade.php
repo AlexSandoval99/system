@@ -5,14 +5,14 @@
   <div class="col-lg-12">
     <div class="ibox float-e-margins">
       <div class="ibox-tools">
-        <a href="{{ url('articulo/create') }}" class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Agregar</a> 
-      </div> 
+        <a href="{{ url('articulo/create') }}" class="btn btn-success btn-xs rigth"><i class="fa fa-plus"></i> Agregar</a>
+      </div>
         <table class="table table-striped table-condensed table-hover">
           <thead>
               <tr>
-                <th>Nombre</th> 
-                <th class="text-center">Codigo Barra</th> 
-                <th class="text-center">Acciones</th> 
+                <th>Nombre</th>
+                <th class="text-center">Codigo Barra</th>
+                <th class="text-center">Acciones</th>
               </tr>
           </thead>
           <tbody>
@@ -29,5 +29,5 @@
         </table>
       </div>
   </div>
-</div>                    
+</div>
 @endsection
