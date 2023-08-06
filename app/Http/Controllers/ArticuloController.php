@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArticuloRequest;
 use App\Models\Articulo;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,5 +30,13 @@ class ArticuloController extends Controller
                                         'barcode'        => $request->barcode ]);
         });
         return redirect('articulo'); 
+    }
+
+    public function pdf(Articulo $articulo)
+    {   
+        return PDF::loadView('pages.articulo.pdf', compact('articulo'))                 
+                    ->setPaper([0, 0, 250, 100], 'portrait')
+                    // ->setPaper([0,0,300,300], 'portrait')
+                    ->stream();
     }
 }

@@ -21,7 +21,9 @@
                     <td>{{ $articulo->name }}</td>
                     <td class="text-center">{{ $articulo->barcode }}</td>
                     <td class="text-center">
-                      <a href="{{ url('branches/' . $articulo->id . '/edit') }}"><i class="fa fa-pencil-alt"></i></a>
+                      <a href="{{ url('articulo/' . $articulo->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-check"></i></a>
+                      <a href="{{ url('articulo/' . $articulo->id . '/pdf') }}" target="_blank" data-toggle="tooltip" data-placement="top" title="Generar Codigo de Barras"><i class="fa fa-barcode"></i></a>
+                      
                     </td>
                 </tr>
             @endforeach
