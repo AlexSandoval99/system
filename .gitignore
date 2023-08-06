@@ -6,7 +6,6 @@
 /storage/*.key
 /node_modules
 /public/hot
-/vendor
 .env
 .env.backup
 .phpunit.result.cache
