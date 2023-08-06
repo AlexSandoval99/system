@@ -20,8 +20,9 @@ class CreateProveedorsTable extends Migration
             $table->string('address');
             $table->string('phone');
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+
             $table->integer('status')->default(1);
             $table->timestamps();
         });

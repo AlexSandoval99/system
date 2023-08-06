@@ -52,5 +52,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('cliente/create', 'ClienteController@create')->name('cliente-create');
 	Route::post('cliente', 'ClienteController@store')->name('cliente.store');
 
+	Route::get('provider', 'ProveedorController@index')->name('provider');
+	Route::get('provider/create', 'ProveedorController@create')->name('provider-create');
+	Route::post('provider', 'ProveedorController@store')->name('provider.store');
+	Route::get('provider-xls', 'ProveedorController@export_xls')->name('provider.export-xls');
 
 });

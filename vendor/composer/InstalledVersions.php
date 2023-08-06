@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '50c22ca75d5073abd1372a4e09d2ed7cb7e5e59e',
+    'reference' => '54cca67954ffa8f96004886da61c44c68e3ee33e',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -79,6 +79,15 @@ private static $installed = array (
       array (
       ),
       'reference' => 'd20a64ed3c94748397ff5973488761b22f6d3f19',
+    ),
+    'composer/semver' => 
+    array (
+      'pretty_version' => '3.3.2',
+      'version' => '3.3.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3953f23262f2bff1919fc82183ad9acb13ff62c9',
     ),
     'cordoval/hamcrest-php' => 
     array (
@@ -156,6 +165,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '0dbf5d78455d4d6a41d186da50adc1122ec066f4',
+    ),
+    'ezyang/htmlpurifier' => 
+    array (
+      'pretty_version' => 'v4.16.0',
+      'version' => '4.16.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '523407fb06eb9e5f3d59889b3978d5bfe94299c8',
     ),
     'facade/flare-client-php' => 
     array (
@@ -505,7 +523,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '50c22ca75d5073abd1372a4e09d2ed7cb7e5e59e',
+      'reference' => '54cca67954ffa8f96004886da61c44c68e3ee33e',
     ),
     'laravel/sail' => 
     array (
@@ -597,6 +615,42 @@ private static $installed = array (
       ),
       'reference' => 'a22e2f150648813875b842b5a0608542ea9380a6',
     ),
+    'maatwebsite/excel' => 
+    array (
+      'pretty_version' => '3.1.48',
+      'version' => '3.1.48.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '6d0fe2a1d195960c7af7bf0de760582da02a34b9',
+    ),
+    'maennchen/zipstream-php' => 
+    array (
+      'pretty_version' => '2.2.6',
+      'version' => '2.2.6.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '30ad6f93cf3efe4192bc7a4c9cad11ff8f4f237f',
+    ),
+    'markbaker/complex' => 
+    array (
+      'pretty_version' => '3.0.2',
+      'version' => '3.0.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '95c56caa1cf5c766ad6d65b6344b807c1e8405b9',
+    ),
+    'markbaker/matrix' => 
+    array (
+      'pretty_version' => '3.0.1',
+      'version' => '3.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '728434227fe21be27ff6d86621a1b13107a2562c',
+    ),
     'masterminds/html5' => 
     array (
       'pretty_version' => '2.8.1',
@@ -617,12 +671,12 @@ private static $installed = array (
     ),
     'mockery/mockery' => 
     array (
-      'pretty_version' => '1.6.4',
-      'version' => '1.6.4.0',
+      'pretty_version' => '1.6.5',
+      'version' => '1.6.5.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'd1413755e26fe56a63455f7753221c86cbb88f66',
+      'reference' => '68782e943f9ffcbc72bda08aedabe73fecb50041',
     ),
     'monolog/monolog' => 
     array (
@@ -648,6 +702,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '7284c22080590fb39f2ffa3e9057f10a4ddd0e0c',
+    ),
+    'myclabs/php-enum' => 
+    array (
+      'pretty_version' => '1.8.4',
+      'version' => '1.8.4.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a867478eae49c9f59ece437ae7f9506bfaa27483',
     ),
     'nesbot/carbon' => 
     array (
@@ -738,6 +801,15 @@ private static $installed = array (
       array (
       ),
       'reference' => '76876c6cf3080bcb6f249d7d59705108166a6685',
+    ),
+    'phpoffice/phpspreadsheet' => 
+    array (
+      'pretty_version' => '1.29.0',
+      'version' => '1.29.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'fde2ccf55eaef7e86021ff1acce26479160a0fa0',
     ),
     'phpoption/phpoption' => 
     array (
@@ -868,12 +940,12 @@ private static $installed = array (
     ),
     'psr/http-message' => 
     array (
-      'pretty_version' => '2.0',
-      'version' => '2.0.0.0',
+      'pretty_version' => '1.1',
+      'version' => '1.1.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '402d35bcb92c70c026d1a6a9883f06b2ead23d71',
+      'reference' => 'cb6ce4845ce34a8ad9e68117c10ee90a29919eba',
     ),
     'psr/http-message-implementation' => 
     array (
