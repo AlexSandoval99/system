@@ -17,11 +17,16 @@ class ProveedorController extends Controller
         $providers = $this->getProvider();
         $providers = $providers->paginate(20);
         return view('pages.proveedor.index' ,compact('providers'));
-    } 
+    }
 
     public function create()
     {
         return view('pages.proveedor.create');
+    }
+
+    public function edit(Proveedor $provider_id)
+    {
+        return view('pages.proveedor.edit',compact('provider_id'));
     }
 
     public function store(CreateProveedorRequest $request)
@@ -37,6 +42,17 @@ class ProveedorController extends Controller
         return redirect('provider');
     }
 
+    public function update(Proveedor $provider_id)
+    {
+            $provider_id->update([
+                                'name'       => request()->name,
+                                'ruc'        => request()->ruc,
+                                'address'     => request()->address,
+                                'phone'      => request()->phone]);
+
+        return redirect('provider');
+    }
+
     public function export_xls()
     {
         $providers = $this->getProvider()->get();
@@ -47,7 +63,7 @@ class ProveedorController extends Controller
             'Direccion.',
             'Telefono',
         ];
-    
+
         foreach ($providers as $provider) {
             $excelArray[] = [
                 $provider->name,
@@ -56,7 +72,7 @@ class ProveedorController extends Controller
                 $provider->phone,
             ];
         }
-    
+
         return Excel::download(new NombreExport(collect($excelArray)), 'Proveedores.xlsx');
 
     }

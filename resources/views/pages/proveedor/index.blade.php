@@ -14,7 +14,7 @@
                     <ul class="dropdown-menu pull-right">
                         <li><a href="{{ route('provider.export-xls', request()->query()) }}"><i class="fa fa-file-excel"></i> XLS</a></li>
                     </ul>
-                </div> 
+                </div>
                 <a href="{{ url('provider/create') }}" class="btn btn-primary btn-xs pull-right"><i class="fa fa-plus"></i> Agregar</a>
             </div>
         </div>
@@ -51,9 +51,7 @@
                     <td class="text-center">{{ $provider->address}}</td>
                     <td class="text-center">{{ $provider->phone}}</td>
                     <td class="text-center">
-                      <a href="{{ url('provider/' . $provider->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-check"></i></a>
-                      <a href="{{ url('provider/' . $provider->id . '/pdf') }}" target="_blank" data-toggle="tooltip" data-placement="top" title="Generar Codigo de Barras"><i class="fa fa-barcode"></i></a>
-                      
+                      <a href="{{ url('provider/' . $provider->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
             @endforeach

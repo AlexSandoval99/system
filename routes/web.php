@@ -10,18 +10,18 @@ Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 Route::get('/config', 'App\Http\Controllers\ConfigController@index')->name('config');
 Route::put('/config/update/{id}', 'App\Http\Controllers\ConfigController@update')->name('config.update');
 
-Route::group(['namespace' => 'App\Http\Controllers\Profile'], function (){ 
+Route::group(['namespace' => 'App\Http\Controllers\Profile'], function (){
 	Route::get('/profile', 'ProfileController@index')->name('profile');
 	Route::put('/profile/update/profile/{id}', 'ProfileController@updateProfile')->name('profile.update.profile');
 	Route::put('/profile/update/password/{id}', 'ProfileController@updatePassword')->name('profile.update.password');
 	Route::put('/profile/update/avatar/{id}', 'ProfileController@updateAvatar')->name('profile.update.avatar');
 });
 
-Route::group(['namespace' => 'App\Http\Controllers\Error'], function (){ 
+Route::group(['namespace' => 'App\Http\Controllers\Error'], function (){
 	Route::get('/unauthorized', 'ErrorController@unauthorized')->name('unauthorized');
 });
 
-Route::group(['namespace' => 'App\Http\Controllers'], function (){ 
+Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	//Users
 	Route::get('user', 'UserController@index')->name('user');
 	Route::get('user/create', 'UserController@create')->name('user.create');
@@ -41,7 +41,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('role/show/{id}', 'RoleController@show')->name('role.show');
 	Route::get('role/destroy/{id}', 'RoleController@destroy')->name('role.destroy');
 
-	
+
 	Route::get('articulo', 'ArticuloController@index')->name('articulo');
 	Route::get('articulo/create', 'ArticuloController@create')->name('articulo-create');
 	Route::post('articulo', 'ArticuloController@store')->name('articulo.store');
@@ -54,7 +54,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('provider', 'ProveedorController@index')->name('provider');
 	Route::get('provider/create', 'ProveedorController@create')->name('provider-create');
+	Route::get('provider/{provider_id}/edit', 'ProveedorController@edit')->name('provider-create');
 	Route::post('provider', 'ProveedorController@store')->name('provider.store');
+	Route::put('provider/{provider_id}', 'ProveedorController@update')->name('provider.update');
 	Route::get('provider-xls', 'ProveedorController@export_xls')->name('provider.export-xls');
+
+    Route::get('brand', 'BrandController@index')->name('brand');
+	Route::get('brand/create', 'BrandController@create')->name('brand-create');
+	Route::post('brand', 'BrandController@store')->name('brand.store');
+
+
 
 });

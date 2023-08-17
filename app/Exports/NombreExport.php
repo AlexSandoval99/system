@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\Proveedor as Proveedor;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Support\Collection;
 
