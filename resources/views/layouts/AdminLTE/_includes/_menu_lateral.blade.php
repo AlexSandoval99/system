@@ -31,11 +31,16 @@
 			</li>
 
 			<li class="treeview">
-				<a href="#"><i class="fa fa fa-shopping-basket"></i><span>Articulo</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+				<a href="#"><i class="fa fa fa-shopping-basket"></i><span>Producto</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
 				<ul class="treeview-menu">
 					<li class="articulo">
 						<a href="{{ route('articulo') }}" title="Articulo">
 							<i class="fa-solid fa-cart-shopping"></i> <span> Articulo</span>
+						</a>
+					</li>
+                    <li class="provider">
+						<a href="{{ route('brand') }}" title="Marca">
+							<span>Marca</span>
 						</a>
 					</li>
 				</ul>
@@ -56,16 +61,6 @@
 					<li class="provider">
 						<a href="{{ route('provider') }}" title="Proveedor">
 							<span> Proveedor</span>
-						</a>
-					</li>
-				</ul>
-			</li>
-            <li class="treeview">
-				<a href="#"><i class="fa fa-tag"></i><span>Marca</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-				<ul class="treeview-menu">
-					<li class="provider">
-						<a href="{{ route('brand') }}" title="Marca">
-							<span>Marca</span>
 						</a>
 					</li>
 				</ul>
