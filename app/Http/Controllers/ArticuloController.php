@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateArticuloRequest;
 use App\Models\Articulo;
 use App\Models\Brand;
+use App\Models\WishPurchase;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,8 @@ class ArticuloController extends Controller
         {
             $articulo = Articulo::create([
                                         'name'           => $request->name,
-                                        'barcode'        => $request->barcode ]);
+                                        'barcode'        => $request->barcode,
+                                        'status'         => 1 ]);
         });
         return redirect('articulo');
     }
@@ -40,5 +42,38 @@ class ArticuloController extends Controller
                     ->setPaper([0, 0, 250, 100], 'portrait')
                     // ->setPaper([0,0,300,300], 'portrait')
                     ->stream();
+    }
+
+    public function ajax_purchases_last()
+    {
+        if(request()->ajax())
+        {
+            // Buscar La ultima Compra del Producto
+            $results   = [];
+            $purchases = WishPurchase::orderBy('wish_purchases.date', 'desc')
+                                    ->selectRaw("wish_purchases.date, wish_purchase_details.quantity")
+                                    ->join('wish_purchase_details', 'wish_purchase_details.wish_purchase_id', '=', 'wish_purchases.id')
+                                    ->where('wish_purchases.status', true)
+                                    ->where('wish_purchase_details.material_id', request()->purchases_product_id)
+                                    ->limit(3);
+
+            if(request()->purchases_provider_id)
+            {
+                $purchases = $purchases->where('wish_purchases.provider_id', request()->purchases_provider_id);
+            }
+            $purchases = $purchases->get();
+
+            $results                = [];
+            $results['total_count'] = count($purchases);
+            foreach ($purchases as $key => $purchase)
+            {
+                $results['items'][$key]['id']       = $purchase->id;
+                $results['items'][$key]['date']     = $purchase->date->format('d/m/Y');
+                $results['items'][$key]['quantity'] = $purchase->quantity;
+            }
+
+            return response()->json($results);
+        }
+        abort(404);
     }
 }

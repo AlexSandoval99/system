@@ -8,8 +8,16 @@
 		<script src="{{ asset('assets/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 		<!-- Morris.js charts -->
 		<script src="{{ asset('assets/adminlte/bower_components/raphael/raphael.min.js') }}"></script>
-		<script src="{{ asset('assets/adminlte/bower_components/morris.js/morris.min.js') }}"></script>
+		<script src="{{ asset('assets/node_modules/morris.js/morris.js') }}"></script>
 		<script src="{{ asset('assets/adminlte/bower_components/chart.js/Chart.js') }}"></script>
+        {{-- js --}}
+        <script src="{{ asset('js/jquery.number.2.1.6.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
+        <script src="{{ asset('js/sweetAlert/sweetalert.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.simplyCountable.js') }}"></script>
+        <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.hotkeys.js') }}"></script>
+        <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
 		<!-- Sparkline -->
 		<script src="{{ asset('assets/adminlte/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js') }}"></script>
 		<!-- jvectormap -->
@@ -38,13 +46,12 @@
 		<!-- Select2 -->
 		<script src="{{ asset('assets/adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 		<!-- Mask -->
-		
-		<script type="text/javascript"> 
+        <script src="{{ asset('js/main.js') }}"></script>
+		<script type="text/javascript">
 	      $(document).ready( function() {
 	        $('#flash_message').delay(3000).fadeOut();
 	      });
 	    </script>
 
-		
 
 		@yield('layout_js')

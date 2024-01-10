@@ -9,5 +9,9 @@ return [
         0 => 'danger',
         1 => 'primary'
     ],
+    'invoice_condition' => [
+        1 => 'Contado',
+        2 => 'Crédito'
+    ],
 ]
 ?>

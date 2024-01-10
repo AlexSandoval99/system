@@ -27,6 +27,11 @@
 							<i class="fa fa-user"></i> <span> Usuarios</span>
 						</a>
 					</li>
+                    <li class="user">
+						<a href="{{ route('user') }}" title="Users">
+							<i class="fa fa-user"></i> <span> Usuarios</span>
+						</a>
+					</li>
 				</ul>
 			</li>
 
@@ -61,6 +66,16 @@
 					<li class="provider">
 						<a href="{{ route('provider') }}" title="Proveedor">
 							<span> Proveedor</span>
+						</a>
+					</li>
+				</ul>
+			</li>
+            <li class="treeview">
+				<a href="#"><i class="fa fa-group"></i><span>Compras</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+				<ul class="treeview-menu">
+					<li class="provider">
+						<a href="{{ route('wish-purchase') }}" title="Pedido de Compras">
+							<span>Pedido de Compras</span>
 						</a>
 					</li>
 				</ul>

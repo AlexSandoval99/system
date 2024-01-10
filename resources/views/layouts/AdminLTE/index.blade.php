@@ -55,6 +55,5 @@
         </div>
 
         @include('layouts.AdminLTE._includes._script_footer')
-
     </body>
 </html>

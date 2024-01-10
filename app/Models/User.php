@@ -42,19 +42,24 @@ class User extends Authenticatable
     {
         return $this->hasAnyRoles($permission->roles);
     }
-    
+
     public function hasAnyRoles($roles)
     {
         if(is_array($roles) || is_object($roles) ) {
             return !! $roles->intersect($this->roles)->count();
         }
-        
+
         return $this->roles->contains('name', $roles);
     }
 
     public function isOnline()
     {
         return Cache::has('user-is-online-' . $this->id);
+    }
+
+    public function scopeFilter($query)
+    {
+        return $query->where('active', true)->get()->pluck('name', 'id');
     }
 
 }
