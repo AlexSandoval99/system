@@ -13,7 +13,7 @@
               <h1><i class="fa fa-fw fa-user-times"></i></h1>
             </div>
             <div class="lockscreen-logo">
-                <a href="">Unauthorized access</a>
+                <a href="">Acceso denegado</a>
             </div>
             <div class="text-center">
                 <a href="#" onclick="window.history.go(-1); return false;"><button type="button" class="btn btn-block btn-primary btn-lg">Back</button></a>

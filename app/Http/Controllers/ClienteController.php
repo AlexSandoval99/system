@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateClienteRequest;
-use App\Models\Cliente;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +11,7 @@ class ClienteController extends Controller
 {
     public function index()
     {  
-        $clientes = Cliente::orderBy('name')->paginate(20);
+        $clientes = Client::orderBy('name')->paginate(20);
         return view('pages.cliente.index' ,compact('clientes'));       
     } //
 
@@ -24,11 +24,11 @@ class ClienteController extends Controller
     {
         DB::transaction(function() use ($request)
         {
-            $cliente = Cliente::create([  
+            $cliente = Client::create([  
                 'name'           => $request->name,
                 'apellido'       => $request->apellido,
-                'ci'             => $request->ci,
-                'phone'          => $request->phone,
+                'direccion'             => $request->direccion,
+                'ruc'          => $request->ruc,
                  ]);
         });
         return redirect('cliente'); 

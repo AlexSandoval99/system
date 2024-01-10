@@ -63,6 +63,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');
 	Route::post('brand', 'BrandController@store')->name('brand.store');
 
+	Route::get('nationalities', 'NationalitiesController@index')->name('nationalities');
+	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
+	Route::post('nationalities', 'NationalitiesController@store')->name('nationalities.store');
+
+
 
 
 });
