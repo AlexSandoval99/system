@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Proveedor;
+use App\Models\Provider;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProveedorRequest extends FormRequest
@@ -25,7 +25,7 @@ class CreateProveedorRequest extends FormRequest
         {
             if(request()->ruc)
             {
-                $provider = Proveedor::where('ruc',request()->ruc)->first();
+                $provider = Provider::where('ruc',request()->ruc)->first();
                 if($provider)
                 {
                     $validator->errors()->add('ruc', 'El RUC ya fue registrado, pertenece a '. $provider->name);

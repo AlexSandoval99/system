@@ -52,12 +52,14 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('cliente/create', 'ClienteController@create')->name('cliente-create');
 	Route::post('cliente', 'ClienteController@store')->name('cliente.store');
 
+    Route::get('ajax/purchases_providers', 'ProveedorController@ajax_providers')->name('ajax.providers');
 	Route::get('provider', 'ProveedorController@index')->name('provider');
 	Route::get('provider/create', 'ProveedorController@create')->name('provider-create');
 	Route::get('provider/{provider_id}/edit', 'ProveedorController@edit')->name('provider-create');
 	Route::post('provider', 'ProveedorController@store')->name('provider.store');
 	Route::put('provider/{provider_id}', 'ProveedorController@update')->name('provider.update');
 	Route::get('provider-xls', 'ProveedorController@export_xls')->name('provider.export-xls');
+
 
     Route::get('brand', 'BrandController@index')->name('brand');
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');
@@ -68,6 +70,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::post('nationalities', 'NationalitiesController@store')->name('nationalities.store');
 
 
+    Route::get('wish-purchase', 'WishPurchaseController@index')->name('wish-purchase');
+	Route::get('wish-purchase/create', 'WishPurchaseController@create')->name('wish-purchase-create');
+	Route::get('wish-purchase/{wish_purchase}', 'WishPurchaseController@show')->name('wish-purchase-create');
+	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
+    Route::get('ajax/purchases_products_last', 'ArticuloController@ajax_purchases_last')->name('ajax.products-purchases-last');
 
 
 });

@@ -19,7 +19,7 @@
 <!-- adminlte Skins. -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/skins/_all-skins.min.css') }}">
 <!-- Morris chart -->
-<link rel="stylesheet" href="{{ asset('assets/adminlte/bower_components/morris.js/morris.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/node_modules/morris.js/morris.css') }}">
 <!-- jvectormap -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/bower_components/jvectormap/jquery-jvectormap.css') }}">
 <!-- Date Picker -->
@@ -32,11 +32,11 @@
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <!-- CSS Custom -->
-<link rel="stylesheet" href="{{ asset('assets/custom/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/adminlte/documentation/style.css') }}">
 <!-- jQuery 3 -->
 <script src="{{ asset('assets/adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- MAskMoney -->
-<script src="{{ asset('assets/plugins/maskMoney/jquery.maskMoney.min.js') }}"></script>
+<script src="{{ asset('assets/node_modules/maskMoney/jquery.maskMoney.min.js') }}"></script>
 <style>
         .link_menu_page{ color:#222d32; }
         .caixa-alta { text-transform:uppercase; }
