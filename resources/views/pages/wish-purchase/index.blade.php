@@ -45,9 +45,9 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu pull-right">
-                                            {{-- <li>
-                                                    <a href="{{ url('restockings/' . $restocking->id . '/restocking-budgets-approved') }}"><i class="fas fa-user"></i> Ver Presupuestos Aprobados</a>
-                                            </li> --}}
+                                            <li>
+                                                    <a href="{{ url('wish-purchase-budgets/' . $purchase->id . '/wish-purchase-budgets-approved') }}"><i class="fa fa-user"></i> Ver Presupuestos Aprobados</a>
+                                            </li>
                                             <li>
                                                 <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i>Ver</a>
                                             </li>

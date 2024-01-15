@@ -35,7 +35,7 @@ class WishPurchaseController extends Controller
             $purchases = $purchases->where('invoice_copy', request()->invoice_copy);
         }
 
-        $purchases = $purchases->whereIn('status', [1,2])->paginate(20);
+        $purchases = $purchases->paginate(20);
         return view('pages.wish-purchase.index', compact('purchases', 'purchases_providers'));
     }
 
@@ -103,48 +103,48 @@ class WishPurchaseController extends Controller
     }
 
     public function charge_purchase_budgets_store(WishPurchase $wish_purchase, CreatePurchaseImageRequest $request)
-{
-    if (request()->ajax()) {
-        if ($request->hasFile('files')) {
-            $wish_purchase->purchase_budgets()->delete();
+    {
+        if (request()->ajax()) {
+            if ($request->hasFile('files')) {
+                $wish_purchase->purchase_budgets()->delete();
 
-            foreach ($request->file('files') as $key => $input_file) {
-                $file = $input_file;
+                foreach ($request->file('files') as $key => $input_file) {
+                    $file = $input_file;
 
-                $dir = 'storage/wish_purchases_budgets';
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
+                    $dir = 'storage/wish_purchases_budgets';
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0777, true);
+                    }
+
+                    if ($file) {
+                        $filename = $this->uploadSignature($file);
+                    }
+
+                    $wish_purchase->purchase_budgets()->create([
+                        'name' => $filename,
+                        'original_name' => $file->getClientOriginalName(),
+                    ]);
                 }
-
-                if ($file) {
-                    $filename = $this->uploadSignature($file);
-                }
-
-                $wish_purchase->purchase_budgets()->create([
-                    'name' => $filename,
-                    'original_name' => $file->getClientOriginalName(),
-                ]);
             }
+
+            return response()->json(['success' => true]);
+        }
+    }
+
+    private function uploadSignature($file)
+    {
+        $signature_name = Str::random(40) . '.' . $file->getClientOriginalExtension();
+
+        $destinationPath = 'storage/wish_purchases_budgets/' . $signature_name;
+
+        if ($file->move(public_path('storage/wish_purchases_budgets'), $signature_name)) {
+            Image::make($destinationPath)
+                ->orientate()
+                ->save($destinationPath);
         }
 
-        return response()->json(['success' => true]);
+        return $signature_name;
     }
-}
-
-private function uploadSignature($file)
-{
-    $signature_name = Str::random(40) . '.' . $file->getClientOriginalExtension();
-
-    $destinationPath = 'storage/wish_purchases_budgets/' . $signature_name;
-
-    if ($file->move(public_path('storage/wish_purchases_budgets'), $signature_name)) {
-        Image::make($destinationPath)
-            ->orientate()
-            ->save($destinationPath);
-    }
-
-    return $signature_name;
-}
     public function confirm_purchase_budgets(WishPurchase $wish_purchase)
     {
 
@@ -185,6 +185,14 @@ private function uploadSignature($file)
             return redirect('wish-purchase');
         }
     }
+
+    public function wish_purchase_budgets_approved(WishPurchase $wish_purchase)
+    {
+        $purchase_budgets = $wish_purchase->purchase_budgets()->where('status',2)->get();
+
+        return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
+    }
+
     private function parse($value)
     {
         return str_replace(',', '.',str_replace('.', '', $value));
