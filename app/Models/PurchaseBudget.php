@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PurchaseBudget extends Model
 {
-    protected $fillable = ['restocking_id','confirmation_user_id','confirmation_date','name','original_name','status'];
+    protected $fillable = ['wish_purchase_id','confirmation_user_id','confirmation_date','name','original_name','status'];
 
     protected $dates =  ['confirmation_date'];
 
@@ -23,7 +23,7 @@ class PurchaseBudget extends Model
 
     public function filePath()
     {
-        return asset('storage/restockings-budgets/' . $this->name);
+        return asset('storage/wish_purchases_budgets/' . $this->name);
     }
 
 

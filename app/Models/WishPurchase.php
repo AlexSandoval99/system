@@ -22,7 +22,7 @@ class WishPurchase extends Model
     {
         $this->attributes['date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
-    public function purchases_order_details()
+    public function wish_purchase_details()
     {
         return $this->hasMany('App\Models\WishPurchaseDetail');
     }

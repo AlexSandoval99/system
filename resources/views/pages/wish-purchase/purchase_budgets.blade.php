@@ -44,7 +44,7 @@
             <dir id="text_list" class="hide">Listado de Archivos</dir>
             <div class="ibox-footer">
                 <input type="submit" class="btn btn-success" value="Guardar">
-                <a href="{{ url('restockings') }}" class="btn btn-danger">Cancelar</a>
+                <a href="{{ url('wish-purchase') }}" class="btn btn-danger">Cancelar</a>
             </div>
         {{ Form::close() }}
     </div>
@@ -63,7 +63,7 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        redirect('{{ url('restockings') }}');
+                        redirect('{{ url('wish-purchase') }}');
                     },
                     error: function(data){
                         laravelErrorMessages(data);
