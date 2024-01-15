@@ -155,7 +155,7 @@
                 {
                     var description = product_description ? product_description : product_name;
 
-                    addToTable(product_id, description, product_quantity, product_presentation_id, product_presentation_name,product_description);
+                    addToTable(product_id, description, product_quantity, product_presentation_id, product_presentation_name,product_description,product_name);
                 }
 
                 $('#purchases_product_id, #product_presentations_id').val(null).trigger('change');
@@ -175,16 +175,15 @@
             }
         }
 
-        function addToTable(id, name, quantity, presentation_id, presentation_name, description)
+        function addToTable(id, name, quantity, presentation_id, presentation_name, description,product_name)
         {
-            console.log(description);
             counter++;
             invoice_items_array.push(id);
 
             $('#tbody_detail').append('<tr>' +
                     '<td>' + counter + '</td>' +
                     '<td class="text-right">' + id +' <input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
-                    '<td>' + name + '<input type="hidden" name="detail_product_name[]" value="' + name + '"></td>' +
+                    '<td>' + product_name + '<input type="hidden" name="detail_product_name[]" value="' + product_name + '"></td>' +
                     '<td>' + presentation_name + ' <input type="hidden" name="detail_presentation_id[]" value="' + presentation_id + '"></td>' +
                     '<td class="text-right"><input type="text" class="form-control" name="detail_product_quantity[]" value="' + quantity + '"></td>' +
                     '<input type="hidden" class="form-control" name="detail_product_description[]" value="' + description + '">'+

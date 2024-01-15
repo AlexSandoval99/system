@@ -41,6 +41,7 @@
                                 <td class="text-right">
                                     <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
                                     <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i></a>
+                                    <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i></a>
                                 </td>
                             </tr>
                         @endforeach

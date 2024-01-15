@@ -75,7 +75,7 @@ class WishPurchaseController extends Controller
                         'wish_purchase_id'         => $purchases_order->id,
                         'deposit_id'               => 1,
                         'presentation'             => $request->detail_presentation_id[$key],
-                        'description'              => $request->detail_product_description[$key],
+                        'description'              => isset($request->detail_product_description[$key]) ? $request->detail_product_name[$key].'('.$request->detail_product_description[$key].')' : $request->detail_product_name[$key],
                     ]);
                 }
             });
@@ -90,8 +90,13 @@ class WishPurchaseController extends Controller
 
     public function show(WishPurchase $wish_purchase)
     {
-        
+
         return view('pages.wish-purchase.show', compact('wish_purchase'));
+    }
+
+    public function charge_purchase_budgets(WishPurchase $wish_purchase)
+    {
+        return view('pages.wish-purchase.purchase_budgets',compact('wish_purchase'));
     }
 
     private function parse($value)

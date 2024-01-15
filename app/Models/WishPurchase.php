@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class WishPurchase extends Model
 {
     use HasFactory;
-    protected $fillable = [ 
+    protected $fillable = [
                             'date',
                             'branch_id',
                             'number',
@@ -37,5 +37,9 @@ class WishPurchase extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User');
+    }
+    public function purchase_budgets()
+    {
+        return $this->hasMany('App\Models\PurchaseBudget');
     }
 }
