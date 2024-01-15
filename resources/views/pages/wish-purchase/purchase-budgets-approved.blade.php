@@ -1,4 +1,5 @@
-@extends('layouts.sistema')
+@extends('layouts.AdminLTE.index')
+@section('title', 'Presupuestos Cargado')
 @section('page-styles')
     <style>
         .button-container {
