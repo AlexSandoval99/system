@@ -39,10 +39,29 @@
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $purchase->status) }}">{{ config('constants.purchase-status.'. $purchase->status) }}</span>
                                 </td>
                                 <td class="text-right">
-                                    <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
-                                    <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i></a>
-                                    <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i></a>
-                                    <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>
+                                    <div class="dropdown" style="display: inline-block;">
+                                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Acción
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            {{-- <li>
+                                                    <a href="{{ url('restockings/' . $restocking->id . '/restocking-budgets-approved') }}"><i class="fas fa-user"></i> Ver Presupuestos Aprobados</a>
+                                            </li> --}}
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i>Ver</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i>Anclar Presupuestos</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>                                            
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
