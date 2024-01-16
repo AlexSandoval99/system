@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label>Producto</label>
-                    {{ Form::select('purchases_product_id', $purchases_products, old('purchases_product_id'), ['id' => 'purchases_product_id', 'placeholder' => 'Seleccione Producto', 'class' => 'form-control', 'select2']) }}
+                    {{ Form::select('raw_material_id', $raw_materials, old('raw_material_id'), ['id' => 'raw_material_id', 'placeholder' => 'Seleccione Materia Prima', 'class' => 'form-control', 'select2']) }}
                     <span class="red" id="text_last_purchases"></span>
                 </div>
                 <div class="form-group col-md-2">
@@ -128,8 +128,8 @@
 
         function addProduct()
         {
-            var product_name              = $("select[name='purchases_product_id'] option:selected").text();
-            var product_id                = $("select[name='purchases_product_id']").val();
+            var product_name              = $("select[name='raw_material_id'] option:selected").text();
+            var product_id                = $("select[name='raw_material_id']").val();
             var product_description       = $("#products_description").val();
             var product_presentation_id   = $("#product_presentations_id").val();
             var product_presentation_name = $("select[name='product_presentations_id'] option:selected").text();

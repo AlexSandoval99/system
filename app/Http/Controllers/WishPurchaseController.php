@@ -10,6 +10,7 @@ use App\Models\Branch;
 use App\Models\Presentation;
 use App\Models\Provider;
 use App\Models\PurchaseBudget;
+use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\WishPurchase;
 use Illuminate\Support\Facades\DB;
@@ -43,23 +44,23 @@ class WishPurchaseController extends Controller
     {
         $users                  = User::filter();
         $branches               = Branch::where('status', true)->pluck('name', 'id');
-        $purchases_products     = Articulo::Filter();
+        $raw_materials          = RawMaterial::Filter();
         $product_presentations  = Presentation::Filter();
 
-        return view('pages.wish-purchase.create', compact('users' , 'branches', 'purchases_products', 'product_presentations'));
+        return view('pages.wish-purchase.create', compact('users' , 'branches', 'raw_materials', 'product_presentations'));
     }
 
     public function store(CreateWishPurchaseRequest $request)
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, &$purchases_order)
+            DB::transaction(function() use ($request, &$wish_purchase)
             {
                 $last_number = WishPurchase::orderBy('number', 'desc')->limit(1)->first();
                 $last_number = $last_number ? $last_number->number : 0;
                 $last_number = $last_number + 1;
 
-                $purchases_order = WishPurchase::create([
+                $wish_purchase = WishPurchase::create([
                     'number'                    => $last_number,
                     'date'                      => $request->date,
                     'branch_id'                 => $request->branch_id,
@@ -72,10 +73,10 @@ class WishPurchaseController extends Controller
                 foreach($request->detail_product_id as $key => $value)
                 {
 
-                    $purchases_order->purchases_order_details()->create([
+                    $wish_purchase->wish_purchase_details()->create([
                         'material_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
-                        'wish_purchase_id'         => $purchases_order->id,
+                        'wish_purchase_id'         => $wish_purchase->id,
                         'deposit_id'               => 1,
                         'presentation'             => $request->detail_presentation_id[$key],
                         'description'              => isset($request->detail_product_description[$key]) ? $request->detail_product_name[$key].'('.$request->detail_product_description[$key].')' : $request->detail_product_name[$key],
@@ -85,7 +86,7 @@ class WishPurchaseController extends Controller
 
             return response()->json([
                 'success'            => true,
-                'purchases_order_id' => $purchases_order->id
+                'purchases_order_id' => $wish_purchase->id
             ]);
         }
         abort(404);
@@ -104,6 +105,7 @@ class WishPurchaseController extends Controller
 
     public function charge_purchase_budgets_store(WishPurchase $wish_purchase, CreatePurchaseImageRequest $request)
     {
+    
         if (request()->ajax()) {
             if ($request->hasFile('files')) {
                 $wish_purchase->purchase_budgets()->delete();

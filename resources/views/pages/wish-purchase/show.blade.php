@@ -72,7 +72,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($wish_purchase->purchases_order_details as $details)
+                        @foreach($wish_purchase->wish_purchase_details as $details)
                             <tr>
                                 <td>{{ $details->material_id }}</td>
                                 <td>

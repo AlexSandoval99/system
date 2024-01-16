@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($wish_purchase->purchases_order_details as $detail)
+                    @foreach($wish_purchase->wish_purchase_details as $detail)
                         <tr>
                             <td>{{$loop->iteration}}</td>
                             <td>{{$detail->description}}</td>
@@ -35,7 +35,7 @@
         {{ Form::open(['id' => 'form']) }}
             <div class="row">
                 <div class="col-md-2">
-                    <button class="btn btn-xs btn-outline btn-success" type="button" onclick="load_file();"><i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Adjuntar Archivos</span></button>
+                    <button class="btn btn-xs btn btn-success" type="button" onclick="load_file();"><i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">Adjuntar Archivos</span></button>
                     <input type="file" name="files[]" id="files" class="hidden" multiple>
                 </div>
             </div>

@@ -14,4 +14,8 @@ class RawMaterial extends Model
     {
         return $this->belongsTo('App\Models\Articulo');
     }
+    public function scopeFilter($query)
+    {
+        return $query->where('status', true)->orderBy('description')->pluck('description', 'id');
+    }
 }
