@@ -34,7 +34,16 @@
 					</li>
 				</ul>
 			</li>
-
+			<li class="treeview">
+				<a href="#"><i class="fa fa-group"></i><span>Materia Prima</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+				<ul class="treeview-menu">
+					<li class="Materia Prima">
+						<a href="{{ route('raw-materials') }}" title="Materia Prima">
+							<span>Materia Prima</span>
+						</a>
+					</li>
+				</ul>
+			</li>
 			<li class="treeview">
 				<a href="#"><i class="fa fa fa-shopping-basket"></i><span>Producto</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
 				<ul class="treeview-menu">
@@ -65,7 +74,7 @@
 				<ul class="treeview-menu">
 					<li class="provider">
 						<a href="{{ route('nationalities') }}" title="Marca">
-							<span>Marca</span>
+							<span>Nacionalidad</span>
 						</a>
 					</li>
 				</ul>
@@ -86,6 +95,9 @@
 					<li class="provider">
 						<a href="{{ route('wish-purchase') }}" title="Pedido de Compras">
 							<span>Pedido de Compras</span>
+						</a>
+						<a href="{{ route('purchase-order') }}" title="Orden de Compras">
+							<span>Orden de Compras</span>
 						</a>
 					</li>
 				</ul>

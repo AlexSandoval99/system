@@ -59,7 +59,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::post('provider', 'ProveedorController@store')->name('provider.store');
 	Route::put('provider/{provider_id}', 'ProveedorController@update')->name('provider.update');
 	Route::get('provider-xls', 'ProveedorController@export_xls')->name('provider.export-xls');
-
+    
+	Route::get('raw-materials', 'RawMaterialsController@index')->name('raw-materials');
+	Route::get('raw-materials/create', 'RawMaterialsController@create')->name('raw-materials-create');
+	Route::post('raw-materials', 'RawMaterialsController@store')->name('raw-materials.store');
 
     Route::get('brand', 'BrandController@index')->name('brand');
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');
@@ -78,6 +81,12 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('wish-purchase/{wish_purchase}/confirm-purchase-budgets', 'WishPurchaseController@confirm_purchase_budgets')->name('wish-purchases.charge-budgets');
     Route::get('wish-purchase-budgets/{purchase_budget}/confirm-purchase-budgets', 'WishPurchaseController@confirm_purchase_budgets_store')->name('wish-purchases.confirm_purchase_budgets_store');
     Route::get('wish-purchase-budgets/{wish_purchase}/wish-purchase-budgets-approved', 'WishPurchaseController@wish_purchase_budgets_approved')->name('wish-purchases.budgets_approved');
+	Route::get('wish-purchase/{restocking}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
+
+
+	Route::get('purchase-order', 'PurchaseOrderController@index')->name('purchase-order');
+	Route::get('purchase-order/create', 'PurchaseOrderController@create')->name('purchase-order-create');
+	Route::get('purchase-order/{wish_purchase}', 'PurchaseOrderController@show')->name('purchase-order-create');
 
 	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
     Route::get('ajax/purchases_products_last', 'ArticuloController@ajax_purchases_last')->name('ajax.products-purchases-last');

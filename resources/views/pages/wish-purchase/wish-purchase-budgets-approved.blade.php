@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-10">
                                 <p>{{$wish_purchase->date}}</p>
-                                <p> {{$wish_purchase->requested_by}}</p>
+                                <p> {{$wish_purchase->user->name}}</p>
                                 <p> {{$wish_purchase->branch->name}}</p>
                             </div>
                         </div>

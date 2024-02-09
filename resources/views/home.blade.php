@@ -1,13 +1,13 @@
 @extends('layouts.AdminLTE.index')
 
-@section('icon_page', 'Tablero')
+@section('icon_page', 'Bienvenido al sistema')
 
-@section('title', 'Tablero ')
+@section('title', ' Bienvenido al Sistema')
 
 @section('menu_pagina')
 
 @section('content')
-  <div class="row">
+  {{-- <div class="row">
     <div class="col-lg-3 col-xs-6">
       <!-- small box -->
       <div class="small-box bg-aqua">
@@ -504,5 +504,5 @@
     </section>
     <!-- right col -->
   </div>
-  <!-- /.row -->
+  <!-- /.row --> --}}
 @endsection
