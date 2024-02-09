@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePurchaseImageRequest;
 use App\Http\Requests\CreateWishPurchaseRequest;
-use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\Presentation;
 use App\Models\Provider;
@@ -13,6 +12,7 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\WishPurchase;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
@@ -27,8 +27,7 @@ class WishPurchaseController extends Controller
 
         if (request()->s)
         {
-            $purchases = $purchases->where('ruc', 'LIKE', '%' . request()->s . '%')
-                ->orWhere('number', 'LIKE', '%' . request()->s . '%');
+            $purchases = $purchases->where('number', 'LIKE', '%' . request()->s . '%');
         }
 
         if (request()->invoice_copy)
@@ -105,7 +104,7 @@ class WishPurchaseController extends Controller
 
     public function charge_purchase_budgets_store(WishPurchase $wish_purchase, CreatePurchaseImageRequest $request)
     {
-    
+
         if (request()->ajax()) {
             if ($request->hasFile('files')) {
                 $wish_purchase->purchase_budgets()->delete();
@@ -193,6 +192,14 @@ class WishPurchaseController extends Controller
         $purchase_budgets = $wish_purchase->purchase_budgets()->where('status',2)->get();
 
         return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
+    }
+
+    public function pdf(WishPurchase $wish_purchase)
+    {
+         return PDF::loadView('pages.wish-purchase.pdf', compact('wish_purchase'))
+            ->setPaper('A4', 'portrait')
+            ->stream();
+
     }
 
     private function parse($value)
