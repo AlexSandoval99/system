@@ -194,14 +194,21 @@ class WishPurchaseController extends Controller
         return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
     }
 
-    public function pdf(WishPurchase $wish_purchase)
+    // public function pdf(WishPurchase $wish_purchase)
+    // {
+    //      return PDF::loadView('pages.wish-purchase.pdf', compact('wish_purchase'))
+    //         ->setPaper('A4', 'portrait')
+    //         ->stream();
+
+    // }
+
+    public function pdf(WishPurchase $restocking)
     {
-         return PDF::loadView('pages.wish-purchase.pdf', compact('wish_purchase'))
-            ->setPaper('A4', 'portrait')
-            ->stream();
-
+        return PDF::loadView('pages.wish-purchase.pdf', compact('restocking'))
+                    ->setPaper([0, 0, 250, 100], 'portrait')
+                    // ->setPaper([0,0,300,300], 'portrait')
+                    ->stream();
     }
-
     private function parse($value)
     {
         return str_replace(',', '.',str_replace('.', '', $value));

@@ -12,7 +12,8 @@
               <tr>
                 <th>Nombre</th> 
                 <th class="text-center">Apellido</th>
-                <th class="text-center">CI</th>
+                <th class="text-center">RUC</th>
+                <th class="text-center">Direccion</th>
                 <th class="text-center">Telefono</th> 
                 <th class="text-center">Acciones</th> 
               </tr>
@@ -20,9 +21,10 @@
           <tbody>
             @foreach($clientes as $cliente)
                 <tr>
-                    <td>{{ $cliente->name }}</td>
-                    <td class="text-center">{{ $cliente->apellido }}</td>
-                    <td class="text-center">{{  number_format($cliente->ci, 0, ',', '.') }}</td>
+                    <td>{{ $cliente->first_name }}</td>
+                    <td class="text-center">{{ $cliente->last_name }}</td>
+                    <td class="text-center">{{  number_format($cliente->ruc, 0, ',', '.') }}</td>
+                    <td class="text-center">{{ $cliente->address }}</td>
                     <td class="text-center">{{ $cliente->phone }}</td>
                     <td class="text-center">
                       <a href="{{ url('branches/' . $cliente->id . '/edit') }}"><i class="fa fa-pencil-alt"></i></a>

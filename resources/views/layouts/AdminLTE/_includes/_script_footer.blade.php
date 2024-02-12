@@ -11,6 +11,8 @@
 		<script src="{{ asset('assets/node_modules/morris.js/morris.js') }}"></script>
 		<script src="{{ asset('assets/adminlte/bower_components/chart.js/Chart.js') }}"></script>
         {{-- js --}}
+        <script type="text/javascript" src="{{ asset('js/jquery-ui.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery.number.2.1.6.min.js') }}"></script>
         <script src="{{ asset('js/jquery.number.2.1.6.min.js') }}"></script>
         <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
         <script src="{{ asset('js/sweetAlert/sweetalert.min.js') }}"></script>
@@ -47,6 +49,10 @@
 		<script src="{{ asset('assets/adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
 		<!-- Mask -->
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src="{{ asset('js/jquery.number.2.1.6.min.js') }}"></script>
+        <script src="{{ asset('js/inputmask.min.js') }}"></script>
+        <script src="{{ asset('js/inputmask.numeric.extensions.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.inputmask.min.js')}}"></script>
 		<script type="text/javascript">
 	      $(document).ready( function() {
 	        $('#flash_message').delay(3000).fadeOut();

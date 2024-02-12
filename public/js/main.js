@@ -307,13 +307,13 @@ function key_delay(callback, ms) {
     };
 }
 
-Dropzone.prototype.defaultOptions.dictDefaultMessage = "Arrastre los archivos aquí o haga click para cargar.";
-Dropzone.prototype.defaultOptions.dictFallbackMessage = "Su navegador no admite la carga de archivos arrastrados.";
-Dropzone.prototype.defaultOptions.dictFallbackText = "Utilice el siguiente formulario alternativo para cargar sus archivos como en los viejos tiempos.";
-Dropzone.prototype.defaultOptions.dictFileTooBig = "El archivo es muy grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.";
-Dropzone.prototype.defaultOptions.dictInvalidFileType = "No puede cargar archivos de este tipo.";
-Dropzone.prototype.defaultOptions.dictResponseError = "El servidor respondió con el código {{statusCode}}.";
-Dropzone.prototype.defaultOptions.dictCancelUpload = "Cancelar carga";
-Dropzone.prototype.defaultOptions.dictCancelUploadConfirmation = "¿Seguro que quieres cancelar esta carga?";
-Dropzone.prototype.defaultOptions.dictRemoveFile = "Remover archivo";
-Dropzone.prototype.defaultOptions.dictMaxFilesExceeded = "No puedes cargar mas archivos.";
+// Dropzone.prototype.defaultOptions.dictDefaultMessage = "Arrastre los archivos aquí o haga click para cargar.";
+// Dropzone.prototype.defaultOptions.dictFallbackMessage = "Su navegador no admite la carga de archivos arrastrados.";
+// Dropzone.prototype.defaultOptions.dictFallbackText = "Utilice el siguiente formulario alternativo para cargar sus archivos como en los viejos tiempos.";
+// Dropzone.prototype.defaultOptions.dictFileTooBig = "El archivo es muy grande ({{filesize}}MiB). Tamaño máximo: {{maxFilesize}}MiB.";
+// Dropzone.prototype.defaultOptions.dictInvalidFileType = "No puede cargar archivos de este tipo.";
+// Dropzone.prototype.defaultOptions.dictResponseError = "El servidor respondió con el código {{statusCode}}.";
+// Dropzone.prototype.defaultOptions.dictCancelUpload = "Cancelar carga";
+// Dropzone.prototype.defaultOptions.dictCancelUploadConfirmation = "¿Seguro que quieres cancelar esta carga?";
+// Dropzone.prototype.defaultOptions.dictRemoveFile = "Remover archivo";
+// Dropzone.prototype.defaultOptions.dictMaxFilesExceeded = "No puedes cargar mas archivos.";

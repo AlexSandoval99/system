@@ -11,7 +11,7 @@ class ClienteController extends Controller
 {
     public function index()
     {  
-        $clientes = Client::orderBy('name')->paginate(20);
+        $clientes = Client::orderBy('first_name')->paginate(20);
         return view('pages.cliente.index' ,compact('clientes'));       
     } //
 
@@ -25,10 +25,11 @@ class ClienteController extends Controller
         DB::transaction(function() use ($request)
         {
             $cliente = Client::create([  
-                'name'           => $request->name,
-                'apellido'       => $request->apellido,
-                'direccion'             => $request->direccion,
+                'first_name'   => $request->name,
+                'last_name'    => $request->apellido,
+                'address'      => $request->address,
                 'ruc'          => $request->ruc,
+                'phone'          => $request->phone,
                  ]);
         });
         return redirect('cliente'); 

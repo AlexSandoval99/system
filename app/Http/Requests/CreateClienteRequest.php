@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Client;
 use App\Models\Cliente;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +25,7 @@ class CreateClienteRequest extends FormRequest
         {
             if(request()->ci)
             {
-                $client = Cliente::where('ci',request()->ci)->first();
+                $client = Client::where('ci',request()->ci)->first();
                 if($client)
                 {
                     $validator->errors()->add('ci', 'Numero de Cedula ya fue registrada');
