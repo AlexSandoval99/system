@@ -83,7 +83,6 @@ class PurchaseOrderController extends Controller
                     $wish_purchase->purchase_order_details()->create([
                         'material_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
-                        // 'presentation'             => $request->detail_presentation_id[$key],
                         'description'              => isset($request->detail_product_description[$key]) ? $request->detail_product_name[$key].'('.$request->detail_product_description[$key].')' : $request->detail_product_name[$key],
                         'amount'                   => $this->parse($request->detail_product_amount[$key]),
                         'residue'                  => $this->parse($request->detail_product_amount[$key]),

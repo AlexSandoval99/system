@@ -11,10 +11,6 @@
                         </div>
                         <div class="ibox-content pb-0">
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label>Empresa</label>
-                                    {{ Form::select('social_reason_id', $social_reasons, old('social_reason_id'), ['class' => 'form-control', 'id' => 'social_reason_id']) }}
-                                </div>
                                 <div class="form-group col-md-2">
                                     <label>Numero OC</label>
                                     <input class="form-control" type="text" name="number_oc" id="number_oc" placeholder="Numero OC" autofocus>
@@ -38,9 +34,8 @@
                             <tr>
                                 <th class="text-right">Cód</th>
                                 <th class="text-center">Producto</th>
-                                <th class="text-center">Tipo</th>
                                 <th class="text-center">Presentación</th>
-                                <th class="text-center">Vcto</th>
+                                {{-- <th class="text-center">Vcto</th> --}}
                                 <th class="text-center">Cantidad</th>
                                 <th class="text-center">A Recibir</th>
                                 <th class="text-center">Recepcionado</th>
@@ -120,7 +115,7 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Fecha Factura</label>
-                                            <input class="form-control text-center" type="text" name="date" id="date" value="" date-mask>
+                                            <input class="form-control  text-center date" type="text" name="date" id="date" value="">
                                             <span class="red" id="text_date_validation"></span>
                                         </div>
                                         <div class="form-group col-md-4">
@@ -136,18 +131,8 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Vigencia Timbrado</label>
-                                            <input class="form-control text-center" type="text" name="stamped_validity" id="stamped_validity" value="" date-mask>
+                                            <input class="form-control  text-center date" type="text" name="stamped_validity" id="stamped_validity" value="">
                                             <span class="red" id="text_stamped_validity_validation"></span>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Moneda</label>
-                                            <select name="currency_id" class="form-control">
-                                                @foreach($currencies as $key => $value)
-                                                    @if($key == 1)
-                                                        <option value="{{ $key }}">{{ $value }}</option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -155,8 +140,7 @@
                                     <div class="row">
                                         <div class="form-group col-md-6 text-center">
                                             <label>Fecha Pago</label>
-                                            <input class="form-control text-center date" type="text" name="expiration[]" value="" date-mask>
-                                            <span class="red" id="text_days_of_grace"></span>
+                                            <input class="form-control text-center date" type="text" name="expiration[]" value="">
                                         </div>
                                         <div class="form-group col-md-6 text-center">
                                             <label>Pago</label>
@@ -222,7 +206,7 @@
         {{ Form::close() }}
 </div>
 @endsection
-@section('page-styles')
+@section('layout_css')
 <style>
     #div_provider_data, #div_invoice_detail, #div_invoice_header, #div_image, #div_note_credits{
             position: relative;
@@ -235,10 +219,11 @@
 </style>
 @endsection
 
-@section('page-scripts')
+@section('layout_js')
     <script>
         var invoice_items_array = [];
         var array_deposits = {!! json_encode($array_deposits) !!}
+        console.log(array_deposits);
         $(document).ready(function ()
         {
             $("select[name='purchases_product_id']").on('change', function(){
@@ -250,7 +235,7 @@
                 $('input[type="submit"]').prop('disabled', true);
                 e.preventDefault();
                 $.ajax({
-                    url: '{{ route('purchases-movements.store') }}',
+                    url: '{{ route('purchase-movement-store') }}',
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
@@ -582,14 +567,13 @@
         function Search_OC()
         {
             var number_oc        = $("#number_oc").val();
-            var social_reason_id = $("#social_reason_id").val();
             // var number_oc        = 13165;
             // var social_reason_id = 1;
             var conteo           = 0;
-
+            console.log(number_oc)
             $('#tbody_detail').html('');
 
-            if(number_oc != '' && social_reason_id != '')
+            if(number_oc != '')
             {
                 $.ajax({
                     headers: {
@@ -597,16 +581,14 @@
                     },
                     url: '{{ route('ajax.purchases-products-movements') }}',
                     type: "GET",
-                    data: { number_oc : number_oc, social_reason_id : social_reason_id },
+                    data: { number_oc : number_oc},
                     success: function(data) {
-                        $('#text_days_of_grace').html('');
                         $.each(data.items, function(index, element) {
                             $('#tbody_detail').append('<tr>' +
                                 '<td class="text-right">' + element.product_id + '</td>' +
                                 '<td>' + element.product_name + '</td>' +
-                                '<td>' + element.type + '</td>' +
                                 '<td>' + element.presentation + '</td>' +
-                                '<td><button type="button" '+(element.expiration_need ? "" : "disabled")+'  data-product_id="'+element.product_id+'" data-product_name="'+element.product_name+'" data-quantity="'+element.quantity+'" data-target="#detail_product_expiration" class="btn btn-outline btn-primary" id="btn-detail-product-expiration" onClick="load_Modal_Expiration(this);"><i class="fas fa-plus"></i></button></td>'+
+                                // '<td><button type="button" '+(element.expiration_need ? "" : "disabled")+'  data-product_id="'+element.product_id+'" data-product_name="'+element.product_name+'" data-quantity="'+element.quantity+'" data-target="#detail_product_expiration" class="btn btn-outline btn-primary" id="btn-detail-product-expiration" onClick="load_Modal_Expiration(this);"><i class="fas fa-plus"></i></button></td>'+
                                 '<td class="text-center">' + $.number(element.quantity, 0, ',', '.') + '</td>' +
                                 '<td><input style="width:50px;" type="text" name="detail_product_quantity[]" onchange="addToTable($(this))" value="" autocomplete="off"></td>' +
                                 '<td class="text-center">' + $.number(element.received, 0, ',', '.') + '</td>' +
@@ -634,8 +616,6 @@
                             conteo++;
                         });
 
-                        if(data.days_of_grace) $('#text_days_of_grace').html(data.days_of_grace + ' Días de gracia.');
-
                         if(conteo>0)
                         {
                             $('#branch_id').val(data.branch_id).trigger('change');
@@ -646,7 +626,7 @@
                             $("[select2]").select2({
                                 language: 'es'
                             });
-                            load_social_reasons(social_reason_id);
+                            load_deposit();
                         }else
                         {
                             swal({
@@ -677,16 +657,13 @@
             }
         }
 
-        function load_social_reasons(social_reason_id)
+        function load_deposit()
         {
             $('#deposits_id').html('');
             $.each(array_deposits, function(index, element){
-                if(index == social_reason_id)
-                {
-                    $.each(element, function(index2, element2){
-                        $('#deposits_id').append('<option value="'+index2+'">'+element2+'</option>');
-                    });
-                }
+                $.each(element, function(index2, element2){
+                    $('#deposits_id').append('<option value="'+index2+'">'+element2+'</option>');
+                });
             });
         }
 

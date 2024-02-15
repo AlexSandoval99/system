@@ -28,7 +28,7 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Fecha</label>
-                                <input class="form-control" type="text" name="date" value="{{ old('date', date('d/m/Y')) }}" date-mask readonly>
+                                <input class="form-control" type="text" name="date" value="{{ old('date', date('d/m/Y')) }}"  readonly>
                             </div>
                             <div class="form-group col-md-2">
                                 <label>Cambio</label>

@@ -99,6 +99,9 @@
 						<a href="{{ route('purchase-order') }}" title="Orden de Compras">
 							<span>Orden de Compras</span>
 						</a>
+						<a href="{{ route('purchase-movement') }}" title="Recepcion de Compras">
+							<span>Recepcion de Compras</span>
+						</a>
 					</li>
 				</ul>
 			</li>

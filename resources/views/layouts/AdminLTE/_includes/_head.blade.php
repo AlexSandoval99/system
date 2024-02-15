@@ -19,7 +19,6 @@
 <!-- adminlte Skins. -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/skins/_all-skins.min.css') }}">
 <!-- Morris chart -->
-<link rel="stylesheet" href="{{ asset('assets/node_modules/morris.js/morris.css') }}">
 <!-- jvectormap -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/bower_components/jvectormap/jquery-jvectormap.css') }}">
 <!-- Date Picker -->
@@ -28,6 +27,7 @@
 <link rel="stylesheet" href="{{ asset('assets/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css') }}">
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/plugins/iCheck/square/blue.css') }}">
+
 <link rel="stylesheet" href="{{ asset('assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 <!-- Google Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -35,29 +35,16 @@
 <link rel="stylesheet" href="{{ asset('assets/adminlte/documentation/style.css') }}">
 <!-- jQuery 3 -->
 <script src="{{ asset('assets/adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('js/main.js') }}"></script>
+<script src="{{ asset('js/inputmask.min.js') }}"></script>
+<script src="{{ asset('js/inputmask.numeric.extensions.min.js') }}"></script>
+<script src="{{ asset('js/jquery.inputmask.min.js')}}"></script>
 <!-- MAskMoney -->
-<script src="{{ asset('assets/node_modules/maskMoney/jquery.maskMoney.min.js') }}"></script>
 <style>
         .link_menu_page{ color:#222d32; }
         .caixa-alta { text-transform:uppercase; }
         .caixa-baixa { text-transform:lowercase; }
         .input-text-center{ text-align:center; }
 </style>
-
-<script>
-        $(function(){
-                $.fn.datepicker.dates['pt-br'] = {
-                        days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
-                        daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-                        daysMin: ["Do", "Se", "Te", "Qu", "Qu", "Se", "Sa"],
-                        months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-                        monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-                        today: "Hoje",
-                        monthsTitle: "Meses",
-                        clear: "Limpar",
-                        format: "dd/mm/yyyy"
-                };
-        });
-</script>
 
 @yield('layout_css')

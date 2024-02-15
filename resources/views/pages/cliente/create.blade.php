@@ -27,15 +27,47 @@
                         <input id="ruc" class="form-control" name="ruc" type="text"  value="{{ old('ruc')}}">
                     </div>
                     <div class="form-group col-md-4">
-                        <label>Telefono</label><br>
-                        <input id="phone" class="form-control" name="phone" type="text"  value="{{ old('phone')}}">
+                        <label>Numero de Documento</label><br>
+                        <input id="document_number" class="form-control" name="document_number" type="text"  value="{{ old('document_number')}}">
                     </div>
-                {{-- <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Departamento</label>
+                        {{ Form::select('departamento', $departamentos, null, ['class' => 'form-control','placeholder' => 'Seleccione Departamento' ,'id' => 'departamento','onChange'=> 'changeDepartment();']) }}
+                      </div>
+                      <div class="form-group col-md-4">
+                          <label>Ciudad</label>
+                        <select id="ciudades" name="ciudades" class="form-control">
+                          <option>Selecciona una ciudad </option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label>Barrio</label><br>
+                        <input id="neighborhood" class="form-control" name="neighborhood" type="text"  value="{{ old('neighborhood')}}">
+                     </div>
+                     <div class="form-group col-md-4">
+                        <label>Razon Social</label><br>
+                        <input id="razon_social" class="form-control" name="razon_social" type="text"  value="{{ old('razon_social')}}">
+                     </div>
+                     <div class="form-group col-md-4">
+                        <label>Estado Civil</label><br>
+                        <input id="civil_status" class="form-control" name="civil_status" type="text"  value="{{ old('civil_status')}}">
+                     </div>
+                     <div class="form-group col-md-4">
+                        <label>Genero</label><br>
+                        <input id="gender" class="form-control" name="gender" type="text"  value="{{ old('gender')}}">
+                     </div>
+                     <div class="row">
                     <div class="form-group col-md-4">
                         <label>Nacionalidad</label>
-                        {{ Form::select('nationalities_id', $nation ,request()->nationalities_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione una nacionalidad']) }}
+                        {{ Form::select('nationalities_id', $nation ,null, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione una nacionalidad']) }}
                     </div>
-                </div> --}}
+                </div>  
+                <div class="ibox-content pb-0">
+                        <div class="form-group col-md-5">
+                            <label>Observación</label>
+                            <textarea class="form-control" name="observation" rows="4">{{ old('observation') }}</textarea>
+                        </div>
+                </div>
             </div>
         </div>
                 <div class="ibox-footer">
@@ -47,3 +79,44 @@
     </div>
 </div>
 @endsection
+@section('layout_js')
+<script>
+    function changeDepartment()
+    {
+        var selected_depart = $('#departamento option:selected').val();
+        $.ajax({
+            url: '{{ route('ajax.get_deparment') }}',
+            type: "GET",
+            data: {departamento_id:selected_depart},
+            success: function(data) {
+                $('#ciudades').html('');
+                $('#ciudades').append('<option value="">Selecciona una ciudad</option>');
+                $.each(data,function (index,element)
+                {
+                    $('#ciudades').append('<option value="' + element.id + '">' + element.ciudad + '</option>');   
+                });
+            }
+        });
+    }
+</script>
+<script>
+    function changeNationalities()
+    {
+        var selected_nation = $('#nationalities option:selected').val();
+        $.ajax({
+            url: '{{ route('ajax.get_nationalities') }}',
+            type: "GET",
+            data: {nationalities_id:selected_nation},
+            success: function(data) {
+                $('#nationalities').html('');
+                $('#nationalities').append('<option value="">Selecciona una nacionalidad</option>');
+                $.each(data,function (index,element)
+                {
+                    $('#nationalities').append('<option value="' + element.id + '">' + element.nation + '</option>');   
+                });
+            }
+        });
+    }
+</script>
+@endsection
+@section('layout_js')

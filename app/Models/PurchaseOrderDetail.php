@@ -3,30 +3,25 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\PurchasesDetail;
 
 class PurchaseOrderDetail extends Model
 {
-    protected $fillable = ['purchase_order_id',
+    protected $fillable = ['purchases_order_id',
                            'material_id',
                            'description',
+                           'price_cost',
                            'quantity',
                            'amount',
                            'residue'];
 
-    public function purchases_order()
+    public function purchase_order()
     {
-        return $this->belongsTo('App\Models\PurchasesOrder');
+        return $this->belongsTo('App\Models\PurchaseOrder','purchases_order_id');
     }
 
-    public function purchases_product()
+    public function raw_material()
     {
-        return $this->belongsTo('App\Models\PurchasesProduct');
-    }
-
-    public function purchases_product_presentation()
-    {
-        return $this->belongsTo('App\Models\PurchasesProductPresentation', 'product_presentations_id');
+        return $this->belongsTo('App\Models\RawMaterial','material_id');
     }
 
     public function purchases_details()

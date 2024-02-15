@@ -14,7 +14,8 @@
                 <th class="text-center">Apellido</th>
                 <th class="text-center">RUC</th>
                 <th class="text-center">Direccion</th>
-                <th class="text-center">Telefono</th> 
+                <th class="text-center">C.I</th> 
+                <th class="text-center">Estado</th> 
                 <th class="text-center">Acciones</th> 
               </tr>
           </thead>
@@ -25,7 +26,8 @@
                     <td class="text-center">{{ $cliente->last_name }}</td>
                     <td class="text-center">{{  number_format($cliente->ruc, 0, ',', '.') }}</td>
                     <td class="text-center">{{ $cliente->address }}</td>
-                    <td class="text-center">{{ $cliente->phone }}</td>
+                    <td class="text-center">{{  number_format($cliente->document_number, 0, ',', '.') }}</td>
+                    <td class="text-center"><span class="label label-{{ config('constants.status-label.' . $cliente->status) }}">{{ config('constants.status.' . $cliente->status) }}</td>
                     <td class="text-center">
                       <a href="{{ url('branches/' . $cliente->id . '/edit') }}"><i class="fa fa-pencil-alt"></i></a>
                     </td>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterial extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'articulo_id','status'];
+    protected $fillable = ['description', 'articulo_id','status','presentation_id'];
     
     public function articulo()
     {
@@ -16,6 +16,10 @@ class RawMaterial extends Model
     }
     public function scopeFilter($query)
     {
-        return $query->where('status', true)->orderBy('description')->pluck('description', 'id');
+        return $query->where('status', true)->orderBy('description')->pluck('description', 'id');//ya hay tabla rae jajaj
+    }
+    public function presentation()
+    {
+        return $this->belongsTo('App\Models\Presentation');
     }
 }

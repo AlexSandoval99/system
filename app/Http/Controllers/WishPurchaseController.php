@@ -202,6 +202,21 @@ class WishPurchaseController extends Controller
 
     // }
 
+    public function searchProviderStamped()
+    {
+        $invoice_number = explode('-', request()->purchase_number);
+        $invoice_number = $invoice_number[0] . '-' . $invoice_number[1];
+
+        $purchase = Purchase::select("purchases.*", DB::raw("DATE_FORMAT(stamped_validity, '%d/%m/%Y') stamp_validity"))
+            ->where('purchases_provider_id', request()->provider_id)
+            ->where('number', 'like', ['%'.$invoice_number.'%'])
+            ->whereIn('status', [1,3,4])
+            ->orderBy('id', 'DESC')
+            ->first();
+
+        return  response()->json($purchase);
+    }
+
     public function pdf(WishPurchase $restocking)
     {
         return PDF::loadView('pages.wish-purchase.pdf', compact('restocking'))
