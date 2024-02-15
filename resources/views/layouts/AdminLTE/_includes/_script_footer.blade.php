@@ -7,8 +7,6 @@
 		<!-- Bootstrap 3.3.7 -->
 		<script src="{{ asset('assets/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 		<!-- Morris.js charts -->
-		<script src="{{ asset('assets/adminlte/bower_components/raphael/raphael.min.js') }}"></script>
-		<script src="{{ asset('assets/node_modules/morris.js/morris.js') }}"></script>
 		<script src="{{ asset('assets/adminlte/bower_components/chart.js/Chart.js') }}"></script>
         {{-- js --}}
         <script type="text/javascript" src="{{ asset('js/jquery-ui.js')}}"></script>
@@ -53,6 +51,7 @@
         <script src="{{ asset('js/inputmask.min.js') }}"></script>
         <script src="{{ asset('js/inputmask.numeric.extensions.min.js') }}"></script>
         <script src="{{ asset('js/jquery.inputmask.min.js')}}"></script>
+        <script src="{{ asset('js/jquery.magnific-popup.min.js')}}"></script>
 		<script type="text/javascript">
 	      $(document).ready( function() {
 	        $('#flash_message').delay(3000).fadeOut();

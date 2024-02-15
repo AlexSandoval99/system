@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 
-class PurchaseOrderController extends Controller
+class PurchaseController extends Controller
 {
     public function index()
     {

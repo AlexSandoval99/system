@@ -93,6 +93,14 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
     Route::post('purchase-orders', 'PurchaseOrderController@store')->name('purchase-order.store');
     // Route::get('ajax/purchases_providers', 'ProveedorController@ajax_providers')->name('ajax.providers');
 
+	Route::get('purchase-movement', 'PurchaseMovementsController@index')->name('purchase-movement');
+	Route::get('purchase-movement/create', 'PurchaseMovementsController@create')->name('purchase-movement-create');
+	Route::get('purchase-movement/{purchase_movement}', 'PurchaseMovementsController@show')->name('purchase-movement-create');
+	Route::post('purchase-movement', 'PurchaseMovementsController@store')->name('purchase-movement-store');
+	Route::get('ajax/purchases-movements', 'PurchaseMovementsController@ajax_purchases_movements')->name('ajax.purchases-movements');
+	Route::get('ajax/purchases-products-movements', 'PurchaseMovementsController@ajax_purchases_products_movements')->name('ajax.purchases-products-movements');
+	Route::get('search/provider-stamped', 'PurchasesController@searchProviderStamped')->name('provider-stamped.search');
+
 
 
 	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');

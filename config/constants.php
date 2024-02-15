@@ -25,5 +25,13 @@ return [
         1 => 'Unidad',
         2 => 'Caja'
     ],
+    'type_purchases' => [
+        1 => 'Factura',
+        2 => 'Boleta',
+        3 => 'Auto Factura',
+        4 => 'Nota Credito',
+        5 => 'Orden de Pago',
+        6 => 'Comprobante de Ingreso'
+    ],
 ]
 ?>

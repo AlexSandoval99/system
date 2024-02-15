@@ -30,7 +30,7 @@ class PurchaseOrder extends Model
     }
     public function purchase_order_details()
     {
-        return $this->hasMany('App\Models\PurchaseOrderDetail');
+        return $this->hasMany('App\Models\PurchaseOrderDetail','purchases_order_id');
     }
     public function provider()
     {
