@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateArticuloRequest;
 use App\Models\Articulo;
 use App\Models\Brand;
+use App\Models\Purchase;
 use App\Models\WishPurchase;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -50,16 +51,16 @@ class ArticuloController extends Controller
         {
             // Buscar La ultima Compra del Producto
             $results   = [];
-            $purchases = WishPurchase::orderBy('wish_purchases.date', 'desc')
-                                    ->selectRaw("wish_purchases.date, wish_purchase_details.quantity")
-                                    ->join('wish_purchase_details', 'wish_purchase_details.wish_purchase_id', '=', 'wish_purchases.id')
-                                    ->where('wish_purchases.status', true)
-                                    ->where('wish_purchase_details.material_id', request()->purchases_product_id)
+            $purchases = Purchase::orderBy('purchases.date', 'desc')
+                                    ->selectRaw("purchases.date, purchase_details.quantity")
+                                    ->join('purchase_details', 'purchase_details.purchase_id', '=', 'purchases.id')
+                                    ->where('purchases.status', true)
+                                    ->where('purchase_details.material_id', request()->purchases_product_id)
                                     ->limit(3);
 
             if(request()->purchases_provider_id)
             {
-                $purchases = $purchases->where('wish_purchases.provider_id', request()->purchases_provider_id);
+                $purchases = $purchases->where('purchases.provider_id', request()->purchases_provider_id);
             }
             $purchases = $purchases->get();
 

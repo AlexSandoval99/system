@@ -8,6 +8,7 @@ use App\Http\Requests\CreateWishPurchaseRequest;
 use App\Models\Branch;
 use App\Models\Presentation;
 use App\Models\Provider;
+use App\Models\Purchase;
 use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
@@ -208,7 +209,7 @@ class WishPurchaseController extends Controller
         $invoice_number = $invoice_number[0] . '-' . $invoice_number[1];
 
         $purchase = Purchase::select("purchases.*", DB::raw("DATE_FORMAT(stamped_validity, '%d/%m/%Y') stamp_validity"))
-            ->where('purchases_provider_id', request()->provider_id)
+            ->where('provider_id', request()->provider_id)
             ->where('number', 'like', ['%'.$invoice_number.'%'])
             ->whereIn('status', [1,3,4])
             ->orderBy('id', 'DESC')

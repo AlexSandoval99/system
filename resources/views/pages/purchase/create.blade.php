@@ -1,5 +1,5 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Proveedor')
+@section('title', 'Compras')
 @section('content')
 {{ Form::open(['id' => 'form']) }}
 <div class="row">
@@ -12,15 +12,7 @@
                 <div class="panel-body pb-0">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="form-group col-md-5" id="div_social_reason">
-                                <label>Razon Social o Empresa</label>
-                                {{ Form::select('social_reason_id', $social_reasons, old('social_reason_id'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'placeholder' => 'Seleccione Razon Social', 'id' => 'social_reason_id']) }}
-                            </div>
-                            <div class="form-group col-md-5" id="div_social_reason_name">
-                                <label>Razon Social o Empresa</label>
-                                <input type="text" name="social_reason_name" id="social_reason_name" class="form-control" disabled>
-                            </div>
-                            <div class="form-group col-md-7">
+                            <div class="form-group col-md-12">
                                 <label>Proveedor</label>
                                 <select class="form-control" name="purchases_provider_id" id="purchases_provider_id"></select>
                             </div>
@@ -40,13 +32,9 @@
                                 <label>Dirección</label>
                                 <input type="text" name="address" value="{{ old('address') }}" id="address" class="form-control">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <label>Razón Social Proveedor</label>
                                 <input type="text" name="razon_social" value="{{ old('razon_social') }}" id="razon_social" class="form-control">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label>Cuenta Contable</label>
-                                <input type="text" name="accounting_account_provider" id="accounting_account_provider" class="form-control" disabled>
                             </div>
                             <div class="form-group col-md-12" id="div_details_advances_providers">
                                 <div class="panel panel-danger">
@@ -59,7 +47,6 @@
                                                 <tr>
                                                     <th class="text-center">Fecha</th>
                                                     <th class="text-center">OP.Nro</th>
-                                                    <th class="text-center">Cuenta Contable</th>
                                                     <th class="text-center">Importe</th>
                                                     <th></th>
                                                 </tr>
@@ -215,51 +202,43 @@
             </div>
             <div class="ibox-content pb-0">
                 <div class="row">
-                    <div class="form-group col-md-2">
-                        <label>Condición</label>
-                        {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'condition']) }}
-                    </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Sucursal</label>
                         {{ Form::select('branch_id', $branches, old('branch_id'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'branch_id']) }}
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Documento</label>
                         {{ Form::select('type', config('constants.type_purchases'), old('type'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'type']) }}
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Numero</label>
                         <input class="form-control" type="text" name="number" id="number" value="{{ old('number') }}" invoice-purchase-mask>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Fecha Compra</label>
-                        <input class="form-control" type="text" name="date" id="date" value="{{ old('date') }}" date-mask onblur="changeValidationDate();">
+                        <input class="form-control date" type="text" name="date" id="date" value="{{ old('date') }}" onblur="changeValidationDate();">
                         <span class="red" id="text_date_validation"></span>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label>Documento</label>
-                        {{ Form::select('invoice_copy', $invoice_copy, old('invoice_copy'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker']) }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-2">
-                        <label>Moneda</label>
-                        {{ form::select('currency_id', $currencies, old('currency_id'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'currency_id']) }}
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label>Cambio</label>
-                        <input class="form-control" type="text" name="change" id="change" value="1">
-                    </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Nro.Timbrado</label>
                         <input class="form-control" type="text" name="stamped" id="stamped" value="{{ old('stamped') }}" onkeyup="changeValidationStamped();">
                         <span class="red" id="text_stamped_validation"></span>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label>Vigencia Timbrado</label>
-                        <input class="form-control" type="text" name="stamped_validity" id="stamped_validity" value="{{ old('stamped_validity') }}" date-mask onblur="changeValidationDate();">
+                        <input class="form-control date" type="text" name="stamped_validity" id="stamped_validity" value="{{ old('stamped_validity') }}" onblur="changeValidationDate();">
                         <span class="red" id="text_stamped_validity_validation"></span>
                     </div>
+                    <div class="form-group col-md-3">
+                        <label>Condición</label>
+                        {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'condition', "onChange" => "changeCondition();"]) }}
+                    </div>
+                    {{-- <div class="form-group col-md-3" id="div_quota">
+                        <label>Cant. Cuota</label>
+                        <input class="form-control" type="text" name="number" id="quota" value="{{ old('quota') }}">
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -302,7 +281,6 @@
                         <tr>
                             <th class="text-center">Cód</th>
                             <th class="text-center">Producto</th>
-                            <th class="text-center">Cuenta Contable</th>
                             <th class="text-center">Cantidad</th>
                             <th class="text-center">Precio</th>
                             <th class="text-center">Subtotal</th>
@@ -312,19 +290,6 @@
                         </tr>
                     </thead>
                     <tbody id="tbody_detail_invoice"></tbody>
-                </table>
-            </div>
-            <div class="ibox-content table-responsive" id="detail_accounting_seat">
-                <table class="table table-condensed table-hover table-bordered mb-0">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Cuenta Contable</th>
-                            <th class="text-center">Concepto</th>
-                            <th class="text-center">Débito</th>
-                            <th class="text-center">Crédito</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody_detail_accounting_seat"></tbody>
                 </table>
             </div>
         </div>
@@ -348,10 +313,6 @@
                 <div class="form-group col-md-3">
                     <label>Descripción</label>
                     <input class="form-control" type="text" name="products_description" id="products_description" value="{{ old('products_description') }}" placeholder="Descripción">
-                </div>
-                <div class="form-group col-md-2" id="div_emergency_mobile">
-                    <label>Movil</label>
-                    {{ Form::select('emergency_mobile_id', $emergency_mobiles, old('emergency_mobile_id'), ['id' => 'emergency_mobile_id', 'placeholder' => 'Movíl', 'data-live-search'=>'true', 'class' => 'form-control selectpicker']) }}
                 </div>
                 <div class="form-group col-md-1">
                     <label>Cantidad</label>
@@ -377,8 +338,6 @@
                         <th class="text-center" width="5%">Cód</th>
                         <th class="text-center" width="20%">Producto</th>
                         <th class="text-center" width="5%">OC</th>
-                        <th class="text-center" width="15%">Cuenta Entrada</th>
-                        <th class="text-center" width="4%">Cuenta Salida</th>
                         <th class="text-center" width="5%">Cantidad</th>
                         <th class="text-center" width="9%">Precio</th>
                         <th class="text-center" width="9%">Exenta</th>
@@ -416,71 +375,31 @@
         <div class="ibox-content pb-0">
             <div class="row">
                 <div class="col-md-7">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="form-group col-md-12">
                             <label>Caja Chica</label>
                             {{ Form::select('cash_box_id', $cash_boxes, old('cash_box_id'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'placeholder' => 'Seleccione Caja Chica', 'id' => 'cash_box_id']) }}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label>Seleccione el Pago</label><br>
-                            <input type="radio" name="type_payment" value="1" {{ 'checked' }} onClick="changeOtherAccounting(1);" id="type_payment_1"> NO PAGO
-                            <input type="radio" name="type_payment" value="2" {{ 'checked' }} onClick="changeOtherAccounting(0);" id="type_payment_2"> PAGO
-                        </div>
-                        <div class="form-group col-md-3 text-center">
-                            <label>Fecha Pago</label>
-                            <input class="form-control text-center date" type="text" name="expiration[]" value="" date-mask>
-                            <span class="red" id="text_days_of_grace"></span>
-                        </div>
-                        <div class="form-group col-md-5 text-center">
-                            <label>Monto a Pagar en Tesoreria</label>
-                            <input class="form-control  text-right" type="text" name="amount_treasury[]" value="" period-data-mask-decimal>
-                        </div>
-                    </div>
-                    <div class="row" id="div_other_accounting_account">
-                        <div class="col-lg-12">
-                            <div class="panel panel-success">
-                                <div class="panel-heading">
-                                    <h4 class="my-0">Detalle de no Pago</h4>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="form-group col-md-7">
-                                            <label>Cuenta Contable</label>
-                                            <select class="form-control" name="other_accounting_account_id" id="other_accounting_account_id"></select>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label>Monto</label>
-                                            <input class="form-control" type="text" name="other_accounting_account_amount" id="other_accounting_account_amount" period-data-mask>
-                                        </div>
-                                        <div class="form-group col-md-1">
-                                            <label>Agregar</label>
-                                            <button type="button" class="btn btn-success" id="button_other_accounting_account"><i class="fa fa-plus"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-12" id="div_detail_other_accounting_account">
-                                            <table class="table table-condensed table-hover table-bordered mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Cuenta Contable</th>
-                                                        <th class="text-center">Monto</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tbody_detail_other_accounting_account"></tbody>
-                                                <tfoot class="bold" id="div_total_no_pago">
-                                                    <tr>
-                                                        <td class="text-right">Totales</td>
-                                                        <td class="text-right"><b id="div_total_not_payment"></b></td>
-                                                        <td></td>
-                                                    </tr>
-                                                </tfoot>
-                                                <input type="hidden" name="total_not_payment" id="total_not_payment" value="0">
-                                            </table>
-                                        </div>
-                                    </div>
+                    </div> --}}
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label>Seleccione el Pago</label><br>
+                                <input type="radio" name="type_payment" value="1" {{ 'checked' }} onClick="changeOtherAccounting(1);" id="type_payment_1"> NO PAGO
+                                <input type="radio" name="type_payment" value="2" {{ 'checked' }} onClick="changeOtherAccounting(0);" id="type_payment_2"> PAGO
+                            </div>
+                            <div class="form-group col-md-3 text-center">
+                                <label>Fecha Pago</label>
+                                <input class="form-control text-center date" type="text" name="expiration[]" value="" autocomplete="off">
+                                <span class="red" id="text_days_of_grace"></span>
+                            </div>
+                            <div class="form-group col-md-5 text-center">
+                                <label>Monto a Pagar en Tesoreria</label>
+                                <input class="form-control  text-right" type="text" name="amount_treasury[]" value="" period-data-mask-decimal autocomplete="off">
+                            </div>
+                            <div class="row" id="row_btn_payment_date" >
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-block btn-outline btn-primary" id="btn_payment_date"><i class="fa fa-plus"></i> Fecha de Pago</button>
                                 </div>
                             </div>
                         </div>
@@ -492,42 +411,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5" id="div_detail_cost_centers">
-                    <label>Centro de Costos</label>
-                    <table class="table table-condensed table-hover table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th width="10%" class="text-center">#</th>
-                                <th width="60%" class="text-center">Centro de Costos</th>
-                                <th width="30%" class="text-center">%</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_detail_cost_centers"></tbody>
-                        <tfoot class="bold">
-                            <tr>
-                                <td colspan="2" class="text-right">Totales</td>
-                                <td class="text-right"><input class="form-control col-md-1" type="text" id="total_cost_centers" name="total_cost_centers" value="0" readonly></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <br>
-                    <div class="form-group col-sm-4">
-                        <label><input type="checkbox" name="select_all_cost_centers" id="select_all_cost_centers" onClick="ChangeSelectAllCostCenters(this);" {{ old('select_all_cost_centers') ? 'checked' : '' }}> Seleccionar todo</label>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="ibox-footer">
             <input type="submit" class="btn btn-sm btn-success" value="Guardar">
-            <a href="{{ url('purchases') }}" class="btn btn-sm btn-danger">Cancelar</a>
+            <a href="{{ url('purchase') }}" class="btn btn-sm btn-danger">Cancelar</a>
         </div>
     </div>
 </div>
 {{ Form::close() }}
 @endsection
-@section('page-scripts')
+@section('layout_js')
     <script>
         var dv = 0;
         var counter = 0;
@@ -537,7 +431,7 @@
         var accounting_accounts_array      = [];
         var other_accounting_account_array = [];
         var advances_array                 = [];
-        $("#div_detail_cost_centers, #div_details_advances_providers, #detail_accounting_seat, #div_social_reason_name, #div_note_credits, #detail_product_invoice").hide();
+        $("#div_details_advances_providers, #detail_accounting_seat, #div_social_reason_name, #div_note_credits, #detail_product_invoice").hide();
         $("#div_social_reason").show();
         $("#text_date_validation, #text_stamped_validity_validation, #tbody_detail_invoice, #text_days_of_grace").html('');
 
@@ -548,17 +442,52 @@
                 $('input[type="submit"]').prop('disabled', true);
                 e.preventDefault();
                 $.ajax({
-                    url: '{{ route('purchases.store') }}',
+                    url: '{{ route('purchase.store') }}',
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        redirect ("{{ url('purchases') }}");
+                        redirect ("{{ url('purchase') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
                         $('input[type="submit"]').prop('disabled', false);
                     }
                 });
+            });
+
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'es',
+                autoclose: true,
+                todayBtn: true,
+                todayBtn: "linked",
+                daysOfWeekDisabled: [0]
+            });
+
+            $("[period-data-mask]").inputmask({
+                alias: 'decimal',
+                groupSeparator: '.',
+                radixPoint: ',',
+                autoGroup: true,
+                allowMinus: false,
+                rightAlign: false,
+                digits: 0,
+                removeMaskOnSubmit: true,
+            });
+
+            $("[date-mask]").inputmask({
+                alias: 'date'
+            });
+
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy hh:ii',
+                language: 'es',
+                autoclose: true,
+                todayBtn: true,
+            });
+
+            $("[date-mask]").inputmask({
+                alias: 'date'
             });
 
             $("#purchases_provider_id").select2({
@@ -618,7 +547,6 @@
                         return {
                             q: params.term,
                             purchases_provider_id: $('#purchases_provider_id').val(),
-                            social_reason_id: $('#social_reason_id').val()
                         };
                     },
                     processResults: function (data, params) {
@@ -653,7 +581,6 @@
                     $('#tbody_detail_invoice').append('<tr>' +
                         '<td class="text-right">' + value.id + '</td>' +
                         '<td>' + value.name + '</td>' +
-                        '<td>' + value.accounting_plan + '</td>' +
                         '<td class="text-right">' + value.quantity + '</td>' +
                         '<td class="text-right">' + value.amount + '</td>' +
                         '<td class="text-right">' + value.subtotal + '</td>' +
@@ -663,30 +590,18 @@
                     '</tr>');
                 });
 
-                // Buscar la Cuenta Contable
-                $("#tbody_detail_accounting_seat").html('');
-                $("#detail_accounting_seat").show();
-                $.each(data_item.accounting, function(index, value)
-                {
-                    $('#tbody_detail_accounting_seat').append('<tr>' +
-                        '<td>' + value.accounting_plan + '</td>' +
-                        '<td>' + value.concept + '</td>' +
-                        '<td class="text-right">' + value.debit + '</td>' +
-                        '<td class="text-right">' + value.credit + '</td>' +
-                    '</tr>');
-                });
             });
 
             $("#purchases_product_id").select2({
                 language: 'es',
                 minimumInputLength: 2,
                 ajax: {
-                    url: "{{ url('ajax/purchases-products') }}",
+                    url: "{{ url('ajax/raw-material') }}",
                     dataType: 'json',
                     method: 'GET',
                     delay: 250,
                     data: function (params) {
-                        return { q: params.term, social_reason_id: $('#social_reason_id').val() };
+                        return { q: params.term };
                     },
                     processResults: function (data, params) {
                         return { results: data.items };
@@ -703,10 +618,6 @@
                 }
             }).on("select2:select", function (e) {
                 var data_item = e.params.data;
-                $('#purchases_product_id option:selected').attr('data-accounting-plan', data_item.accounting_plan_id);
-                $('#purchases_product_id option:selected').attr('data-baccounting-plan', data_item.baccounting_plan_id);
-                $('#purchases_product_id option:selected').attr('data-stockeable', data_item.stockeable);
-                $('#purchases_product_id option:selected').attr('data-requires-mobile', data_item.requires_mobile);
                 $('#purchases_product_id option:selected').attr('data-text', data_item.name);
             });
 
@@ -733,11 +644,9 @@
 
             $("#social_reason_id").on('change', function(){
                 $('#div_spinner').show();
-                ChangeListAccountingAccounts();
             });
 
             $("#number").on('change', function(){
-                load_payment_services_authorizations();
                 loadStamped();
             });
 
@@ -748,7 +657,63 @@
                 todayBtn: true,
                 todayBtn: "linked"
             });
+
+            $('#btn_payment_date').click(function(){
+                $('<div class="row" >'+
+                    '<div class="form-group col-md-3 text-center" style="margin-left: 66mm">'+
+                        '<input class="form-control text-center date" type="text" name="expiration[]" value="" autocomplete="off">'+
+                    '</div>'+
+                    '<div class="form-group col-md-5" style="margin-left: -2mm">'+
+                        '<div class="input-group">'+
+                            '<input class="form-control" type="text" name="amount_treasury[]" value="" period-data-mask-decimal autocomplete="off">'+
+                            '<span class="input-group-btn">'+
+                                '<button class="btn btn-warning" type="button"  onclick="$(this).parent().parent().parent().parent().remove()"><i class="fa fa-times"></i></button>'+
+                            '</span>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>').insertBefore('#row_btn_payment_date');
+                loadDate();
+
+            });
         });
+
+        function loadDate()
+        {
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'es',
+                autoclose: true,
+                todayBtn: true,
+                todayBtn: "linked",
+                daysOfWeekDisabled: [0]
+            });
+
+            $("[period-data-mask]").inputmask({
+                alias: 'decimal',
+                groupSeparator: '.',
+                radixPoint: ',',
+                autoGroup: true,
+                allowMinus: false,
+                rightAlign: false,
+                digits: 0,
+                removeMaskOnSubmit: true,
+            });
+
+            $("[date-mask]").inputmask({
+                alias: 'date'
+            });
+
+            $(".date").datepicker({
+                format: 'dd/mm/yyyy hh:ii',
+                language: 'es',
+                autoclose: true,
+                todayBtn: true,
+            });
+
+            $("[date-mask]").inputmask({
+                alias: 'date'
+            });
+        }
 
         function loadStamped()
         {
@@ -772,6 +737,19 @@
                 });
             }
         }
+        // changeCondition()
+        // function changeCondition()
+        // {
+        //     var condition = $("#condition option:selected").val();
+        //     if(condition == 1)
+        //     {
+        //         $("#div_quota").hide();
+        //     }
+        //     else
+        //     {
+        //         $("#div_quota").show();
+        //     }
+        // }
 
         function loadPeriodDataMaskDecimal()
         {
@@ -784,44 +762,6 @@
                 rightAlign: true,
                 digits: 2,
                 removeMaskOnSubmit: true,
-            });
-        }
-
-        function load_payment_services_authorizations()
-        {
-            var ruc = $('#ruc').val()+'-'+dv;
-            var number = $('#number').val();
-            $.ajax({
-                url: '{{ route('payment-services.ajax') }}',
-                type: "GET",
-                data: { ruc : ruc , without_receipts : 1, purchase_number: number},
-                success: function(data) {
-
-                    $('#tbody_detail_lender_payments').html('');
-                    if(typeof data.item != 'undefined')
-                    {
-                        var total = 0;
-                        $.each(data.item, function(key, element){
-                            total += +element.amount.replace(/\./g, '');
-
-                            $('#tbody_detail_lender_payments').append('<tr>' +
-                                '<td>' + element.date + '</td>' +
-                                '<td>' + element.number + '</td>' +
-                                '<td>' + element.amount +' <input type="hidden" name="receipts['+key+']" value="' + $.number(element.amount,0,'','') + '"></td>' +
-                            '</tr>');
-                        });
-                        $('#div_total_receipts').append($.number(total,0,'', '.'));
-
-                        $('#lender_receipts').show();
-                    }
-                    else
-                    {
-                        $('#lender_receipts').hide();
-                    }
-                },
-                error: function(data) {
-                    laravelErrorMessages(data);
-                }
             });
         }
 
@@ -882,83 +822,6 @@
                 grandTotal = grandTotal + in_cost_centers;
             });
             $("#total_cost_centers").val(grandTotal);
-        }
-
-        ChangeListAccountingAccounts();
-        function ChangeListAccountingAccounts()
-        {
-            var social_reason_id   = $("#social_reason_id").val();
-            var counter_cost       = 1;
-            var social_reason_name = $("select[name='social_reason_id'] option:selected").text();
-            $("#other_accounting_account_id, #tbody_detail_cost_centers").html('');
-            $("#div_detail_products").hide();
-
-            if(social_reason_id > 0)
-            {
-                $("#div_social_reason_name").show();
-                $("#social_reason_name").val(social_reason_name);
-                $("#div_social_reason").hide();
-
-                $.ajax({
-                    url: '{{ route('ajax.accounting-accounts') }}',
-                    type: "GET",
-                    data: { social_reason_id : social_reason_id },
-                    success: function(data) {
-                        $(data.items).each(function(index, element) {
-                            accounting_accounts_array[element.id] = element.name;
-                        });
-                        // $("#purchases_product_id").append('<option>Seleccione Producto</option>')
-                        // $.each(data.products, function(index, value){
-                        //     $("#purchases_product_id").append('<option value="'+ value.id +'" data-accounting-plan="'+ value.accounting_plan + '" data-requires-mobile="' + value.requires_mobile +'">'+ value.name +'</option>')
-                            $("#div_detail_products").show();
-                            $('#div_spinner').hide();
-                        // });
-
-                        $("#other_accounting_account_id").append('<option>Seleccione Cuenta Contable..</option>')
-                        $.each(data.items, function(index, value){
-                            $("#other_accounting_account_id").append('<option value="'+ value.id + '">'+ value.name +'</option>')
-                        });
-
-                        $("#other_accounting_account_id, #emergency_mobile_id").select2({
-                            language: 'es'
-                        });
-                        form_ready = true;
-                    },
-                    error: function(data) {
-                        laravelErrorMessages(data);
-                    }
-                });
-
-                $.ajax({
-                    url: '{{ route('ajax.cost-centers') }}',
-                    type: "GET",
-                    data: { social_reason_id : social_reason_id },
-                    success: function(data) {
-                        $(data.items).each(function(index, element) {
-                            $('#tbody_detail_cost_centers').append('<tr>' +
-                                '<td class="text-center">' + counter_cost + '</td>' +
-                                '<td>' + element.name + '<input type="hidden" name="cost_centers_id[]" value='+ element.id  +'></td>' +
-                                '<td><input class="form-control col-md-1" type="text" name="cost_centers[]" onkeyup="ChangeCostCentersCheckTotal();"></td>' +
-                                '<td class="text-center">'+
-                                    '<div class="checkbox checkbox-success checkbox-inline">'+
-                                        '<input type="checkbox" id="inlineCheckbox'+index+'" name="cost_centers_check[]" onClick="ChangeCostCentersCheck();">'+
-                                        '<label for="inlineCheckbox'+index+'"></label>'+
-                                    '</div>'+
-                            '</tr>');
-
-                            counter_cost++;
-                        });
-
-                        if(counter_cost>1)
-                        {
-                            $("#div_detail_cost_centers").show();
-                        }
-                    },
-                    error: function(data) {
-                        laravelErrorMessages(data);
-                    }
-                });
-            }
         }
 
         function ChangeSelectAllCostCenters(t)
@@ -1138,7 +1001,7 @@
                             $('#tbody_detail_last_purchases').append('<tr>' +
                                 '<td class="text-center">' + element.date + '</td>' +
                                 '<td class="text-center"><span class="label label-' + element.type_label + '">' + element.type +'</td>' +
-                                '<td class="text-right"><a target="_blank" href="{{ url('purchases') }}/' + element.id + '">' + element.number +'</td>' +
+                                '<td class="text-right"><a target="_blank" href="{{ url('purchase') }}/' + element.id + '">' + element.number +'</td>' +
                                 '<td class="text-right">' + element.amount +'</td>' +
                             '</tr>');
 
@@ -1159,7 +1022,7 @@
                             $('#tbody_detail_purchases_pendings').append('<tr>' +
                                 '<td class="text-center">' + element.date + '</td>' +
                                 '<td class="text-center"><span class="label label-' + element.type_label + '">' + element.type +'</td>' +
-                                '<td class="text-right"><a target="_blank" href="{{ url('purchases') }}/' + element.id + '">' + element.number +'</td>' +
+                                '<td class="text-right"><a target="_blank" href="{{ url('purchase') }}/' + element.id + '">' + element.number +'</td>' +
                                 '<td class="text-right">' + element.amount +'</td>' +
                             '</tr>');
 
@@ -1199,7 +1062,6 @@
                             $('#tbody_details_advances_providers').append('<tr>' +
                                 '<td class="text-center">' + element.date + '</td>' +
                                 '<td class="text-right"><a target="_blank" href="{{ url('purchases-payments') }}/' + element.id + '">' + element.number +'</td>' +
-                                '<td>' + element.accounting_plan + '</td>' +
                                 '<td class="text-right">' + element.amount + '</td>' +
                                 '<td class="text-center"><input type="checkbox" name="advances_providers_check[]" value= "' + element.id + '" onClick="ChangeAdvancesProvidersCheck();"></td>' +
                             '</tr>');
@@ -1249,24 +1111,8 @@
                 }
                 else
                 {
-                    calculateOtherAccountingAccount();
                 }
             });
-            //$.ajax({
-                //url: '{{ route('ajax.accounting-accounts-advances-providers') }}',
-                //type: "GET",
-                //data: { advances_providers_id : advances_providers_id },
-                //success: function(data) {
-                    //$(data.items).each(function(index, element) {
-                       // addToTableOtherAccountingAccount(element.id, element.name, element.amount);
-                        //other_accounting_account_array.push(element.id);
-                        //$("#other_accounting_account_amount").val('');
-                    //});
-                //},
-                //error: function(data) {
-                //    laravelErrorMessages(data);
-                //}
-            //});
         }
 
         function changeOrdersDetailProducts(id)
@@ -1410,12 +1256,10 @@
             $('#tbody_detail').append('<tr>' +
                 '<td width="5%">' + counter + '</td>' +
                 '<td width="5%" class="text-right">' + id + '<input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
-                '<td width="20%">' + name + ( emergency_mobile==1 ? '<br><i><b><span class="red">'+ emergency_mobile_name +'</span></b></i>' : '' ) +
+                '<td width="20%">' + name + ( emergency_mobile==1 ? '<br><i><b><span class="red">'+ emergency_mobile_name +'</span></b></i>' : '' ) + 
                     '<input type="hidden" name="detail_product_name[]" value="' + name + '">'+
-                '</td>' +
+                '</td>' + 
                 '<td width="5%" class="text-center">' + number_orders + ' <input type="hidden" name="detail_product_orders_id[]" value="' + id_orders + '"></td>' +
-                '<td width="15%"><select class="form-control" name="detail_accounting_plan[]" id="select_'+counter+'" style="width: 100%"></select></td>' +
-                '<td width="4%" align="center">'+(stockeable == 1 ? '<select class="form-control" name="detail_baccounting_plan[]" id="select2_'+counter+'" style="width: 100%"></select>' : '<input type="hidden" value="" name="detail_baccounting_plan[]">')+'</td>' +
                 '<td width="5%" class="text-center">' + $.number(quantity, 0, ',', '.') + '<input type="hidden" name="detail_product_quantity[]" onkeyup="changeReCalculo();" value="' + quantity + '"></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_product_amount[]" onkeyup="changeReCalculo();" value="' + amount + '" period-data-mask-decimal></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_total_excenta[]"  onkeyup="calculateGrandTotal();" value="' + total_excenta + '" period-data-mask-decimal></td>' +
@@ -1423,7 +1267,6 @@
                 '<td width="9%" class="text-right"><input type="text" name="detail_total_iva10[]"  onkeyup="calculateGrandTotal();" value="' + total_iva10 + '" period-data-mask-decimal></td>' +
                 '<td with="5%" class="text-right"><a href="javascript:;" onClick="removeRow(this, '+ id +');"><i style="font-size:17px;" class="fa fa-times"></i></a></td>' +
                 '<input type="hidden" name="detail_type_iva[]" value="' + type_iva + '">' +
-                '<input type="hidden" name="detail_emergency_mobile[]" value="' + emergency_mobile_id + '">' +
             '</tr>');
             $("#select_"+counter).select2({
                                     language: 'es'
@@ -1437,107 +1280,10 @@
             changeReCalculo()
         }
 
-        function addOtherAccountingAccount()
-        {
-            var other_accounting_account_name = $("select[name='other_accounting_account_id'] option:selected").text();
-            var other_accounting_account_id   = $("select[name='other_accounting_account_id']").val();
-            var other_accounting_amount       = $("input[name='other_accounting_account_amount']").val().replace(/\./g, '');
-
-            if(other_accounting_account_id != '' && other_accounting_amount != '')
-            {
-                if($.inArray(other_accounting_account_id, other_accounting_account_array) != '-1')
-                {
-                    alert('Ya existe la Cuenta Contable');
-                    return false;
-                }
-                else
-                {
-                    addToTableOtherAccountingAccount(other_accounting_account_id, other_accounting_account_name, other_accounting_amount);
-                    other_accounting_account_array.push(other_accounting_account_id);
-                    $("#other_accounting_account_amount").val('');
-                }
-            }
-            else
-            {
-                alert('Hay campos vacíos');
-                return false;
-            }
-        }
-
-        function addToTableOtherAccountingAccount(id, name, amount, enable_delete = true)
-        {
-            // $('#tbody_detail_other_accounting_account').html('');
-            $('#tbody_detail_other_accounting_account').append('<tr>' +
-                '<td>' + name + '<input type="hidden" name="detail_other_accounting_account_id[]" value="' + id + '"></td>' +
-                '<td class="text-right">' + $.number(amount, 0, ',', '.') +' <input type="hidden" name="detail_other_accounting_account_amount[]" value="' + amount + '"></td>' +
-                '<td class="text-center">'+
-                    (enable_delete ? '<a href="javascript:;" onClick="removeRowOtherAccountingAccount(this, '+ id +');"><i style="font-size:17px;" class="fa fa-times"></i></a>' : '') +
-                    '<input type="hidden" name="detail_other_accounting_enabled[]" value="' + enable_delete + '">' +
-                '</td>' +
-            '</tr>');
-            calculateOtherAccountingAccount();
-        }
-
-        function change_load_accounting_account(id, accounting_plan, baccounting_plan)
-        {
-            $("#select_"+id).html('');
-            $("#select2_"+id).html('');
-            $("#select_"+id).append('<option value="">Seleccione cuenta...</option>');
-            $("#select2_"+id).append('<option value="">Seleccione cuenta...</option>');
-            $.each(accounting_accounts_array, function(index, value){
-                if( typeof value !== 'undefined')
-                {
-                    if(accounting_plan == index)
-                    {
-                        $("#select_"+id).append('<option value="'+ index +'" selected>'+ value +'</option>')
-                    }
-                    else
-                    {
-                        $("#select_"+id).append('<option value="'+ index +'">'+ value +'</option>')
-                    }
-                    if(baccounting_plan == index)
-                    {
-                        $("#select2_"+id).append('<option value="'+ index +'" selected>'+ value +'</option>')
-                    }
-                    else
-                    {
-                        $("#select2_"+id).append('<option value="'+ index +'">'+ value +'</option>')
-                    }
-                }
-            });
-        }
-
         function removeRowOtherAccountingAccount(t, other_accounting_account_id)
         {
             $(t).parent().parent().remove();
             other_accounting_account_array.splice($.inArray(other_accounting_account_id, other_accounting_account_array), 1 );
-            calculateOtherAccountingAccount();
-        }
-
-        calculateOtherAccountingAccount();
-        function calculateOtherAccountingAccount()
-        {
-            var grandTotalNoPago  = 0;
-            var grandTotalProduct = $('#total_product').val().replace(/\./g, '').replace(',', '.');
-
-            $("#div_total_no_pago, #div_detail_other_accounting_account").hide();
-
-            $('input[name^="detail_other_accounting_account_amount[]"]').each(function ()
-            {
-                grandTotalNoPago += +$(this).val().replace(/\./g, '').replace(',', '.');
-            });
-            $("#div_total_not_payment").html($.number(grandTotalNoPago, 2, ',', '.'));
-            $("#total_not_payment").val($.number(grandTotalNoPago, 2, ',', ''));
-
-            if(grandTotalNoPago > 0)
-            {
-                $("#div_total_no_pago, #div_detail_other_accounting_account").show();
-            }
-
-            if(grandTotalNoPago > 0 && grandTotalProduct>0)
-            {
-                $("#amount_treasury").val(grandTotalProduct - grandTotalNoPago);
-            }
         }
 
         function changeReCalculo()
@@ -1654,7 +1400,6 @@
                 Condition();
                 $("[select2]").select2();
                 $('#amount_treasury').val(grandTotal_Factura);
-                calculateOtherAccountingAccount();
             }
             else
             {

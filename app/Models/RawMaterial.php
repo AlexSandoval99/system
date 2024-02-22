@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterial extends Model
 {
     use HasFactory;
-    protected $fillable = ['description', 'articulo_id','status','presentation_id'];
+    protected $fillable = ['description', 'articulo_id','status','presentation_id','type_iva'];
     
     public function articulo()
     {

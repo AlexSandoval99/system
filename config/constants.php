@@ -33,5 +33,26 @@ return [
         5 => 'Orden de Pago',
         6 => 'Comprobante de Ingreso'
     ],
+
+    'type_purchases_label' => [
+        1 => 'primary',
+        2 => 'info',
+        3 => 'danger',
+        4 => 'warning',
+        6 => 'info'
+    ],
+
+    'product' => [
+        1 => 'Materia Prima',
+        2 => 'Articulo'
+    ],
+    'purchases_type' => [
+        1 => 'Factura',
+        2 => 'Boleta',
+        3 => 'Auto Factura',
+        4 => 'Nota Credito',
+        5 => 'Orden de Pago',
+        6 => 'Comprobante de Ingreso'
+    ],
 ]
 ?>

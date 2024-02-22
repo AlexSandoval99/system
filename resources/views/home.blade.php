@@ -7,7 +7,9 @@
 @section('menu_pagina')
 
 @section('content')
-   {{-- <div class="row">
+   
+@endsection
+{{-- <div class="row">
     <div class="col-lg-3 col-xs-6">
       <!-- small box -->
       <div class="small-box bg-aqua">
@@ -505,4 +507,3 @@
     <!-- right col -->
   </div>
   <!-- /.row -->  --}}
-@endsection

@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseMovementsDetail extends Model
 {
-    protected $fillable = [	'purchases_movements_id',
+    protected $fillable = [	'purchases_movement_id',
                             'purchases_existence_id',
-                            'raw_material_id',                            
+                            'raw_materials_id',                            
     						'purchases_order_detail_id',
                             'price_cost',
     						'quantity',
@@ -16,17 +16,17 @@ class PurchaseMovementsDetail extends Model
     
     public function purchases_movement()
     {
-        return $this->belongsTo('App\Models\PurchasesMovement', 'purchases_movements_id');
+        return $this->belongsTo('App\Models\PurchaseMovement', 'purchase_movement_id');
     }
 
     public function raw_material()
     {
-        return $this->belongsTo('App\Models\RawMaterial');
+        return $this->belongsTo('App\Models\RawMaterial','raw_materials_id');
     }
 
     public function purchases_order_detail()
     {
-        return $this->belongsTo('App\Models\PurchasesOrderDetail');
+        return $this->belongsTo('App\Models\PurchaseOrderDetail');
     }
 
     public function purchases_existence()

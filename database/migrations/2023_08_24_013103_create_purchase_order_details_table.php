@@ -19,6 +19,7 @@ class CreatePurchaseOrderDetailsTable extends Migration
             $table->unsignedInteger('purchases_order_id');
             $table->foreign('purchases_order_id')->references('id')->on('purchase_orders');
 
+            
             $table->unsignedInteger('material_id');
             $table->foreign('material_id')->references('id')->on('raw_materials');
 
@@ -26,6 +27,8 @@ class CreatePurchaseOrderDetailsTable extends Migration
             $table->integer('quantity');
             $table->integer('residue');
             $table->decimal('amount',11,2);
+            
+
 
             $table->timestamps();
         });

@@ -102,6 +102,19 @@
 						<a href="{{ route('purchase-movement') }}" title="Recepcion de Compras">
 							<span>Recepcion de Compras</span>
 						</a>
+						<a href="{{ route('purchase') }}" title="Factura Compras">
+							<span>Factura Compras</span>
+						</a>
+						<a href="{{ route('inventories') }}" title="Inventario">
+							<span>Inventario</span>
+						</a>
+						<a href="{{ route('reports.stock-product-purchases') }}" title="Existencia">
+							<span>Existencia</span>
+						</a>
+						
+						<a href="{{ route('reports.purchases_report') }}" title="Libro Compra">
+							<span>Libro Compra</span>
+						</a>
 					</li>
 				</ul>
 			</li>

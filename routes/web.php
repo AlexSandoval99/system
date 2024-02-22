@@ -22,6 +22,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Error'], function (){
 });
 
 Route::group(['namespace' => 'App\Http\Controllers'], function (){
+	
+	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 	//Users
 	Route::get('user', 'UserController@index')->name('user');
 	Route::get('user/create', 'UserController@create')->name('user.create');
@@ -83,6 +85,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
     Route::get('wish-purchase-budgets/{purchase_budget}/confirm-purchase-budgets', 'WishPurchaseController@confirm_purchase_budgets_store')->name('wish-purchases.confirm_purchase_budgets_store');
     Route::get('wish-purchase-budgets/{wish_purchase}/wish-purchase-budgets-approved', 'WishPurchaseController@wish_purchase_budgets_approved')->name('wish-purchases.budgets_approved');
     // Route::get('wish-purchase/{wish_purchase}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
+	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
 
 	Route::get('wish-purchase/{restocking}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
 
@@ -95,16 +98,37 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('purchase-movement', 'PurchaseMovementsController@index')->name('purchase-movement');
 	Route::get('purchase-movement/create', 'PurchaseMovementsController@create')->name('purchase-movement-create');
-	Route::get('purchase-movement/{purchase_movement}', 'PurchaseMovementsController@show')->name('purchase-movement-create');
+	Route::get('purchase-movement/{purchase_movement}', 'PurchaseMovementsController@show')->name('purchase-movement-show');
 	Route::post('purchase-movement', 'PurchaseMovementsController@store')->name('purchase-movement-store');
 	Route::get('ajax/purchases-movements', 'PurchaseMovementsController@ajax_purchases_movements')->name('ajax.purchases-movements');
 	Route::get('ajax/purchases-products-movements', 'PurchaseMovementsController@ajax_purchases_products_movements')->name('ajax.purchases-products-movements');
-	Route::get('search/provider-stamped', 'PurchasesController@searchProviderStamped')->name('provider-stamped.search');
-
-
-
-	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
+	Route::get('search/provider-stamped', 'WishPurchaseController@searchProviderStamped')->name('provider-stamped.search');
     Route::get('ajax/purchases_products_last', 'ArticuloController@ajax_purchases_last')->name('ajax.products-purchases-last');
+
+	Route::get('purchase', 'PurchaseController@index')->name('purchase');
+	Route::get('purchase/create', 'PurchaseController@create')->name('purchase-create');
+	Route::get('purchase/{purchase}', 'PurchaseController@show')->name('purchase-show');
+	Route::post('purchase', 'PurchaseController@store')->name('purchase.store');
+	Route::get('purchase/{purchase}/pdf', 'PurchaseController@pdf')->name('purchases.pdf');
+
+    Route::get('ajax/purchases_products_orders', 'RawMaterialsController@ajax_purchases_orders')->name('ajax.products-purchases-orders');
+	Route::get('ajax/raw-material', 'RawMaterialsController@ajax_purchases_products')->name('ajax.purchases-products');
+	Route::get('ajax/purchases/note-credits', 'PurchaseController@ajax_purchases_note_credits')->name('ajax.invoices-purchases');
+
+	Route::get('inventories', 'PurchasesProductInventoriesController@index')->name('inventories');
+    Route::get('inventories/create', 'PurchasesProductInventoriesController@create')->name('inventories.create');
+    Route::post('inventories', 'PurchasesProductInventoriesController@store')->name('inventories.store');
+    Route::get('inventories/{purchases_product_inventory}', 'PurchasesProductInventoriesController@show')->name('inventories.show');
+    Route::get('inventories/{purchases_product_inventory}/pdf', 'PurchasesProductInventoriesController@pdf')->name('inventories.pdf');
+	Route::get('inventories/{purchases_product_inventory}/confirm-inventory', 'PurchasesProductInventoriesController@confirm_inventory')->name('inventories.confirm-inventory');
+	Route::get('reports/stock-product-purchases', 'ReportsController@stock_product_purchases_report')->name('reports.stock-product-purchases');
+	Route::get('reports/stock-product-purchases-xls', 'ReportsController@stock_product_purchases_report_excel')->name('reports.stock-product-purchases-xls');
+	Route::get('reports/purchases_report', 'ReportsController@purchases_report')->name('reports.purchases_report');
+	Route::get('reports/purchases_report/pdf', 'ReportsController@purchases_report_pdf')->name('reports.purchases_report.pdf');
+
+
+
+
 
 
 });

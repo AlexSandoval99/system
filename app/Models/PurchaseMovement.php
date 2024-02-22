@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PurchaseMovements extends Model 
+class PurchaseMovement extends Model 
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class PurchaseMovements extends Model
                             'type_movement',
                             'recived_person',
                             'movements_destiny_id',
-                            'purchases_product_inventory_id',
+                            'inventory_id',
                             'observation',
                             'invoice_number',
                             'invoice_date',
@@ -28,6 +28,7 @@ class PurchaseMovements extends Model
                             'user_deleted',
                             'accounting_seated',
                             'branch_id',
+                            'deposit_id',
                             'currency_id', 
                             'invoice_condition', 
                             'invoice_stamped', 
@@ -72,7 +73,7 @@ class PurchaseMovements extends Model
 
     public function deposit()
     {
-        return $this->belongsTo('App\Models\Deposit', 'deposits_id');
+        return $this->belongsTo('App\Models\Deposit', 'deposit_id');
     } 
 
     public function deposit_destiny()
@@ -82,7 +83,7 @@ class PurchaseMovements extends Model
 
     public function purchases_product_inventory()
     {
-        return $this->belongsTo('App\Models\PurchasesProductInventory');
+        return $this->belongsTo('App\Models\Inventory');
     } 
 
     public function movements_destiny()

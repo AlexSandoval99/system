@@ -161,7 +161,7 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center" width="5%">  Cant.</th>
-                                        <th class="text-center" width="17%"> Servicio</th>
+                                        <th class="text-center" width="17%"> Materia Prima</th>
                                         <th class="text-center" width="20%"> Descripcion</th>
                                         <th class="text-center" width="8%">  Movil</th>
                                         <th class="text-center" width="10%"> Precio</th>
@@ -239,7 +239,7 @@
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        redirect ("{{ url('purchases-movements') }}");
+                        redirect ("{{ url('purchase-movement') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);

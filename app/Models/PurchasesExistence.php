@@ -9,14 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 class PurchasesExistence extends Model
 {
     protected $fillable = [	'raw_material_id',
-                            'social_reason_id',
+                            'type',
                             'deposit_id',
                             'quantity',
                             'residue',
                             'price_cost',
-                            'price_cost_iva','expiration_date' ];
-
-    protected $dates = ['expiration_date'];
+                            'price_cost_iva'];
                             
     public function raw_material()
     {

@@ -8,6 +8,8 @@
         "php": "^7.3|^8.0",
         "almasaeed2010/adminlte": "~2.4",
         "barryvdh/laravel-dompdf": "^2.0",
+        "brian2694/laravel-toastr": "^5.5",
+        "doctrine/dbal": "^3.8",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -17,7 +19,8 @@
         "laravel/ui": "^3.2",
         "laravelcollective/html": "^6.3",
         "maatwebsite/excel": "^3.1",
-        "milon/barcode": "^10.0"
+        "milon/barcode": "^10.0",
+        "rap2hpoutre/laravel-log-viewer": "^2.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -34,7 +37,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Http/Helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

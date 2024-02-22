@@ -2,9 +2,11 @@
 @section('title', 'Recepción de Orden de Compra')
 @section('content')
     <div class="row">
-            <div class="ibox-tools">
-                <a href="{{ url('purchase-movement/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
-            </div>
+        <div class="ibox-content pull-right">
+            <a href="{{ url('purchase-movement/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+        </div>
+    </div>
+    <div class="row">
             <form method="GET">
                 <div class="row">
                     <div class="form-group col-md-2">
@@ -19,7 +21,7 @@
                     <div class="form-group col-md-2">
                         <button type="submit" class="btn btn-primary" name="filter" value="1"><i class="fa fa-search"></i></button>
                         @if(request()->filter)
-                        <a href="{{ url('purchases-movements') }}" class="btn btn-warning"><i class="fa fa-times"></i></a>
+                        <a href="{{ url('purchase-movements') }}" class="btn btn-warning"><i class="fa fa-times"></i></a>
                         @endif
                     </div>
                 </div>
@@ -34,6 +36,7 @@
                         <th class="text-right">Numero OC</th>
                         <th class="text-center">Factura</th>
                         <th>Deposito</th>
+                        <th>Acciones</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -42,14 +45,14 @@
                         <tr>
                             <td>{{ $purchases_movement->id }}</td>
                             <td class="text-center">{{ $purchases_movement->created_at->format('d/m/Y') }}</td>
-                            <td class="text-right">{{ $purchases_movement->purchases_movement_details()->first() ? $purchases_movement->purchases_movement_details()->first()->purchases_order_detail->purchases_order->number : ''}}</td>
+                            <td class="text-right">{{ $purchases_movement->purchases_movement_details()->first() ? $purchases_movement->purchases_movement_details()->first()->purchases_order_detail->purchase_order->number : ''}}</td>
                             <td class="text-center">{{ $purchases_movement->invoice_number }}</td>
                             <td>{{ $purchases_movement->deposit->name }}</td>
                             <td class="text-right">
-                                <a href="{{ url('purchases-movements/' . $purchases_movement->id) }}"><i class="fa fa-info-circle"></i></a>
-                                @permission('purchases-movements.delete')
+                                <a href="{{ url('purchase-movement/' . $purchases_movement->id) }}"><i class="fa fa-info-circle"></i></a>
+                                {{-- @permission('purchases-movements.delete') --}}
                                         <a href="{{ url('purchases-movements/' . $purchases_movement->id . '/delete') }}"><i class="fa fa-trash"></i></a>
-                                @endpermission
+                                {{-- @endpermission --}}
                             </td>
                         </tr>
                     @endforeach

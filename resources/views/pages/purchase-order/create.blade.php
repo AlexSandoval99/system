@@ -78,7 +78,6 @@
                         <ul class="nav nav-tabs">
                             <li class="active"><a data-toggle="tab" href="#tab-1">Ultimas Compras</a></li>
                             <li class=""><a data-toggle="tab" href="#tab-2">Pendientes Pago</a></li>
-                            <li class=""><a data-toggle="tab" href="#tab-3">Anticipos</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
