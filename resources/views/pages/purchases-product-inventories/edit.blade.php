@@ -8,12 +8,12 @@
                         <h5>Editar Inventario de Productos</h5>
                         <div class="ibox-tools">
                             @permission('closing-inventory-stock.reload-existence')
-                                <a href="{{ url('purchases-product-inventories/' . $purchases_product_inventory->id .'/edit?reload_actual_existence=1') }}" class="btn btn-primary btn-xs"><i class="fa fa-sync"></i> Precargar Saldos</a>
+                                <a href="{{ url('inventories/' . $purchases_product_inventory->id .'/edit?reload_actual_existence=1') }}" class="btn btn-primary btn-xs"><i class="fa fa-sync"></i> Precargar Saldos</a>
                             @endpermission
-                            <a href="{{ url('purchases-product-inventories') }}" class="btn btn-primary btn-xs"><i class="fa fa-arrow-left"></i> Volver</a>
+                            <a href="{{ url('inventories') }}" class="btn btn-primary btn-xs"><i class="fa fa-arrow-left"></i> Volver</a>
                         </div>
                     </div>
-                    {{ Form::open(['route' => ['purchases-product-inventories.update', $purchases_product_inventory->id], 'method' => 'PUT']) }}
+                    {{ Form::open(['route' => ['inventories.update', $purchases_product_inventory->id], 'method' => 'PUT']) }}
                         <div class="ibox-content table-responsive">
                             @include('partials.messages')
                             @if(count($purchases_products) > 0)
@@ -71,7 +71,7 @@
                         </div>             
                         <div class="ibox-footer">
                             <input type="submit" class="btn btn-sm btn-success" value="Guardar">
-                            <a href="{{ url('purchases-product-inventories') }}" class="btn btn-sm btn-danger">Cancelar</a>
+                            <a href="{{ url('inventories') }}" class="btn btn-sm btn-danger">Cancelar</a>
                         </div>                                
                     {{ Form::close() }} 
                 </div>                               

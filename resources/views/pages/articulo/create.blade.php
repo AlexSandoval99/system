@@ -19,6 +19,12 @@
                             <input id="barcode" name="barcode" class="form-control" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}">
                           </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Precio</label><br>
+                            <input id="price" name="price" class="form-control" type="text"  value="{{--{{ old('name', $articulo->name) }}--}}">
+                          </div>
+                    </div>
                       <div class="row">
                           <div class="form-group col-md-6">
                               <label>Marca</label>

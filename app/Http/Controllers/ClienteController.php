@@ -9,6 +9,7 @@ use App\Models\Departamento;
 use App\Models\Nationality;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClienteController extends Controller
 {
@@ -69,7 +70,31 @@ class ClienteController extends Controller
             return $result;
         }
     }
+
+    public function ajax_clients()
+    {
+        if(request()->ajax())
+        {
+            $results = [];
+            $key = 0;
+            $cliente = Client::where('first_name','LIKE','%'. request()->q .'%')->orWhere('last_name','LIKE','%'. request()->q .'%')
+                                ->orWhere('ruc','LIKE','%'. request()->q .'%')->orWhere('document_number','LIKE','%'. request()->q .'%')->first();
+            if($cliente)
+            {
+                $results['items'][$key]['id']                  = $cliente->id;
+                $results['items'][$key]['text']                = $cliente->first_name .' '.$cliente->last_name . ' | Ruc : ' . $cliente->ruc;
+                $results['items'][$key]['name']                = $cliente->first_name .' '.$cliente->last_name;
+                $results['items'][$key]['ruc']                 = $cliente->ruc;
+                $results['items'][$key]['razon_social']        = $cliente->razon_social;
+                $results['items'][$key]['document_number']     = $cliente->document_number;
+                $results['items'][$key]['address']             = $cliente->address;
+                $results['items'][$key]['phone']               = $cliente->phone ?? '';
+            }
+            return response()->json($results);                   
+        }
+    }
 }
+
 
 
 

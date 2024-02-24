@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Articulo extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'barcode','status'];
+    protected $fillable = ['name','price', 'barcode','status'];
 
     public function scopeFilter($query)
     {

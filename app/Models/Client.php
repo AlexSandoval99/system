@@ -11,4 +11,10 @@ class Client extends Model
     protected $fillable = ['first_name', 'last_name', 'address', 'ruc','neighborhood','razon_social','civil_status','document_number',
                         
                             'gender','observation','status'];
+
+
+    public function scopeFilter($query)
+    {
+        return $query->where('status', true)->orderBy('id')->pluck('id', 'id');
+    }
 }

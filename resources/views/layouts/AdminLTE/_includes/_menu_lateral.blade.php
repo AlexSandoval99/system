@@ -111,13 +111,31 @@
 						<a href="{{ route('reports.stock-product-purchases') }}" title="Existencia">
 							<span>Existencia</span>
 						</a>
-						
 						<a href="{{ route('reports.purchases_report') }}" title="Libro Compra">
 							<span>Libro Compra</span>
 						</a>
 					</li>
 				</ul>
 			</li>
-		</ul>
+			<li class="treeview">
+				<a href="#"><i class="fa fa-group"></i><span>Produccion</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+				<ul class="treeview-menu">
+					<li class="provider">
+						<a href="{{ route('wish-production') }}" title="Pedido de Compras">
+							<span>Pedido de Produccion</span>
+						</a>
+					</li>
+					<li class="provider">
+						<a href="{{ route('budget-production') }}" title="Presupuesto">
+							<span>Presupuesto</span>
+						</a>
+					</li>
+					<li class="provider">
+						<a href="{{ route('production-order') }}" title="Presupuesto">
+							<span>Orden de Produccion</span>
+						</a>
+					</li>
+				</ul>
+			</li>
 	</section>
 </aside>

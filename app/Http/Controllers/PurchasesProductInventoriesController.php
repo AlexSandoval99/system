@@ -113,7 +113,7 @@ class PurchasesProductInventoriesController extends Controller
             toastr()->success('Agregado exitosamente');
         });
 
-        return redirect('purchases-product-inventories');
+        return redirect('inventories');
     }
 
     public function show(PurchasesProductInventory $purchases_product_inventory)
@@ -190,7 +190,7 @@ class PurchasesProductInventoriesController extends Controller
             toastr()->success('Inventario actualizado exitosamente');
         });
 
-        return redirect('purchases-product-inventories');
+        return redirect('inventories');
     }
 
     public function confirm_inventory(ConfirmInventoryRequest $request, Inventory $purchases_product_inventory)
@@ -287,14 +287,14 @@ class PurchasesProductInventoriesController extends Controller
 
         toastr()->success('Inventario confirmado exitosamente');
 
-        return redirect('purchases-product-inventories');
+        return redirect('inventories');
     }
 
     public function delete(PurchasesProductInventory $purchases_product_inventory)
     {
         $purchases_product_inventory->update(['status' => 3]);
         toastr()->success('Eliminado exitosamente');
-        return redirect('purchases-product-inventories');
+        return redirect('inventories');
     }
 
     public function xls(PurchasesProductInventory $purchases_product_inventory)

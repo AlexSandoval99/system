@@ -126,7 +126,24 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('reports/purchases_report', 'ReportsController@purchases_report')->name('reports.purchases_report');
 	Route::get('reports/purchases_report/pdf', 'ReportsController@purchases_report_pdf')->name('reports.purchases_report.pdf');
 
+	Route::get('wish-production', 'WishProductionController@index')->name('wish-production');
+	Route::get('wish-production/create', 'WishProductionController@create')->name('wish-production.create');
+	Route::get('wish-production/{wish_production}', 'WishProductionController@show')->name('wish-production-create');
+	Route::post('wish-production', 'WishProductionController@store')->name('wish-production.store');
+    Route::get('ajax/clients', 'ClienteController@ajax_clients')->name('ajax.clients');
 
+	Route::get('budget-production', 'BudgetProductionController@index')->name('budget-production');
+	Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');
+	Route::get('budget-production/{purchase_movement}', 'BudgetProductionController@show')->name('budget-production-show');
+	Route::post('budget-production', 'BudgetProductionController@store')->name('budget-production-store');
+	Route::get('ajax/budget-production', 'BudgetProductionController@ajax_budget_production')->name('ajax.budget-production');
+	Route::get('ajax/articulo', 'ArticuloController@ajax_articulo')->name('ajax.articulo');
+
+	Route::get('production-order', 'ProductionOrderController@index')->name('production-order');
+	Route::get('production-order/create', 'ProductionOrderController@create')->name('production-order-create');
+	Route::get('production-order/{purchase_movement}', 'ProductionOrderController@show')->name('production-order-show');
+	Route::post('production-order', 'ProductionOrderController@store')->name('production-order-store');
+	
 
 
 

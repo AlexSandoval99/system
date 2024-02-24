@@ -32,6 +32,7 @@ class ArticuloController extends Controller
             $articulo = Articulo::create([
                                         'name'           => $request->name,
                                         'barcode'        => $request->barcode,
+                                        'price'        => $request->price,
                                         'status'         => 1 ]);
         });
         return redirect('articulo');
@@ -71,6 +72,26 @@ class ArticuloController extends Controller
                 $results['items'][$key]['id']       = $purchase->id;
                 $results['items'][$key]['date']     = $purchase->date->format('d/m/Y');
                 $results['items'][$key]['quantity'] = $purchase->quantity;
+            }
+
+            return response()->json($results);
+        }
+        abort(404);
+    }
+
+    public function ajax_articulo()
+    {
+        if(request()->ajax())
+        {
+            $results   = [];
+
+            if(request()->articulo_id)
+            {
+                $articulo = Articulo::where('id',request()->articulo_id)->first();
+                $results                = [];
+                $results['items']['id']       = $articulo->id;
+                $results['items']['name']     = $articulo->name;
+                $results['items']['price']    = intVal($articulo->price);
             }
 
             return response()->json($results);

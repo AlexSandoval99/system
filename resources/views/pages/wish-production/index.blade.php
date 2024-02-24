@@ -1,12 +1,12 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Pedido Compras')
+@section('title', 'Pedido Produccion')
 @section('content')
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <div class="btn-group pull-right">
-                    <a href="{{ url('wish-purchase/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    <a href="{{ url('wish-production/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
                 </div>
             </div>
             <div class="ibox-content pb-0">
@@ -23,20 +23,21 @@
                     <thead>
                         <tr>
                             <th>Nro°</th>
-                            <th>SU</th>
                             <th>Fecha</th>
+                            <th>Cliente</th>
                             <th>Estado</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($purchases as $purchase)
+                        @foreach($productions as $production)
                             <tr>
-                                <td>{{ $purchase->number }}</td>
-                                <td>{{ $purchase->branch->name }}</td>
-                                <td>{{ $purchase->date }}</td>
+                                <td>{{ $production->id }}</td>
+                                <td>{{ $production->date }}</td>
+                                <td>{{ $production->client->razon_social }}</td>
+
                                 <td>
-                                    <span class="label label-{{ config('constants.purchase-status-label.' . $purchase->status) }}">{{ config('constants.purchase-status.'. $purchase->status) }}</span>
+                                    <span class="label label-{{ config('constants.purchase-status-label.' . $production->status) }}">{{ config('constants.purchase-status.'. $production->status) }}</span>
                                 </td>
                                 <td class="text-right">
                                     <div class="dropdown" style="display: inline-block;">
@@ -44,6 +45,7 @@
                                             Acción
                                             <span class="caret"></span>
                                         </button>
+                                       
                                     </div>
                                 </td>
                             </tr>
@@ -51,7 +53,7 @@
                     </tbody>
                 </table>
             </div>
-            {{ $purchases->appends(request()->query())->links() }}
+            {{ $productions->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
