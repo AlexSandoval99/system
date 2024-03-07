@@ -1,12 +1,12 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Control de Produccion')
+@section('title', 'Control de Calidad')
 @section('content')
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <div class="btn-group pull-right">
-                    <a href="{{ url('production-control/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    <a href="{{ url('production-control-quality/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
                 </div>
             </div>
             <div class="ibox-content pb-0">

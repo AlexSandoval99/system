@@ -79,6 +79,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('production-stage/create', 'ProductionStageController@create')->name('production-stage-create');
 	Route::post('production-stage', 'ProductionStageController@store')->name('production-stage.store');
 
+	Route::get('production-quality', 'ProductionQualityController@index')->name('production-quality');
+	Route::get('production-quality/create', 'ProductionQualityController@create')->name('production-quality-create');
+	Route::post('production-quality', 'ProductionQualityController@store')->name('production-quality.store');
+
 	Route::get('nationalities', 'NationalitiesController@index')->name('nationalities');
 	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
 	Route::post('nationalities', 'NationalitiesController@store')->name('nationalities.store');
@@ -159,6 +163,16 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('production-control/{purchase_movement}', 'ProductionControlController@show')->name('production-control-show');
 	Route::post('production-control', 'ProductionControlController@store')->name('production-control-store');
 	Route::get('ajax/control-production', 'ProductionControlController@ajax_control_production')->name('ajax.control-production');
+	Route::get('ajax/update-control', 'ProductionControlController@ajax_update_control')->name('ajax.update-control');
+
+	
+	Route::get('production-control-quality', 'ProductionControlQualityController@index')->name('production-control-quality');
+	Route::get('production-control-quality/create', 'ProductionControlQualityController@create')->name('production-control-quality-create');
+	Route::get('production-control-quality/{purchase_movement}', 'ProductionControlQualityController@show')->name('production-control-quality-show');
+	Route::post('production-control-quality', 'ProductionControlQualityController@store')->name('production-control-quality-store');
+	Route::get('ajax/control-calidad', 'ProductionControlQualityController@ajax_control_calidad')->name('ajax.control-calidad');
+	Route::get('ajax/update-control', 'ProductionControlQualityController@ajax_update_control')->name('ajax.update-control');
+
 	// Route::get('ajax/modal-material', 'ProductionControlController@ajax_modal_material')->name('ajax.modal-material');
 	
 	

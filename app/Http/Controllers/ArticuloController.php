@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateArticuloRequest;
 use App\Models\Articulo;
 use App\Models\Brand;
+use App\Models\ProductionQuality;
 use App\Models\ProductionStage;
 use App\Models\Purchase;
 use App\Models\RawMaterial;
@@ -27,7 +28,8 @@ class ArticuloController extends Controller
         $brand = Brand::where('status',1)->pluck('name','id');
         $materials = RawMaterial::filter();
         $stages = ProductionStage::filter();
-        return view('pages.articulo.create',compact('brand','materials','stages'));
+        $qualitys = ProductionQuality::filter();
+        return view('pages.articulo.create',compact('brand','materials','stages','qualitys'));
     }
 
     public function store(CreateArticuloRequest $request)
@@ -52,6 +54,13 @@ class ArticuloController extends Controller
                 SettingProduct::create([
                     'articulo_id'       => $articulo->id,
                     'stage_id'       => $value1,
+                ]);
+            }
+            foreach ($request->qualitys as $key2 => $value2) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'production_qualities_id'       => $value2,
                 ]);
             }
         });

@@ -102,7 +102,30 @@
                                 </div>
                             </div>
                             <div id="tab3" class="tab-pane fade">
-                                
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="material">Cotrol de Calidad</label><br>
+                                        {{ Form::select('quality', $qualitys, null, ['class' => 'form-control', 'id' => 'quality', 'placeholder' => 'Seleccione una Calidad']) }}
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label>&nbsp;</label><br>
+                                        <button type="button" class="btn btn-primary" id="AddQuality"><i class="fa fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @csrf
+                                        <table class="table" id="tablaQuality" style="display: none;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Control de Calidad</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablaQuality">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -145,6 +168,18 @@
             if(count > 0)
             {
                 $('#tablaStage').show();
+            }
+        });
+
+        $('#AddQuality').click(function(){
+            var quality = $('#quality').val();
+            var qualityText = $("select[name='quality'] option:selected").text();
+            var fila = '<tr><td><input type="hidden" name="qualitys[]" value="' + quality + '">' + qualityText + '</td><td><a href="javascript:;" onClick="removeRow(this, ' + count + ');"><i style="font-size:17px;" class="fa fa-times"></i></a></td></tr>';
+            $('#tablaQuality').append(fila);
+            count++;
+            if(count > 0)
+            {
+                $('#tablaQuality').show();
             }
         });
 

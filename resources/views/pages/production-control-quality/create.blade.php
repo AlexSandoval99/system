@@ -1,5 +1,5 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Control de Produccion')
+@section('title', 'Control de Calidad')
 @section('content')
 <div class="row">
     {{ Form::open(['id' => 'form']) }}
@@ -7,13 +7,13 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Agregar Control de Produccion</h5>
+                            <h5>Agregar Control de Calidad</h5>
                         </div>
                         <div class="ibox-content pb-0">
                             <div class="row">
                                 <div class="form-group col-md-2">
-                                    <label>Numero Orden</label>
-                                    <input class="form-control" type="text" name="number_order" id="number_order" placeholder="Numero Orden" autofocus>
+                                    <label>Numero Control</label>
+                                    <input class="form-control" type="text" name="number_control" id="number_control" placeholder="N° Control de Produccion" autofocus>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Fecha</label>
@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <br>
-                                    <button type="button" class="btn btn-primary" name="button_search" id="button_search"><i class="fa fa-search"></i> BUSCAR ORDEN</button>
+                                    <button type="button" class="btn btn-primary" name="button_search" id="button_search"><i class="fa fa-search"></i> BUSCAR CONTROL PRODUCCION</button>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +55,9 @@
                     <div class="col-md-12">
                         <div class="tabs-container">
                             <ul class="nav nav-tabs fs-3">
-                                <li class="active"><a data-toggle="tab" href="#seccion1" onclick="ChangeTab1();"><h5>Primera Etapa </h5></a></li>
-                                <li class=""><a data-toggle="tab" href="#seccion2" onclick="ChangeTab2();"><h5>Segunda Etapa </h5></a></li>
-                                <li class=""><a data-toggle="tab" href="#seccion3" onclick="ChangeTab3();"><h5>Tercera Etapa </h5></a></li>
+                                <li class="active"><a data-toggle="tab" href="#seccion1" onclick="ChangeTab1();"><h5>Primera Calidad </h5></a></li>
+                                <li class=""><a data-toggle="tab" href="#seccion2" onclick="ChangeTab2();"><h5>Segunda Calidad </h5></a></li>
+                                <li class=""><a data-toggle="tab" href="#seccion3" onclick="ChangeTab3();"><h5>Tercera Calidad </h5></a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="seccion1">
@@ -68,7 +68,7 @@
                                                     <th>#</th>
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
-                                                    <th>Etapa</th>
+                                                    <th>Calidad</th>
                                                     <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
@@ -87,7 +87,7 @@
                                                     <th>#</th>
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
-                                                    <th>Etapa</th>
+                                                    <th>Calidad</th>
                                                     <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
@@ -105,9 +105,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Articulos</th>
+                                                    <th>Articulo</th>
                                                     <th>Cantidad</th>
-                                                    <th>Etapa</th>
+                                                    <th>Calidad</th>
                                                     <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
@@ -137,9 +137,9 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
+                                    <label for="etapa">Calidad Verificada:</label>
                                     <br>
-                                    <td><span id="stage_name0"></span></td>
+                                    <td><span id="qualities_name0"></span></td>
                                     <input type="checkbox" id="etapa0" name="etapa0">
                                     <input type="hidden" id="stage_id0" name="stage_id0">
 
@@ -179,9 +179,9 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
+                                    <label for="etapa">Calidad Verificada:</label>
                                     <br>
-                                    <td><span id="stage_name1"></span></td>
+                                    <td><span id="qualities_name1"></span></td>
                                     <input type="checkbox" id="etapa1" name="etapa1">
                                     <input type="hidden" id="stage_id1" name="stage_id1">
                                 </div>
@@ -220,9 +220,9 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
+                                    <label for="etapa">Calidad Verificada:</label>
                                     <br>
-                                    <td><span id="stage_name2"></span></td>
+                                    <td><span id="qualities_name2"></span></td>
                                     <input type="checkbox" id="etapa2" name="etapa2">
                                     <input type="hidden" id="stage_id2" name="stage_id2">
                                 </div>
@@ -304,34 +304,34 @@
 
             $(document).ready(function(){
                 $(document).on('click', '.open-modal1', function () {
-                    var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
+                    var stageName = $(this).data('quality');
+                    var stageId = $(this).data('production_qualities_id');
                     var quantity = $(this).data('quantity');
 
                     // Poblar el modal con los datos
-                    $('#stage_name0').text(stageName);
+                    $('#qualities_name0').text(stageName);
                     $('#stage_id0').val(stageId);
                     $('#total_quantity0').val(quantity);
                 });
 
                 $(document).on('click', '.open-modal2', function () {
                     var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
+                    var stageId = $(this).data('production_qualities_id');
                     var quantity = $(this).data('quantity');
                     console.log(stageName,quantity);
                     // Poblar el modal con los datos
-                    $('#stage_name1').text(stageName);
+                    $('#qualities_name1').text(stageName);
                     $('#stage_id1').val(stageId);
                     $('#total_quantity1').val(quantity);
                 });
 
                 $(document).on('click', '.open-modal3', function () {
                     var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
+                    var stageId = $(this).data('production_qualities_id');
                     var quantity = $(this).data('quantity');
 
                     // Poblar el modal con los datos
-                    $('#stage_name2').text(stageName);
+                    $('#qualities_name2').text(stageName);
                     $('#stage_id2').val(stageId);
                     $('#total_quantity2').val(quantity);
                 });
@@ -372,19 +372,19 @@
         }
         function Search_order()
         {
-            var number_order    = $("#number_order").val();
+            var number_control    = $("#number_control").val();
             var conteo           = 0;
             $('#tbody_detail1').html('');
 
-            if(number_order != '')
+            if(number_control != '')
             {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{ route('ajax.control-production') }}',
+                    url: '{{ route('ajax.control-calidad') }}',
                     type: "GET",
-                    data: { number_order : number_order, sesion:1},
+                    data: { number_control : number_control, sesion:1},
                     success: function(data) {
                         $.each(data.items, function(index, element) {
                             invoice_items_array.push(element.product_id);
@@ -394,9 +394,9 @@
                                 '<td>' + element.product_id + '</td>' +
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.qualities_name + '</td>' +
                                 '<td></td>' +
-                                '<td><i class="fa fa-info-circle open-modal1" data-toggle="modal" data-target="#myModal1" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
+                                '<td><i class="fa fa-info-circle open-modal1" data-toggle="modal" data-target="#myModal1" data-stage="' + element.qualities_name + '" data-production_qualities_id="' + element.production_qualities_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
@@ -421,7 +421,7 @@
                         {
                             swal({
                                 title: "SISTEMA",
-                                text: "No existe Pedido!!",
+                                text: "No existe Control de Produccion!!",
                                 icon: "info",
                                 button: "OK",
                             });
@@ -437,9 +437,9 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{ route('ajax.control-production') }}',
+                    url: '{{ route('ajax.control-calidad') }}',
                     type: "GET",
-                    data: { number_order : number_order, sesion:2},
+                    data: { number_control : number_control, sesion:2},
                     success: function(data) {
                         $.each(data.items, function(index, element) {
                             invoice_items_array.push(element.product_id);
@@ -449,10 +449,10 @@
                                 '<td>' + element.product_id + '</td>' +
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.qualities_name + '</td>' +
                                 '<td></td>' +
 
-                                '<td><i class="fa fa-info-circle open-modal2" data-toggle="modal" data-target="#myModal2" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
+                                '<td><i class="fa fa-info-circle open-modal2" data-toggle="modal" data-target="#myModal2" data-stage="' + element.qualities_name + '" data-production_qualities_id="' + element.production_qualities_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
@@ -468,9 +468,9 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{ route('ajax.control-production') }}',
+                    url: '{{ route('ajax.control-calidad') }}',
                     type: "GET",
-                    data: { number_order : number_order, sesion:3},
+                    data: { number_control : number_control, sesion:3},
                     success: function(data) {
                         $.each(data.items, function(index, element) {
                             invoice_items_array.push(element.product_id);
@@ -479,9 +479,9 @@
                                 '<td>' + element.product_id + '</td>' +
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.qualities_name + '</td>' +
                                 '<td></td>' +
-                                '<td><i class="fa fa-info-circle open-modal3" data-toggle="modal" data-target="#myModal3" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
+                                '<td><i class="fa fa-info-circle open-modal3" data-toggle="modal" data-target="#myModal3" data-stage="' + element.qualities_name + '" data-production_qualities_id="' + element.production_qualities_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
