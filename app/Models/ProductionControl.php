@@ -6,14 +6,13 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductionOrder extends Model
+class ProductionControl extends Model
 {
     use HasFactory;
     protected $fillable = [
                             'date',
                             'status',
                             'client_id',
-                            'team_work_id',
                             'branch_id',
                             'user_id'
                         ];
@@ -21,19 +20,15 @@ class ProductionOrder extends Model
     {
         $this->attributes['date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
-    public function production_order_details()
+    public function production_control_details()
     {
-        return $this->hasMany('App\Models\ProductionOrderDetail','production_order_id');
+        return $this->hasMany('App\Models\ProductionControlDetail','production_control_id');
     }
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
     }
-    public function team_work()
-    {
-        return $this->belongsTo('App\Models\TeamWork');
-    }
-    public function branch()
+    public function Branch()
     {
         return $this->belongsTo('App\Models\Branch');
     }

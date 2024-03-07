@@ -17,4 +17,9 @@ class Client extends Model
     {
         return $query->where('status', true)->orderBy('id')->pluck('id', 'id');
     }
+    
+    public function getFullnameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }

@@ -6,13 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductionOrderRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
+use App\Models\BudgetProductionDetail;
 use App\Models\Presentation;
+use App\Models\ProductionOrder;
+use App\Models\ProductionOrderDetail;
 use App\Models\Provider;
 use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\PurchaseOrder;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 
@@ -21,7 +26,7 @@ class ProductionOrderController extends Controller
     public function index()
     {
         $purchases_providers = Provider::Filter();
-        $order           = PurchaseOrder::with('branch', 'provider')
+        $order           = ProductionOrder::with('branch')
             ->orderBy('id', 'desc');
 
         if (request()->o)
@@ -30,77 +35,65 @@ class ProductionOrderController extends Controller
                 ->orWhere('number', 'LIKE', '%' . request()->o . '%');
         }
 
-        if (request()->invoice_copy)
-        {
-            $order = $order->where('invoice_copy', request()->invoice_copy);
-        }
-
          $order = $order->paginate(20);
-         return view('pages.purchase-order.index', compact('order', 'purchases_providers'));
+         return view('pages.production-order.index', compact('order', 'purchases_providers'));
     }
 
     public function create()
     {
         $users                  = User::filter();
         $branches               = Branch::where('status', true)->pluck('name', 'id');
-        $raw_materials          = RawMaterial::Filter();
+        $articulos               = Articulo::Filter();
         $product_presentations  = Presentation::Filter();
         $provider_suggesteds    = NULL;
-        return view('pages.production-order.create', compact('users' , 'branches', 'raw_materials', 'product_presentations','provider_suggesteds'));
+        return view('pages.production-order.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds'));
     }
 
     public function store(CreateProductionOrderRequest $request)
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, &$wish_purchase)
+            DB::transaction(function() use ($request, &$production_order)
             {
-                $last_number = PurchaseOrder::orderBy('number', 'desc')->limit(1)->first();
-                $last_number = $last_number ? $last_number->number : 0;
-                $last_number = $last_number + 1;
-
-                $wish_purchase = PurchaseOrder::create([
-                    'number'                    => $last_number,
-                    'date'                      => $request->date,
-                    'ruc'                       => $request->ruc,
-                    'branch_id'                 => $request->branch_id,
-                    'condition'                 => $request->condition,
-                    'provider_id'               => $request->purchases_provider_id,
-                    'razon_social'              => $request->razon_social,
-                    'phone'                     => $request->phone,
-                    'address'                   => $request->address,
-                    'status'                    => 1,
-                    'observacion'               => $request->observation,
-                    'user_id'                   => auth()->user()->id,
-                    'amount'                    => $this->parse($request->total_product)
+                $production_order = ProductionOrder::create([
+                    'date'              => $request->date,
+                    'status'            => 1,
+                    'client_id'         => $request->client_id,
+                    'team_work_id'      => 1,
+                    'branch_id'         => $request->branch_id,
+                    'user_id'           => auth()->user()->id
                 ]);
 
                 // Grabar los Productos
                 foreach($request->detail_product_id as $key => $value)
                 {
-
-                    $wish_purchase->purchase_order_details()->create([
-                        'material_id'              => $request->detail_product_id[$key],
-                        'quantity'                 => $request->detail_product_quantity[$key],
-                        'description'              => isset($request->detail_product_description[$key]) ? $request->detail_product_name[$key].'('.$request->detail_product_description[$key].')' : $request->detail_product_name[$key],
-                        'amount'                   => $this->parse($request->detail_product_amount[$key]),
-                        'residue'                  => $this->parse($request->detail_product_amount[$key]),
-                    ]);
+                    foreach ($request->{"detail_material_id_$value"} as $key1 => $value1) 
+                    {
+                        $production_order->production_order_details()->create([
+                            'material_id'              => $value1,
+                            'articulo_id'              => $value,
+                            'quantity_material'        => $request->{"detail_material_quantity_$value"}[$key1],
+                            'quantity'                 => $request->detail_product_quantity[$key],
+                            'production_order_id'      => $production_order->id,
+                        ]);
+                    }
                 }
             });
 
             return response()->json([
                 'success'            => true,
-                'purchases_order_id' => $wish_purchase->id
             ]);
         }
         abort(404);
     }
 
-    public function show(PurchaseOrder $wish_purchase)
+    public function show(ProductionOrder $production_order)
     {
-
-        return view('pages.wish-purchase.show', compact('wish_purchase'));
+        $production_order->load(['production_order_details', 
+        'production_order_details.client', 
+        'production_order_details.user']);
+        
+        return view('pages.production-order.show', compact('production_order'));
     }
 
     public function charge_purchase_budgets(PurchaseOrder $wish_purchase)
@@ -108,100 +101,60 @@ class ProductionOrderController extends Controller
         return view('pages.wish-purchase.purchase_budgets',compact('wish_purchase'));
     }
 
-    public function charge_purchase_budgets_store(PurchaseOrder $wish_purchase, CreatePurchaseImageRequest $request)
+    public function ajax_order_production()
     {
-
-        if (request()->ajax()) {
-            if ($request->hasFile('files')) {
-                $wish_purchase->purchase_budgets()->delete();
-
-                foreach ($request->file('files') as $key => $input_file) {
-                    $file = $input_file;
-
-                    $dir = 'storage/wish_purchases_budgets';
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0777, true);
-                    }
-
-                    if ($file) {
-                        $filename = $this->uploadSignature($file);
-                    }
-
-                    $wish_purchase->purchase_budgets()->create([
-                        'name' => $filename,
-                        'original_name' => $file->getClientOriginalName(),
-                    ]);
-                }
-            }
-
-            return response()->json(['success' => true]);
+        if(request()->ajax())
+        {
+            $results = [];        
+            $order_productions = BudgetProductionDetail::with('budget_production', 'articulo')
+                                                            ->select("budget_production_details.*")
+                                                            ->join('budget_productions', 'budget_production_details.budget_production_id', '=', 'budget_productions.id')
+                                                            ->where('budget_productions.status', true)
+                                                            ->where('budget_productions.id', request()->number_budget)
+                                                            ->get();
+            foreach ($order_productions as $key => $order_detail)
+            {
+                $results['items'][$key]['id']           = $order_detail->id;
+                $results['items'][$key]['product_id']   = $order_detail->articulo_id;
+                $results['items'][$key]['product_name'] = $order_detail->articulo->name;
+                $results['items'][$key]['quantity']     = $order_detail->quantity;
+                $results['items'][$key]['client_id']    = $order_detail->budget_production->client_id;
+                $results['items'][$key]['client']       = $order_detail->budget_production->client->first_name.' '.$order_detail->budget_production->client->last_name;
+                $results['items'][$key]['branch_id']    = $order_detail->budget_production->branch_id;
+                $results['items'][$key]['branch']       = $order_detail->budget_production->branch->name;
+                $results['items'][$key]['date']         = $order_detail->budget_production->date->format('d/m/Y');
+                // $results['ruc']                 = $order_detail->purchase_order->ruc;
+                // $results['provider_id']         = $order_detail->purchase_order->provider_id;
+                // $results['provider_fullname']   = $order_detail->purchase_order->provider->name;
+                // $results['phone']               = $order_detail->purchase_order->phone;
+                // $results['social_reason']       = $order_detail->purchase_order->razon_social;
+                // $results['address']             = $order_detail->purchase_order->address;
+                $results['branch_id']           = $order_detail->budget_production->branch_id;
+            }         
+            return response()->json($results);
         }
+        abort(404);
     }
 
-    // private function uploadSignature($file)
-    // {
-    //     $signature_name = Str::random(40) . '.' . $file->getClientOriginalExtension();
-
-    //     $destinationPath = 'storage/wish_purchases_budgets/' . $signature_name;
-
-    //     if ($file->move(public_path('storage/wish_purchases_budgets'), $signature_name)) {
-    //         Image::make($destinationPath)
-    //             ->orientate()
-    //             ->save($destinationPath);
-    //     }
-
-    //     return $signature_name;
-    // }
-    // public function confirm_purchase_budgets(PurchaseOrder $wish_purchase)
-    // {
-
-    //     $wish_purchases = $wish_purchase->purchase_budgets()->get();
-
-    //     return view('pages.wish-purchase.confirm-purchase-budgets',compact('wish_purchase'));
-    // }
-
-    // public function confirm_purchase_budgets_store(PurchaseBudget $purchase_budget)
-    // {
-    //     $text = 'Presupuesto Aprobado';
-    //     // APROBAR EL PRESUPUESTO
-    //     if(request()->type == 1)
-    //     {
-    //         $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>2]);
-    //         $purchase_budget->wish_purchase->update(['status' => 5]);
-    //     }
-    //     //BORRAR EL PRESUPUESTO
-    //     elseif(request()->type == 2)
-    //     {
-    //         $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>3]);
-    //         $text = 'Presupuesto Rechazado';
-
-    //     }
-    //     // RECHAZAR EL PRESUPUESTO
-    //     elseif(request()->type == 3)
-    //     {
-    //         $text = 'Presupuesto Borrado';
-    //         $purchase_budget->delete();
-    //     }
-
-    //     if(request()->url)
-    //     {
-    //         return redirect(request()->url);
-    //     }
-    //     else
-    //     {
-    //         return redirect('wish-purchase');
-    //     }
-    // }
-
-    // public function wish_purchase_budgets_approved(PurchaseOrder $wish_purchase)
-    // {
-    //     $purchase_budgets = $wish_purchase->purchase_budgets()->where('status',2)->get();
-
-    //     return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
-    // }
-
-    private function parse($value)
+    public function ajax_modal_material()
     {
-        return str_replace(',', '.',str_replace('.', '', $value));
+        if(request()->ajax())
+        {
+            $results = [];        
+            $articulo = Articulo::where('id',request()->product_id)->first();
+            $order = BudgetProductionDetail::where('budget_production_id',request()->number_budget)->where('articulo_id',request()->product_id)->first();
+            foreach ($articulo->setting_material as $key => $setting)
+            {
+                $results['items'][$key]['id']           = $setting->id;
+                $results['items'][$key]['articulo_id']   = $setting->articulo_id;
+                $results['items'][$key]['articulo_name'] = $setting->articulo->name;
+                $results['items'][$key]['raw_material_id']     = $setting->raw_materials_id;
+                $results['items'][$key]['raw_material']     = $setting->raw_material->description;
+                $results['items'][$key]['quantity']        = $setting->quantity * $order->quantity;
+            }         
+            return response()->json($results);
+        }
+        abort(404);
     }
+    
 }

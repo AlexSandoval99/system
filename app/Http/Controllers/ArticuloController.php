@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateArticuloRequest;
 use App\Models\Articulo;
 use App\Models\Brand;
+use App\Models\ProductionStage;
 use App\Models\Purchase;
+use App\Models\RawMaterial;
+use App\Models\SettingProduct;
 use App\Models\WishPurchase;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -22,7 +25,9 @@ class ArticuloController extends Controller
     public function create()
     {
         $brand = Brand::where('status',1)->pluck('name','id');
-        return view('pages.articulo.create',compact('brand'));
+        $materials = RawMaterial::filter();
+        $stages = ProductionStage::filter();
+        return view('pages.articulo.create',compact('brand','materials','stages'));
     }
 
     public function store(CreateArticuloRequest $request)
@@ -34,8 +39,30 @@ class ArticuloController extends Controller
                                         'barcode'        => $request->barcode,
                                         'price'        => $request->price,
                                         'status'         => 1 ]);
+            foreach ($request->materiales as $key => $value) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'raw_materials_id'   => $value,
+                    'quantity'          => $request->cantidades[$key],
+                ]);
+            }
+            foreach ($request->stages as $key1 => $value1) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'stage_id'       => $value1,
+                ]);
+            }
         });
         return redirect('articulo');
+    }
+
+    public function show(Articulo $articulo)
+    {
+        $articulo->load(['setting_product']);
+
+        return view('pages.articulo.show', compact('articulo'));
     }
 
     public function pdf(Articulo $articulo)
@@ -45,6 +72,26 @@ class ArticuloController extends Controller
                     // ->setPaper([0,0,300,300], 'portrait')
                     ->stream();
     }
+
+
+    public function edit(Articulo $articulo_id)
+    {
+        return view('pages.articulo.edit',compact('articulo_id'));
+    }
+
+    public function update(Articulo $articulo_id)
+    {
+            $articulo_id->update([
+                                'name'       => request()->name,
+                                'ruc'        => request()->ruc,
+                                'address'     => request()->address,
+                                'phone'      => request()->phone]);
+
+        return redirect('articulo');
+    }
+
+
+    
 
     public function ajax_purchases_last()
     {

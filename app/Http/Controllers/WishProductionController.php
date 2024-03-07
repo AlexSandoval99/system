@@ -93,10 +93,10 @@ class WishProductionController extends Controller
         abort(404);
     }
 
-    public function show(WishPurchase $wish_purchase)
+    public function show(WishProduction $wish_production)
     {
 
-        return view('pages.wish-purchase.show', compact('wish_purchase'));
+        return view('pages.wish-production.show', compact('wish_production'));
     }
 
     public function charge_purchase_budgets(WishPurchase $wish_purchase)

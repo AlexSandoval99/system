@@ -43,7 +43,7 @@
                             <th class="text-center">Numero Pedido</th>
                             <th class="text-center">Fecha</th>
                             <th class="text-center">Sucursal</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,7 +53,7 @@
                                 <td class="text-center">{{ $budget_production->budget_production_details()->first() ? $budget_production->budget_production_details()->first()->wish_production->id : ''}}</td>
                                 <td class="text-center">{{ $budget_production->created_at->format('d/m/Y') }}</td>
                                 <td class="text-center">{{ $budget_production->branch->name }}</td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a href="{{ url('budget-production/' . $budget_production->id) }}"><i class="fa fa-info-circle"></i></a>
                                     {{-- @permission('purchases-movements.delete') --}}
                                             <a href="{{ url('budget-production/' . $budget_production->id . '/delete') }}"><i class="fa fa-trash"></i></a>

@@ -26,7 +26,7 @@
                             <th>Fecha</th>
                             <th>Cliente</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,16 +35,11 @@
                                 <td>{{ $production->id }}</td>
                                 <td>{{ $production->date }}</td>
                                 <td>{{ $production->client->razon_social }}</td>
-
                                 <td>
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $production->status) }}">{{ config('constants.purchase-status.'. $production->status) }}</span>
                                 </td>
-                                <td class="text-right">
-                                    <div class="dropdown" style="display: inline-block;">
-                                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Acción
-                                            <span class="caret"></span>
-                                        </button>
+                                <td class="text-center">
+                                    <a href="{{ url('wish-production/' . $production->id) }}"><i class="fa fa-info-circle"></i></a>
                                        
                                     </div>
                                 </td>

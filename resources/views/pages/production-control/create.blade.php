@@ -1,5 +1,5 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Orden de Produccion')
+@section('title', 'Control de Produccion')
 @section('content')
 <div class="row">
     {{ Form::open(['id' => 'form']) }}
@@ -7,13 +7,13 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>Agregar Orden de Produccion</h5>
+                            <h5>Agregar Control de Produccion</h5>
                         </div>
                         <div class="ibox-content pb-0">
                             <div class="row">
                                 <div class="form-group col-md-2">
-                                    <label>Numero Presupuesto</label>
-                                    <input class="form-control" type="text" name="number_budget" id="number_budget" placeholder="Numero Presupuesto" autofocus>
+                                    <label>Numero Orden</label>
+                                    <input class="form-control" type="text" name="number_order" id="number_order" placeholder="Numero Orden" autofocus>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Fecha</label>
@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <br>
-                                    <button type="button" class="btn btn-primary" name="button_search" id="button_search"><i class="fa fa-search"></i> BUSCAR PRESUPUESTO</button>
+                                    <button type="button" class="btn btn-primary" name="button_search" id="button_search"><i class="fa fa-search"></i> BUSCAR ORDEN</button>
                                 </div>
                             </div>
                         </div>
@@ -49,107 +49,78 @@
                     </div>
                 </div><br><br>
                 <div class="ibox-title">
-                    <h3>Items a Fabricar</h3>
+                    <h3>Items</h3>
                 </div>
-                <div class="ibox-content table-responsive no-padding" id="detail_product">
-                    <table class="table table-hover table-striped mb-0">
-                        <thead>
-                            <tr>
-                                <th>Cód</th>
-                                <th class="text-center">Producto</th>
-                                <th class="text-center">Cantidad</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_detail"></tbody>
-                    </table>
-                </div>
-            </div>
-            {{-- <div class="ibox-content pb-0" id="div_deposito">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div id="div_provider_data">
-                            <div class="row">
-                                <div class="form-group col-md-8">
-                                    <label>Proveedor</label>
-                                    <input type="text" name="provider_name" value="" id="provider_name" class="form-control" readonly>
-                                    <input type="hidden" name="purchases_provider_id" value="" id="purchases_provider_id" class="form-control" readonly>
-                                    <input type="hidden" name="ruc" value="" id="ruc" class="form-control" readonly>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Telefono</label>
-                                    <input type="text" name="phone_label" value="" id="phone_label" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label>Dirección</label>
-                                    <input type="text" name="address_label" value="" id="address_label" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div id="div_invoice_header">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="form-group col-md-9">
-                                            <label>Razon Social</label>
-                                            <input type="text" name="social_reason" value="" id="social_reason" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label>Condición</label>
-                                            <select name="condition" onchange="show_expiration($(this).val())" class="form-control">
-                                                @foreach(config('constants.invoice_condition') as $key => $value)
-                                                    <option value="{{ $key }}">{{ $value }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                    <div class="col-md-12">
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs fs-3">
+                                <li class="active"><a data-toggle="tab" href="#seccion1" onclick="ChangeTab1();"><h5>Primera Etapa </h5></a></li>
+                                <li class=""><a data-toggle="tab" href="#seccion2" onclick="ChangeTab2();"><h5>Segunda Etapa </h5></a></li>
+                                <li class=""><a data-toggle="tab" href="#seccion3" onclick="ChangeTab3();"><h5>Tercera Etapa </h5></a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="seccion1">
+                                    <div class="panel-body table-responsive" id="div_sec1">
+                                        <table class="table table-stripped" >
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Articulo</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Etapa</th>
+                                                    <th>OBS:</th>
+                                                    <th class="text-center">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody_detail1"></tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="ibox-content table-responsive no-padding" id="div_invoice_detail">
-                            <table class="table table-hover table-bordered mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" width="5%">  Cant.</th>
-                                        <th class="text-center" width="17%"> Materia Prima</th>
-                                        <th class="text-center" width="20%"> Descripcion</th>
-                                        <th class="text-center" width="8%">  Movil</th>
-                                        <th class="text-center" width="10%"> Precio</th>
-                                        <th class="text-center" width="10%"> 10%</th>
-                                        <th class="text-center" width="10%"> 5%</th>
-                                        <th class="text-center" width="10%"> Exenta</th>
-                                        <th class="text-center" width="10%"> Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_product"></tbody>
-                            </table>
-                        </div>
-                        <br>
-                        <div id="div_image">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label>Total factura:</label> <div class="inline-block" id="label_total_invoice">Gs 0.</div>
-                                    <input type="hidden" name="total_invoice" value="" id="total_invoice" class="form-control" readonly>
+                            </div> 
+                            <div class="tab-content">
+                                <div class="tab-pane" id="seccion2">
+                                    <div class="panel-body table-responsive" id="div_sec2">
+                                        <table class="table table-stripped" data-limit-navigation="8" data-sort="true" data-paging="true" data-filter=#filter1>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Articulo</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Etapa</th>
+                                                    <th>OBS:</th>
+                                                    <th class="text-center">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody_detail2"></tbody>
+
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label>Total IVA 5%:</label> <div class="inline-block" id="totales_iva5"> </div>
-                                    <input type="hidden" name="total_iva" value="" id="total_iva" class="form-control" readonly>
-                                    <input type="hidden" name="total_iva_5" value="" id="total_iva_5" class="form-control" readonly>
+                            </div> 
+                            <div class="tab-content">                                              
+                                <div class="tab-pane" id="seccion3">
+                                    <div class="panel-body table-responsive" id="div_sec3">
+                                        <table class="table table-stripped" data-limit-navigation="8" data-sort="true" data-paging="true" data-filter=#filter1>
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Articulos</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Etapa</th>
+                                                    <th>OBS:</th>
+                                                    <th class="text-center">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody_detail3"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label>Total IVA 10%:</label> <div class="inline-block" id="totales_iva10"> </div>
-                                    <input type="hidden" name="total_iva_10" value="" id="total_iva_10" class="form-control" readonly>
-                                </div>
-                            </div>
+                            </div>         
                         </div>
                     </div>
                 </div>
-                <br>
-            </div> --}}
+            </div>
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
                 <a href="{{ url('budget-production') }}" class="btn btn-sm btn-danger">Cancelar</a>
@@ -158,23 +129,34 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Materia Prima</h5>
+                            <h5 class="modal-title" id="myModalLabel">Control</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Materia Prima</th>
-                                        <th>Cantidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="modalBody">
-                                    <!-- Aquí se cargarán los datos -->
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="etapa">Etapa Verificada:</label>
+                                    <br>
+                                    <td><span id="stage_name"></span></td>
+                                    <input type="checkbox" id="etapa" name="etapa">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="total">Cantidad Total:</label>
+                                    <input type="text" id="total_quantity" name="total" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="observacion">Observación:</label>
+                                    <input type="text" id="observacion" name="observacion" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cantidad_controlada">Cantidad Controlada:</label>
+                                    <input type="text" id="cantidad_controlada" name="cantidad_controlada" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -209,11 +191,11 @@
                 $('input[type="submit"]').prop('disabled', true);
                 e.preventDefault();
                 $.ajax({
-                    url: '{{ route('production-order-store') }}',
+                    url: '{{ route('budget-production-store') }}',
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        redirect ("{{ url('production-order') }}");
+                        redirect ("{{ url('budget-production') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
@@ -243,7 +225,7 @@
             });
 
             $("#button_search").click(function() {
-                Search_Ped();
+                Search_order();
             });
 
             $("#btn_expiration_date").click(function() {
@@ -263,45 +245,42 @@
                 addProduct();
             });
             $(document).ready(function(){
-                $(document).on('click', '.open-modal', function() {
-                    var number_budget = $("#number_budget").val();
-                    var productId = $(this).closest('tr').find('td:first').text();
-                    console.log(number_budget, productId);
-                    $.ajax({
-                        url: '{{ route('ajax.modal-material') }}',
-                        method: 'GET',
-                        data: { product_id: productId, number_budget: number_budget },
-                        success: function(response) {
-                            var modalBody = $('#modalBody');
+                $(document).on('click', '.open-modal', function () {
+                    var stageName = $(this).data('stage');
+                    var quantity = $(this).data('quantity');
 
-                            // Limpiar contenido anterior, si lo hubiera
-                            modalBody.empty();
-
-                            // Agregar filas a la tabla dentro del modal
-                            response.items.forEach(function(item) {
-                                console.log(item);
-                                var rowHtml = '<tr>';
-                                rowHtml += '<td>' + item.raw_material + '</td>';
-                                rowHtml += '<td>' + item.quantity + '</td>';
-                                rowHtml += '<input type="hidden" name="detail_material_quantity_'+productId+'[]" value="' + $.number(item.quantity, 0, ',', '.') + '">';
-                                rowHtml += '<input type="hidden" name="detail_material_id_'+productId+'[]" value="' + $.number(item.raw_material_id, 0, ',', '.') + '">';
-
-                                rowHtml += '</tr>';
-                                modalBody.append(rowHtml);
-                            });
-
-                        },
-                        error: function(xhr, status, error) {
-                            // Maneja cualquier error de la solicitud AJAX
-                            console.error(error);
-                        }
-                    });
+                    // Poblar el modal con los datos
+                    $('#stage_name').text(stageName);
+                    $('#total_quantity').val(quantity);
                 });
             });
 
             loadDate();
+            
         });
 
+        function ChangeTab1()
+        {
+                $('#div_sec1').show();
+                $('#div_sec3').hide();
+                $('#div_sec2').hide();
+                
+        }
+        function ChangeTab2()
+        {
+                $('#div_sec2').show();
+                $('#div_sec1').hide();
+                $('#div_sec3').hide();
+                
+        }
+        
+        function ChangeTab3()
+        {
+                $('#div_sec3').show();
+                $('#div_sec1').hide();
+                $('#div_sec2').hide();
+                
+        }
         function loadDate()
         {
             $(".date").datepicker({
@@ -427,34 +406,36 @@
             $("#number_ped").prop("readonly", false);
             $("#button_search").show();
         }
-        function Search_Ped()
+        function Search_order()
         {
-            var number_budget    = $("#number_budget").val();
+            var number_order    = $("#number_order").val();
             var conteo           = 0;
-            $('#tbody_detail').html('');
+            $('#tbody_detail1').html('');
 
-            if(number_budget != '')
+            if(number_order != '')
             {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{ route('ajax.order-production') }}',
+                    url: '{{ route('ajax.control-production') }}',
                     type: "GET",
-                    data: { number_budget : number_budget},
+                    data: { number_order : number_order, sesion:1},
                     success: function(data) {
                         $.each(data.items, function(index, element) {
                             invoice_items_array.push(element.product_id);
 
-                            $('#tbody_detail').append('<tr>' +
+                            $('#tbody_detail1').append(     
+                            '<tr>' +
                                 '<td>' + element.product_id + '</td>' +
-                                '<td class="text-center">' + element.product_name + '</td>' +
-                                '<td class="text-center">' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td><i class="fa fa-info-circle open-modal" data-toggle="modal" data-target="#myModal"></i></td>' +
+                                '<td>' + element.product_name + '</td>' +
+                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
+                                '<td>' + element.stage_name + '</td>' +
+                                '<td></td>' +
+                                '<td><i class="fa fa-info-circle open-modal" data-toggle="modal" data-target="#myModal" data-stage="' + element.stage_name + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
-                                '<input type="hidden" name="detail_product_quantity[]" value="' + $.number(element.quantity, 0, ',', '.') + '">' +
                             '</tr>');
                             conteo++;
                             $('#branch_id').val(element.branch_id);
@@ -487,6 +468,67 @@
                         laravelErrorMessages(data);
                     }
                 });
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{ route('ajax.control-production') }}',
+                    type: "GET",
+                    data: { number_order : number_order, sesion:2},
+                    success: function(data) {
+                        $.each(data.items, function(index, element) {
+                            invoice_items_array.push(element.product_id);
+
+                            $('#tbody_detail2').append(     
+                            '<tr>' +
+                                '<td>' + element.product_id + '</td>' +
+                                '<td>' + element.product_name + '</td>' +
+                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
+                                '<td>' + element.stage_name + '</td>' +
+                                '<td></td>' +
+
+                                '<td><i class="fa fa-info-circle open-modal" data-toggle="modal" data-target="#myModal" data-stage="' + element.stage_name + '" data-quantity="' + element.quantity + '"></i></td>' +
+                                '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
+                                '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
+                                '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                            '</tr>');
+                        });
+                    },
+                    error: function(data){
+                        laravelErrorMessages(data);
+                    }
+                });
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{ route('ajax.control-production') }}',
+                    type: "GET",
+                    data: { number_order : number_order, sesion:3},
+                    success: function(data) {
+                        $.each(data.items, function(index, element) {
+                            invoice_items_array.push(element.product_id);
+                            $('#tbody_detail3').append(     
+                            '<tr>' +
+                                '<td>' + element.product_id + '</td>' +
+                                '<td>' + element.product_name + '</td>' +
+                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
+                                '<td>' + element.stage_name + '</td>' +
+                                '<td></td>' +
+                                '<td><i class="fa fa-info-circle open-modal" data-toggle="modal" data-target="#myModal" data-stage="' + element.stage_name + '" data-quantity="' + element.quantity + '"></i></td>' +
+                                '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
+                                '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
+                                '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                            '</tr>');
+                        });
+                    },
+                    error: function(data){
+                        laravelErrorMessages(data);
+                    }
+                });
+
 
             }
             else

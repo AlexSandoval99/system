@@ -67,6 +67,7 @@ class BudgetProductionController extends Controller
                             'quantity'              => $request->quantity_product[$key],
                             'amount'                => $request->detail_product_amount[$key],
                             'budget_production_id'  => $budget_production->id,                      
+                            'wish_production_id'    => $request->wish_production_id,                      
     						'articulo_id'           => $product_id
                     ]);
                 }
@@ -81,14 +82,10 @@ class BudgetProductionController extends Controller
         abort(404);
     }
 
-    public function show(PurchaseMovement $purchase_movement)
+    public function show(BudgetProduction $budget_production)
     {
-
-        $purchase_movement->load(['purchases_movement_details', 
-                'purchases_movement_details.raw_material', 
-                'purchases_movement_details.purchases_order_detail']);
         
-        return view('pages.budget-production.show', compact('purchase_movement'));
+        return view('pages.budget-production.show', compact('budget_production'));
     }
 
     public function delete(PurchaseMovement $purchases_movement)
@@ -179,24 +176,26 @@ class BudgetProductionController extends Controller
                                                             ->get();
             foreach ($wish_productions as $key => $order_detail)
             {
-                $results['items'][$key]['id']           = $order_detail->id;
-                $results['items'][$key]['product_id']   = $order_detail->articulo_id;
-                $results['items'][$key]['product_name'] = $order_detail->articulo->name;
-                $results['items'][$key]['quantity']     = $order_detail->quantity;
-                $results['items'][$key]['amount']       = $order_detail->articulo->price;
-                $results['items'][$key]['subtotal']     = $order_detail->articulo->price * $order_detail->quantity;
-                $results['items'][$key]['client_id']    = $order_detail->wish_production->client_id;
-                $results['items'][$key]['client']       = $order_detail->wish_production->client->first_name.' '.$order_detail->wish_production->client->last_name;
-                $results['items'][$key]['branch_id']    = $order_detail->wish_production->branch_id;
-                $results['items'][$key]['branch']       = $order_detail->wish_production->branch->name;
-                $results['items'][$key]['date']         = Carbon::createFromFormat('Y-m-d',$order_detail->wish_production->date)->format('d/m/Y');
+                $results['items'][$key]['id']                           = $order_detail->id;
+                $results['items'][$key]['product_id']                   = $order_detail->articulo_id;
+                $results['items'][$key]['product_name']                 = $order_detail->articulo->name;
+                $results['items'][$key]['quantity']                     = $order_detail->quantity;
+                $results['items'][$key]['amount']                       = $order_detail->articulo->price;
+                $results['items'][$key]['subtotal']                     = $order_detail->articulo->price * $order_detail->quantity;
+                $results['items'][$key]['client_id']                    = $order_detail->wish_production->client_id;
+                $results['items'][$key]['client']                       = $order_detail->wish_production->client->first_name.' '.$order_detail->wish_production->client->last_name;
+                $results['items'][$key]['branch_id']                    = $order_detail->wish_production->branch_id;
+                $results['items'][$key]['branch']                       = $order_detail->wish_production->branch->name;
+                $results['items'][$key]['date']                         = Carbon::createFromFormat('Y-m-d',$order_detail->wish_production->date)->format('d/m/Y');
+                $results['items'][$key]['wish_production_id']           = $order_detail->wish_production->id;
+
                 // $results['ruc']                 = $order_detail->purchase_order->ruc;
                 // $results['provider_id']         = $order_detail->purchase_order->provider_id;
                 // $results['provider_fullname']   = $order_detail->purchase_order->provider->name;
                 // $results['phone']               = $order_detail->purchase_order->phone;
                 // $results['social_reason']       = $order_detail->purchase_order->razon_social;
                 // $results['address']             = $order_detail->purchase_order->address;
-                $results['branch_id']           = $order_detail->wish_production->branch_id;
+                $results['branch_id']                   = $order_detail->wish_production->branch_id;
             }         
             return response()->json($results);
         }

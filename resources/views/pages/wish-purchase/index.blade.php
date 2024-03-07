@@ -26,7 +26,7 @@
                             <th>SU</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +44,23 @@
                                             Acción
                                             <span class="caret"></span>
                                         </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                    <a href="{{ url('wish-purchase-budgets/' . $purchase->id . '/wish-purchase-budgets-approved') }}"><i class="fa fa-user"></i> Ver Presupuestos Aprobados</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i>Ver</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i>Anclar Presupuestos</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>                                            
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                             </tr>

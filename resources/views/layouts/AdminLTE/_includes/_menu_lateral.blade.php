@@ -57,6 +57,11 @@
 							<span>Marca</span>
 						</a>
 					</li>
+					<li class="stage">
+						<a href="{{ route('production-stage') }}" title="Etapa">
+							<i class="fa-solid fa-cart-shopping"></i> <span> Etapa Produccion</span>
+						</a>
+					</li>
 				</ul>
 			</li>
 			<li class="treeview">
@@ -133,6 +138,11 @@
 					<li class="provider">
 						<a href="{{ route('production-order') }}" title="Presupuesto">
 							<span>Orden de Produccion</span>
+						</a>
+					</li>
+					<li class="provider">
+						<a href="{{ route('production-control') }}" title="Presupuesto">
+							<span>Control de Produccion</span>
 						</a>
 					</li>
 				</ul>

@@ -26,6 +26,7 @@
                             <td class="text-center">{{ number_format($articulo->price,0,',','.') }}</td>
                             <td class="text-center">
                                 <a href="{{ url('articulo/' . $articulo->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                                <a href="{{ url('articulo/' . $articulo->id) }}"><i class="fa fa-info-circle"></i></a>
                                 <a href="{{ url('articulo/' . $articulo->id . '/pdf') }}" target="_blank" data-toggle="tooltip" data-placement="top" title="Generar Codigo de Barras"><i class="fa fa-barcode"></i></a>
                             </td>
                         </tr>

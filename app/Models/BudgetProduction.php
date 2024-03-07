@@ -37,33 +37,31 @@ class BudgetProduction extends Model
         return $this->hasMany('App\Models\BudgetProductionDetail');
     }
 
+    
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
-    } 
+    }
 
+    public function deposit()
+    {
+        return $this->belongsTo('App\Models\Deposit', 'deposit_id');
+    } 
+    
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
+    }
     public function scopeActive($query)
     {
         return $query->where('status', 1);
     }
 
-    /**
-     * Get the branch that owns the PurchasesMovement
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
-    /**
-     * Get the currency that owns the PurchasesMovement
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    // public function currency()
-    // {
-    //     return $this->belongsTo(Currency::class);
-    // }
+ 
 }

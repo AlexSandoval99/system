@@ -4,20 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
-class Articulo extends Model
+class ProductionStage extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','price', 'barcode','status'];
+    protected $fillable = ['name','number', 'status'];
 
     public function scopeFilter($query)
     {
         return $query->where('status', true)->orderBy('name')->pluck('name', 'id');
     }
-
-    public function setting_product()
-    {
-        return $this->hasMany('App\Models\SettingProduct');
-    }
-
 }

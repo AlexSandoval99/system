@@ -48,6 +48,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('articulo/create', 'ArticuloController@create')->name('articulo-create');
 	Route::post('articulo', 'ArticuloController@store')->name('articulo.store');
 	Route::get('articulo/{articulo}/pdf', 'ArticuloController@pdf')->name('articulo.pdf');
+	Route::get('articulo/{articulo}', 'ArticuloController@show')->name('artiiculo-show');
+	Route::put('articulo/{articulo_id}', 'ArticuloController@update')->name('articulo.update');
+
+
 
 
 	Route::get('cliente', 'ClienteController@index')->name('cliente');
@@ -70,6 +74,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
     Route::get('brand', 'BrandController@index')->name('brand');
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');
 	Route::post('brand', 'BrandController@store')->name('brand.store');
+
+	Route::get('production-stage', 'ProductionStageController@index')->name('production-stage');
+	Route::get('production-stage/create', 'ProductionStageController@create')->name('production-stage-create');
+	Route::post('production-stage', 'ProductionStageController@store')->name('production-stage.store');
 
 	Route::get('nationalities', 'NationalitiesController@index')->name('nationalities');
 	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
@@ -134,15 +142,26 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('budget-production', 'BudgetProductionController@index')->name('budget-production');
 	Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');
-	Route::get('budget-production/{purchase_movement}', 'BudgetProductionController@show')->name('budget-production-show');
+	Route::get('budget-production/{budget_production}', 'BudgetProductionController@show')->name('budget-production-show');
 	Route::post('budget-production', 'BudgetProductionController@store')->name('budget-production-store');
 	Route::get('ajax/budget-production', 'BudgetProductionController@ajax_budget_production')->name('ajax.budget-production');
 	Route::get('ajax/articulo', 'ArticuloController@ajax_articulo')->name('ajax.articulo');
 
 	Route::get('production-order', 'ProductionOrderController@index')->name('production-order');
 	Route::get('production-order/create', 'ProductionOrderController@create')->name('production-order-create');
-	Route::get('production-order/{purchase_movement}', 'ProductionOrderController@show')->name('production-order-show');
+	Route::get('production-order/{production-orden}', 'ProductionOrderController@show')->name('production-order-show');
 	Route::post('production-order', 'ProductionOrderController@store')->name('production-order-store');
+	Route::get('ajax/order-production', 'ProductionOrderController@ajax_order_production')->name('ajax.order-production');
+	Route::get('ajax/modal-material', 'ProductionOrderController@ajax_modal_material')->name('ajax.modal-material');
+
+	Route::get('production-control', 'ProductionControlController@index')->name('production-control');
+	Route::get('production-control/create', 'ProductionControlController@create')->name('production-control-create');
+	Route::get('production-control/{purchase_movement}', 'ProductionControlController@show')->name('production-control-show');
+	Route::post('production-control', 'ProductionControlController@store')->name('production-control-store');
+	Route::get('ajax/control-production', 'ProductionControlController@ajax_control_production')->name('ajax.control-production');
+	// Route::get('ajax/modal-material', 'ProductionControlController@ajax_modal_material')->name('ajax.modal-material');
+	
+	
 	
 
 
