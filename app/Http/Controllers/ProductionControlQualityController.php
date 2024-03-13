@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductionOrderRequest;
+use App\Http\Requests\CreateProductionQualityRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\BudgetProductionDetail;
 use App\Models\Client;
+use App\Models\Losse;
+use App\Models\LosseDetail;
 use App\Models\Presentation;
 use App\Models\ProductionControl;
 use App\Models\ProductionControlDetail;
 use App\Models\ProductionControlQuality;
+use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
 use App\Models\ProductionQualityControl;
@@ -20,6 +24,7 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\PurchaseOrder;
+use App\Models\PurchasesExistence;
 use App\Models\SettingProduct;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -49,11 +54,11 @@ class ProductionControlQualityController extends Controller
         return view('pages.production-control-quality.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds'));
     }
 
-    public function store(CreateProductionOrderRequest $request)
+    public function store(CreateProductionQualityRequest $request)
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, &$wish_purchase)
+            DB::transaction(function() use ($request, & $control)
             {
                 $control = ProductionQualityControl::create([
                     'date'                      => $request->date,
@@ -64,17 +69,71 @@ class ProductionControlQualityController extends Controller
                 ]);
 
                 // Grabar los Productos
-                foreach($request->detail_product_id as $key => $value)
+                foreach($request->detail_product_id as $key => $value)      
                 {
                     $control->production_quality_control_details()->create([
+                        
                         'articulo_id'           => $value,
                         'quantity'              => $request->{"total$key"} ?? 0,
                         'residue'               => $request->{"cantidad_controlada$key"} ?? 0,
                         'observation'           => $request->{"observacion$key"} ?? '',
-                        'stage'                 => $request->{"etapa$key"} ?? false,
-                        'production_control_id' => $control->id,
+                        'quality'                 => $request->{"etapa$key"} ? 1 : 0,
+                        'production_quality_id' => $control->id,
                         'quality_id'              => $request->{"quality_id$key"}
                     ]);
+                }
+                $array_products = $control->production_quality_control_details()->groupBy('articulo_id')->get();
+                foreach ($array_products as $key => $product)
+                {
+                    if($request->{"total$key"} > $request->{"cantidad_controlada$key"})
+                    {
+                        $losse = Losse::where('control_quality_id',$control->id)->first();
+                        if(!$losse)
+                        {
+                            $losse = Losse::create([
+                                'status'            => 1,
+                                'date'               => $request->date,
+                                'user_id'            => auth()->user()->id,
+                                'branch_id'          => $request->branch_id,
+                                'control_quality_id' => $control->id
+                            ]);
+                        }
+    
+                        $materials = RawMaterial::where('articulo_id',$product->articulo_id)->where('status',1)->get();
+                        foreach ($materials as $key => $material) 
+                        {
+                            $losse->losse_detail()->create([
+                                'articulo_id'   => $product->articulo_id,
+                                'reason'        => $request->{"observacion$key"},
+                                'material_id'   => $material->id, 
+                                'quantity'      => $request->{"total$key"} - $request->{"cantidad_controlada$key"},
+                                'losse_id'      => $losse->id
+                            ]);
+                        }
+                    }
+                    $cost_product = ProductionCost::where('control_quality_id',$control->id)->first();
+                    if(!$cost_product)
+                    {
+                        $cost_product = ProductionCost::create([
+                            'date'               => $request->date,
+                            'status'            => 1,
+                            'branch_id'          => $request->branch_id,
+                            'user_id'            => auth()->user()->id,
+                            'control_quality_id' => $control->id
+                        ]);
+                    }
+
+                    $materials = RawMaterial::where('articulo_id',$product->articulo_id)->where('status',1)->get();
+                    foreach ($materials as $key => $material) 
+                    {
+                        $cost_product->production_cost_detail()->create([
+                            'articulo_id'           => $product->articulo_id,
+                            'material_id'           => $material->id, 
+                            'quantity'              => $request->{"total$key"},
+                            'production_cost_id'    => $cost_product->id,
+                            'price_cost'            => $request->{"total$key"} * $material->average_cost
+                        ]);
+                    }
                 }
             });
 
@@ -85,10 +144,10 @@ class ProductionControlQualityController extends Controller
         abort(404);
     }
 
-    public function show(PurchaseOrder $wish_purchase)
+    public function show(ProductionQualityControl $control)
     {
 
-        return view('pages.wish-purchase.show', compact('wish_purchase'));
+        return view('pages.production-control-quality.show', compact('control'));
     }
 
 

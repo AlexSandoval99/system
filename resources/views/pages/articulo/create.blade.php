@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Marca</label>
-                        {{ Form::select('marca_id', $brand ,request()->marca_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione un equipo']) }}
+                        {{ Form::select('brand_id', $brand ,request()->brand_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione un equipo']) }}
                     </div>
                 </div>
             </div>

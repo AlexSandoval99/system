@@ -123,7 +123,7 @@
             </div>
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
-                <a href="{{ url('budget-production') }}" class="btn btn-sm btn-danger">Cancelar</a>
+                <a href="{{ url('production-control') }}" class="btn btn-sm btn-danger">Cancelar</a>
             </div>
             <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
@@ -395,11 +395,13 @@
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
                                 '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.observation + '</td>' + 
                                 '<td></td>' +
                                 '<td><i class="fa fa-info-circle open-modal1" data-toggle="modal" data-target="#myModal1" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
                             '</tr>');
                             conteo++;
                             $('#branch_id').val(element.branch_id);
@@ -450,12 +452,14 @@
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
                                 '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.observation + '</td>' + 
                                 '<td></td>' +
 
                                 '<td><i class="fa fa-info-circle open-modal2" data-toggle="modal" data-target="#myModal2" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
                             '</tr>');
                         });
                     },
@@ -479,12 +483,14 @@
                                 '<td>' + element.product_id + '</td>' +
                                 '<td>' + element.product_name + '</td>' +
                                 '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
+                                '<td>' + element.stage_name + '</td>' + 
+                                '<td>' + element.observation + '</td>' + 
                                 '<td></td>' +
                                 '<td><i class="fa fa-info-circle open-modal3" data-toggle="modal" data-target="#myModal3" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
                                 '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                 '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                 '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
                             '</tr>');
                         });
                     },

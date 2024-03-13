@@ -43,7 +43,7 @@ class BudgetProductionController extends Controller
     public function create()
     {
         $branches       = Branch::getAllCached()->pluck('name', 'id');
-        $articulos              = Articulo::Filter();
+        $articulos       = Articulo::Filter();
 
         return view('pages.budget-production.create', compact('branches','articulos'));
     }
@@ -82,6 +82,35 @@ class BudgetProductionController extends Controller
         abort(404);
     }
 
+    public function edit(BudgetProduction $budget_production)
+
+    {
+        $articulos       = Articulo::Filter();
+
+        return view('pages.budget-production.edit',compact('budget_production','articulos'));
+    }
+
+    public function update(BudgetProduction $request, $id)
+    {
+        if($request->ajax())
+        {
+            DB::transaction(function() use ($request, $id)
+            {
+                $detail = BudgetProductionDetail::findOrFail($id);
+    
+                $detail->update([
+                                  'articulo_id'              => $request->detail_product_id,
+                                  'quantity'                 => $request->detail_product_quantity,
+                                  'quantity'                 => $request->quantity_product,
+                                  'amount'                   => $request->detail_product_amount,
+                                  'wish_production_id'       => $request->wish_production_id,                      
+                                  'articulo_id'              => $request->product_id,
+                ]);
+            });
+    
+            return response()->json(['success' => true]);
+        }
+    }
     public function show(BudgetProduction $budget_production)
     {
         

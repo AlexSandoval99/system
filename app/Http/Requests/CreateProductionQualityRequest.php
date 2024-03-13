@@ -25,7 +25,6 @@ class CreateProductionQualityRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
         ];
     }
 
@@ -33,13 +32,17 @@ class CreateProductionQualityRequest extends FormRequest
     {
         $validator->after(function ($validator)
         {
-            if(request()->name)
+            if(!request()->{"quality_id0"} || !request()->{"cantidad_controlada0"})
             {
-                // $provider = ProductionStage::where('name',request()->name)->first();
-                // if($provider)
-                // {
-                //     $validator->errors()->add('name', 'El nombre de la marca ya fue registrado');
-                // }
+                $validator->errors()->add('ruc', 'La primera Etapa no puede mandar vacio');
+            }
+            if(!request()->{"quality_id1"} || !request()->{"cantidad_controlada1"})
+            {
+                $validator->errors()->add('ruc', 'La segunda Etapa no puede mandar vacio');
+            }
+            if(!request()->{"quality_id2"} || !request()->{"cantidad_controlada2"})
+            {
+                $validator->errors()->add('ruc', 'La tercera Etapa no puede mandar vacio');
             }
         });
     }

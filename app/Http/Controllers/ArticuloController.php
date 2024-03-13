@@ -40,6 +40,7 @@ class ArticuloController extends Controller
                                         'name'           => $request->name,
                                         'barcode'        => $request->barcode,
                                         'price'        => $request->price,
+                                        'brand_id'        => $request->brand_id,
                                         'status'         => 1 ]);
             foreach ($request->materiales as $key => $value) 
             {
@@ -83,19 +84,45 @@ class ArticuloController extends Controller
     }
 
 
-    public function edit(Articulo $articulo_id)
+    public function edit(Articulo $articulo)
     {
-        return view('pages.articulo.edit',compact('articulo_id'));
+        $brand = Brand::where('status',1)->pluck('name','id');
+        $materials = RawMaterial::filter();
+        $stages = ProductionStage::filter();
+        $qualities = ProductionQuality::filter();
+        return view('pages.articulo.edit',compact('articulo','brand','materials','stages','qualities'));
     }
 
-    public function update(Articulo $articulo_id)
+    public function update(Articulo $articulo ,CreateArticuloRequest $request)
     {
-            $articulo_id->update([
+            $articulo->update([
                                 'name'       => request()->name,
-                                'ruc'        => request()->ruc,
-                                'address'     => request()->address,
-                                'phone'      => request()->phone]);
-
+                                'price'        => request()->price,
+                                'barcode'     => request()->barcode,
+                            ]);
+            $articulo->setting_product()->delete();
+            foreach ($request->materiales as $key => $value) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'raw_materials_id'   => $value,
+                    'quantity'          => $request->cantidades[$key],
+                ]);
+            }
+            foreach ($request->stages as $key1 => $value1) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'stage_id'       => $value1,
+                ]);
+            }
+            foreach ($request->qualitys as $key2 => $value2) 
+            {
+                SettingProduct::create([
+                    'articulo_id'       => $articulo->id,
+                    'production_qualities_id'       => $value2,
+                ]);
+            }
         return redirect('articulo');
     }
 

@@ -26,9 +26,26 @@ class BrandController extends Controller
             'name' => request()->name,
             'status' => 1
         ]);
+        
 
         $this->flashMessage('check', 'La Marca fue registrado correctamente', 'success');
 
         return redirect()->route('brand');
+    }
+    public function edit(Brand $brands)
+    {
+        return view('pages.brand.edit',compact('brands'));
+    }
+
+    public function update(Brand $brands)
+    {
+            $brands->update([
+                                'name'       => request()->name,
+                            ]);
+                            
+                                
+                                
+
+        return redirect('brand');
     }
 }

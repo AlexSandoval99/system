@@ -35,4 +35,21 @@ class ProductionStageController extends Controller
 
         return redirect()->route('production-stage');
     }
+    public function edit(ProductionStage $stages)
+    {
+        return view('pages.production-stage.edit',compact('stages'));
+    }
+
+    public function update(ProductionStage $stages)
+    {
+            $stages->update([
+                                'name'       => request()->name,
+                                'number'       => request()->number ,
+                            ]);
+                            
+                                
+                                
+
+        return redirect('production-stage');
+}
 }

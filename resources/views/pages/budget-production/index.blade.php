@@ -55,6 +55,7 @@
                                 <td class="text-center">{{ $budget_production->branch->name }}</td>
                                 <td class="text-center">
                                     <a href="{{ url('budget-production/' . $budget_production->id) }}"><i class="fa fa-info-circle"></i></a>
+                                    <a href="{{ url('budget-production/' . $budget_production->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
                                     {{-- @permission('purchases-movements.delete') --}}
                                             <a href="{{ url('budget-production/' . $budget_production->id . '/delete') }}"><i class="fa fa-trash"></i></a>
                                     {{-- @endpermission --}}

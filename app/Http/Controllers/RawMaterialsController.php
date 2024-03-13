@@ -93,6 +93,11 @@ class RawMaterialsController extends Controller
         }
         abort(404);
     }
+    public function show(RawMaterial $materiap)
+    {
+
+        return view('pages.raw-materials.show', compact('materiap'));
+    }
 
     public function ajax_purchases_products()
     {

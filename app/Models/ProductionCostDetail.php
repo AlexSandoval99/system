@@ -6,34 +6,32 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductionControlQualityDetail extends Model
+class ProductionCostDetail extends Model
 {
     use HasFactory;
     protected $fillable = [
-                            'observation',
                             'quantity',
-                            'residue',
+                            'price_cost',
                             'articulo_id',
-                            'production_quality_id',
-                            'quality_id',
+                            'material_id',
+                            'production_cost_id',
+
                         ];
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
 
-    public function production_control_quality()
+    public function production_cost()
     {
-        return $this->belongsTo('App\Models\ProductionControlQuality','production_quality_id');
+        return $this->belongsTo('App\Models\ProductionCost','production_cost_id');
     }
     public function articulo()
-    {   
+    {
         return $this->belongsTo('App\Models\Articulo','articulo_id');
     }
-    public function production_quality()
+    public function material()
     {
-        return $this->belongsTo('App\Models\ProductionQuality','quality_id');
+        return $this->belongsTo('App\Models\RawMaterial','material_id');
     }
-    
-
 }

@@ -27,7 +27,7 @@
                             <th>Sucursal</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,13 +40,9 @@
                                 <td>
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $ord->status) }}">{{ config('constants.purchase-status.'. $ord->status) }}</span>
                                 </td>
-                                <td class="text-right">
-                                    <div class="dropdown" style="display: inline-block;">
-                                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Acción
-                                            <span class="caret"></span>
-                                        </button>
-                                    </div>
+                                <td class="text-center">
+                                    <a href="{{ url('production-control-quality/' . $ord->id) }}"><i class="fa fa-info-circle"></i></a> 
+                                    <a href="{{ url('losses/index') }}"><i class="fa fa-refresh"></i></a> 
                                 </td>
                             </tr>
                         @endforeach

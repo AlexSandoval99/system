@@ -22,7 +22,7 @@ class ProductionQualityControl extends Model
     }
     public function production_quality_control_details()
     {
-        return $this->hasMany('App\Models\ProductionControlQualityDetail','production_quality_id');
+        return $this->hasMany('App\Models\ProductionQualityControlDetail','production_quality_id');
     }
     public function client()
     {

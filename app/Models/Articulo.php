@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Articulo extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','price', 'barcode','status'];
+    protected $fillable = ['name','price', 'barcode','brand_id','status'];
 
     public function scopeFilter($query)
     {
@@ -18,6 +18,11 @@ class Articulo extends Model
     public function setting_product()
     {
         return $this->hasMany('App\Models\SettingProduct');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
     }
 
 }

@@ -27,7 +27,7 @@
                             <th>Sucursal</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +46,10 @@
                                             Acción
                                             <span class="caret"></span>
                                         </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li>
+                                                <a href="{{ url('production-control/' . $ord->id) }}"><i class="fa fa-info-circle"></i>Ver</a>
+                                            </li>
                                     </div>
                                 </td>
                             </tr>

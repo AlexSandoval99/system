@@ -58,7 +58,7 @@
                     <tbody>
                         @foreach($budget_production->budget_production_details as $details)
                             <tr>
-                                <td class="text-center"> {{ $details->articulo->description }}</td>
+                                <td class="text-center"> {{ $details->articulo->name }}</td>
                                 <td class="text-center">{{ $details->description ?? '' }}</td>
                                 <td class="text-center">{{ number_format($details->quantity, 0, ',', '.') }}</td>
                             </tr>

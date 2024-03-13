@@ -24,6 +24,7 @@
                             <td class="text-center"><span class="label label-{{ config('constants.status-label.' . $materia->status) }}">{{ config('constants.status.' . $materia->status) }}</td>
                             <td class="text-center">
                                 <a href="{{ url('raw-materials/' . $materia->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                                <a href="{{ url('raw-materials/' . $materia->id) }}"><i class="fa fa-info-circle"></i></a>
                             </td>
                         </tr>
                     @endforeach

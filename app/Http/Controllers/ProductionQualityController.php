@@ -35,4 +35,21 @@ class ProductionQualityController extends Controller
 
         return redirect()->route('production-quality');
     }
+    public function edit(ProductionQuality $qualitys)
+    {
+        return view('pages.production-quality.edit',compact('qualitys'));
+    }
+
+    public function update(ProductionQuality $qualitys)
+    {
+            $qualitys->update([
+                                'name'       => request()->name,
+                                'number'       => request()->number ,
+                            ]);
+                            
+                                
+                                
+
+        return redirect('production-quality');
+}
 }

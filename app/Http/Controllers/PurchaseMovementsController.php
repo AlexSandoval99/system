@@ -176,41 +176,42 @@ class PurchaseMovementsController extends Controller
                                      'price_cost'    => $price_cost
                                  ]);
                             //ACTUALIZACION DE COSTO PROMEDIO
-                            // $existences = PurchasesExistence::where('raw_material_id',  $product_id)
-                            //             ->where('residue', '>', 0)
-                            //             ->get()           
-                            //             ->sum('residue');
+                             $existences = PurchasesExistence::where('raw_material_id',  $product_id)
+                                         ->where('residue', '>', 0)
+                                         ->get()           
+                                         ->sum('residue');
 
-                            // $existence_costs = PurchasesExistence::selectRaw('sum(residue) as total_quantity, price_cost,raw_material_id')
-                            //                 ->where('raw_material_id', $product_id)
-                            //                 ->where('residue', '>', 0)
-                            //                 ->groupBy('price_cost','raw_material_id')
-                            //                 ->get();
-                            // $cost_array = [];
-                            // $n_cost = null;
-                            // foreach ($existence_costs as $key => $cost) 
-                            // {
-                            //     if(isset($cost_array[($cost->raw_material_id)]))
-                            //     {
-                            //         $cost_array[$cost->raw_material_id] += $cost->total_quantity * $cost->price_cost;
-                            //     }
-                            //     else
-                            //     {
-                            //         $cost_array[$cost->raw_material_id] = $cost->total_quantity * $cost->price_cost;
-                            //     }
-                            // }
-                            // if($existences) 
-                            // {
-                            //     $new_cost = (($cost_array[$product_id] + ($price_cost * $product_quantity))/ $existences);
+                             $existence_costs = PurchasesExistence::selectRaw('sum(residue) as total_quantity, price_cost,raw_material_id')
+                                             ->where('raw_material_id', $product_id)
+                                             ->where('residue', '>', 0)
+                                             ->groupBy('price_cost','raw_material_id')
+                                             ->get();
+                             $cost_array = [];
+                             $n_cost = null;
+                             foreach ($existence_costs as $key => $cost) 
+                             {
+                                 if(isset($cost_array[($cost->raw_material_id)]))
+                                 {
+                                     $cost_array[$cost->raw_material_id] += $cost->total_quantity * $cost->price_cost;
+                                 }
+                                 else
+                                 {
+                                     $cost_array[$cost->raw_material_id] = $cost->total_quantity * $cost->price_cost;
+                                 }
+                             }
 
-                            //     // $product_cost->update([
-                            //     //     'quantity'      => $existences,
-                            //     //     'price_cost'    => $new_cost]);
+                             if($existences) 
+                             {
+                                 $new_cost = ($cost_array[$product_id] / $existences);
+                                $raw_material = RawMaterial::where('id',$product_id)->update(['average_cost' =>$new_cost]);
+                                //   $product_cost->update([
+                                //       'quantity'      => $existences,
+                                //       'price_cost'    => $new_cost]);
 
-                            //     $purchases_movement_details->update([
-                            //         'price_cost'    => $new_cost
-                            //     ]);
-                            // }
+                                //  $purchases_movement_details->update([
+                                //      'price_cost'    => $new_cost
+                                //  ]);
+                             }
         
                         // }
                         // else

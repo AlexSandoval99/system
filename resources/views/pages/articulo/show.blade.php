@@ -103,11 +103,11 @@
                         </thead>
                         <tbody>
                             @if(isset($articulo->setting_product))
-                                {{-- @foreach($articulo->setting_product as $res)
+                                @foreach($articulo->setting_product->whereNotNull('production_qualities_id') as $res)
                                     <tr>
-                                    <td>{{ $res->raw_material->description }}</td>
+                                    <td>{{ $res->qualities->name }}</td>
                                     </tr>
-                                @endforeach  --}}
+                                @endforeach  
                             @endif
                         </tbody>
                     </table>

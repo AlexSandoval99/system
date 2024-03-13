@@ -49,7 +49,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::post('articulo', 'ArticuloController@store')->name('articulo.store');
 	Route::get('articulo/{articulo}/pdf', 'ArticuloController@pdf')->name('articulo.pdf');
 	Route::get('articulo/{articulo}', 'ArticuloController@show')->name('artiiculo-show');
-	Route::put('articulo/{articulo_id}', 'ArticuloController@update')->name('articulo.update');
+	Route::get('articulo/{articulo}/edit', 'ArticuloController@edit')->name('articulo.edit');
+	Route::put('articulo/{articulo}/update', 'ArticuloController@update')->name('articulo.update');
+
 
 
 
@@ -69,19 +71,26 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('raw-materials', 'RawMaterialsController@index')->name('raw-materials');
 	Route::get('raw-materials/create', 'RawMaterialsController@create')->name('raw-materials-create');
+	Route::get('raw-materials/{materiap}', 'RawMaterialsController@show')->name('raw-materials-show');
 	Route::post('raw-materials', 'RawMaterialsController@store')->name('raw-materials.store');
 
     Route::get('brand', 'BrandController@index')->name('brand');
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');
 	Route::post('brand', 'BrandController@store')->name('brand.store');
+	Route::get('brand/{brands}/edit', 'BrandController@edit')->name('brand.edit');
+	Route::put('brand/{brands}/update', 'BrandController@update')->name('brand.update');
 
 	Route::get('production-stage', 'ProductionStageController@index')->name('production-stage');
 	Route::get('production-stage/create', 'ProductionStageController@create')->name('production-stage-create');
 	Route::post('production-stage', 'ProductionStageController@store')->name('production-stage.store');
+	Route::get('production-stage/{stages}/edit', 'ProductionStageController@edit')->name('production-stage.edit');
+	Route::put('production-stage/{stages}/update', 'ProductionStageController@update')->name('production-stage.update');
 
 	Route::get('production-quality', 'ProductionQualityController@index')->name('production-quality');
 	Route::get('production-quality/create', 'ProductionQualityController@create')->name('production-quality-create');
 	Route::post('production-quality', 'ProductionQualityController@store')->name('production-quality.store');
+	Route::get('production-quality/{qualitys}/edit', 'ProductionQualityController@edit')->name('production-quality.edit');
+	Route::put('production-quality/{qualitys}/update', 'ProductionQualityController@update')->name('production-quality.update');
 
 	Route::get('nationalities', 'NationalitiesController@index')->name('nationalities');
 	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
@@ -98,7 +107,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
     Route::get('wish-purchase-budgets/{wish_purchase}/wish-purchase-budgets-approved', 'WishPurchaseController@wish_purchase_budgets_approved')->name('wish-purchases.budgets_approved');
     // Route::get('wish-purchase/{wish_purchase}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
 	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
-
+	Route::get('wish-purchase/{wish_purchase}/edit', 'WishPurchaseController@edit')->name('wish-purchase.edit');
+	Route::put('wish-purchase/{wish_purchase}/update', 'WishPurchaseController@update')->name('wish-purchase.update');
 	Route::get('wish-purchase/{restocking}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
 
 
@@ -140,9 +150,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('wish-production', 'WishProductionController@index')->name('wish-production');
 	Route::get('wish-production/create', 'WishProductionController@create')->name('wish-production.create');
-	Route::get('wish-production/{wish_production}', 'WishProductionController@show')->name('wish-production-create');
+	Route::get('wish-production/{wish_production}', 'WishProductionController@show')->name('wish-production-show');
 	Route::post('wish-production', 'WishProductionController@store')->name('wish-production.store');
     Route::get('ajax/clients', 'ClienteController@ajax_clients')->name('ajax.clients');
+	Route::get('wish-production/{wish_production}/edit', 'WishProductionController@edit')->name('wish-production.edit');
+	Route::put('wish-production/{wish_production}/update', 'WishProductionController@update')->name('wish-production.update');
 
 	Route::get('budget-production', 'BudgetProductionController@index')->name('budget-production');
 	Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');
@@ -150,17 +162,21 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::post('budget-production', 'BudgetProductionController@store')->name('budget-production-store');
 	Route::get('ajax/budget-production', 'BudgetProductionController@ajax_budget_production')->name('ajax.budget-production');
 	Route::get('ajax/articulo', 'ArticuloController@ajax_articulo')->name('ajax.articulo');
+	Route::get('budget-production/{budget_production}/edit', 'BudgetProductionController@edit')->name('budget-production.edit');
+	Route::put('budget-production/{budget_production}/update', 'BudgetProductionController@update')->name('budget-production.update');
 
 	Route::get('production-order', 'ProductionOrderController@index')->name('production-order');
 	Route::get('production-order/create', 'ProductionOrderController@create')->name('production-order-create');
-	Route::get('production-order/{production-orden}', 'ProductionOrderController@show')->name('production-order-show');
+	Route::get('production-order/{production_order}', 'ProductionOrderController@show')->name('production-order.show');
 	Route::post('production-order', 'ProductionOrderController@store')->name('production-order-store');
 	Route::get('ajax/order-production', 'ProductionOrderController@ajax_order_production')->name('ajax.order-production');
 	Route::get('ajax/modal-material', 'ProductionOrderController@ajax_modal_material')->name('ajax.modal-material');
+	Route::get('production-order/{production_order}/edit', 'ProductionOrderController@edit')->name('production-order.edit');
+	Route::put('production-order/{production_order}/update', 'ProductionOrderController@update')->name('production-order.update');
 
 	Route::get('production-control', 'ProductionControlController@index')->name('production-control');
 	Route::get('production-control/create', 'ProductionControlController@create')->name('production-control-create');
-	Route::get('production-control/{purchase_movement}', 'ProductionControlController@show')->name('production-control-show');
+	Route::get('production-control/{control}', 'ProductionControlController@show')->name('production-control-show');
 	Route::post('production-control', 'ProductionControlController@store')->name('production-control-store');
 	Route::get('ajax/control-production', 'ProductionControlController@ajax_control_production')->name('ajax.control-production');
 	Route::get('ajax/update-control', 'ProductionControlController@ajax_update_control')->name('ajax.update-control');
@@ -168,12 +184,20 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	
 	Route::get('production-control-quality', 'ProductionControlQualityController@index')->name('production-control-quality');
 	Route::get('production-control-quality/create', 'ProductionControlQualityController@create')->name('production-control-quality-create');
-	Route::get('production-control-quality/{purchase_movement}', 'ProductionControlQualityController@show')->name('production-control-quality-show');
+	Route::get('production-control-quality/{control}', 'ProductionControlQualityController@show')->name('production-control-quality-show');
 	Route::post('production-control-quality', 'ProductionControlQualityController@store')->name('production-control-quality-store');
 	Route::get('ajax/control-calidad', 'ProductionControlQualityController@ajax_control_calidad')->name('ajax.control-calidad');
 	Route::get('ajax/update-control', 'ProductionControlQualityController@ajax_update_control')->name('ajax.update-control');
 
-	// Route::get('ajax/modal-material', 'ProductionControlController@ajax_modal_material')->name('ajax.modal-material');
+	Route::get('losses', 'LossesController@index')->name('losses');
+	Route::get('losses/create', 'LossesController@create')->name('losses-create');
+	Route::get('losses/{losses}', 'LossesController@show')->name('losses-show');
+	Route::post('losses', 'LossesController@store')->name('losses-store');
+	Route::get('ajax/control-calidad', 'LossesController@ajax_control_calidad')->name('ajax.control-calidad');
+	Route::get('ajax/update-control', 'LossesController@ajax_update_control')->name('ajax.update-control');
+
+	Route::get('production-cost', 'ProductionCostController@index')->name('production-cost');
+	Route::get('production-cost/{production_cost}', 'ProductionCostController@show')->name('production-cost-show');
 	
 	
 	

@@ -123,7 +123,7 @@
             </div>
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
-                <a href="{{ url('budget-production') }}" class="btn btn-sm btn-danger">Cancelar</a>
+                <a href="{{ url('production-control-quality') }}" class="btn btn-sm btn-danger">Cancelar</a>
             </div>
             <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
@@ -141,7 +141,7 @@
                                     <br>
                                     <td><span id="qualities_name0"></span></td>
                                     <input type="checkbox" id="etapa0" name="etapa0">
-                                    <input type="hidden" id="stage_id0" name="stage_id0">
+                                    <input type="hidden" id="quality_id0" name="quality_id0">
 
                                 </div>
                                 <div class="col-md-6">
@@ -183,7 +183,7 @@
                                     <br>
                                     <td><span id="qualities_name1"></span></td>
                                     <input type="checkbox" id="etapa1" name="etapa1">
-                                    <input type="hidden" id="stage_id1" name="stage_id1">
+                                    <input type="hidden" id="quality_id1" name="quality_id1">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="total">Cantidad Total:</label>
@@ -224,7 +224,7 @@
                                     <br>
                                     <td><span id="qualities_name2"></span></td>
                                     <input type="checkbox" id="etapa2" name="etapa2">
-                                    <input type="hidden" id="stage_id2" name="stage_id2">
+                                    <input type="hidden" id="quality_id2" name="quality_id2">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="total">Cantidad Total:</label>
@@ -275,11 +275,11 @@
                 $('input[type="submit"]').prop('disabled', true);
                 e.preventDefault();
                 $.ajax({
-                    url: '{{ route('production-control-store') }}',
+                    url: '{{ route('production-control-quality-store') }}',
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        redirect ("{{ url('budget-production') }}");
+                        redirect ("{{ url('production-control-quality') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
@@ -304,13 +304,13 @@
 
             $(document).ready(function(){
                 $(document).on('click', '.open-modal1', function () {
-                    var stageName = $(this).data('quality');
+                    var stageName = $(this).data('stage');
                     var stageId = $(this).data('production_qualities_id');
                     var quantity = $(this).data('quantity');
 
                     // Poblar el modal con los datos
                     $('#qualities_name0').text(stageName);
-                    $('#stage_id0').val(stageId);
+                    $('#quality_id0').val(stageId);
                     $('#total_quantity0').val(quantity);
                 });
 
@@ -318,10 +318,9 @@
                     var stageName = $(this).data('stage');
                     var stageId = $(this).data('production_qualities_id');
                     var quantity = $(this).data('quantity');
-                    console.log(stageName,quantity);
                     // Poblar el modal con los datos
                     $('#qualities_name1').text(stageName);
-                    $('#stage_id1').val(stageId);
+                    $('#quality_id1').val(stageId);
                     $('#total_quantity1').val(quantity);
                 });
 
@@ -332,7 +331,7 @@
 
                     // Poblar el modal con los datos
                     $('#qualities_name2').text(stageName);
-                    $('#stage_id2').val(stageId);
+                    $('#quality_id2').val(stageId);
                     $('#total_quantity2').val(quantity);
                 });
             });

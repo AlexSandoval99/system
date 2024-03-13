@@ -40,9 +40,8 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ url('wish-production/' . $production->id) }}"><i class="fa fa-info-circle"></i></a>
-                                       
-                                    </div>
-                                </td>
+                                    <a href="{{ url('wish-production/' . $production->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                </div>
                             </tr>
                         @endforeach
                     </tbody>

@@ -53,7 +53,7 @@ class ProductionOrderController extends Controller
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, &$production_order)
+            DB::transaction(function() use ($request, & $production_order)
             {
                 $production_order = ProductionOrder::create([
                     'date'              => $request->date,
@@ -89,11 +89,32 @@ class ProductionOrderController extends Controller
 
     public function show(ProductionOrder $production_order)
     {
-        $production_order->load(['production_order_details', 
-        'production_order_details.client', 
-        'production_order_details.user']);
+       
         
         return view('pages.production-order.show', compact('production_order'));
+    }
+    public function edit(ProductionOrder $production_order)
+    {
+
+        return view('pages.production-order.edit',compact('production_order'));
+    }
+
+    public function update(ProductionOrder $request, $id)
+    {
+        if($request->ajax())
+        {
+            DB::transaction(function() use ($request, $id)
+            {
+                $detail = ProductionOrderDetail::findOrFail($id);
+    
+                $detail->update([
+                                  'articulo_id'              => $request->detail_product_id,
+                                  'quantity'                 => $request->detail_product_quantity,
+                ]);
+            });
+    
+            return response()->json(['success' => true]);
+        }
     }
 
     public function charge_purchase_budgets(PurchaseOrder $wish_purchase)

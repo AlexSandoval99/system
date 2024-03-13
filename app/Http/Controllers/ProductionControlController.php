@@ -50,7 +50,7 @@ class ProductionControlController extends Controller
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, &$wish_purchase)
+            DB::transaction(function() use ($request, & $control)
             {
                 $control = ProductionControl::create([
                     'date'                      => $request->date,
@@ -68,7 +68,7 @@ class ProductionControlController extends Controller
                         'quantity'              => $request->{"total$key"} ?? 0,
                         'residue'               => $request->{"cantidad_controlada$key"} ?? 0,
                         'observation'           => $request->{"observacion$key"} ?? '',
-                        'stage'                 => $request->{"etapa$key"} ?? false,
+                        'stage'                 => $request->{"etapa$key"} ? 1 : 0,
                         'production_control_id' => $control->id,
                         'stage_id'              => $request->{"stage_id$key"}
                     ]);
@@ -82,10 +82,10 @@ class ProductionControlController extends Controller
         abort(404);
     }
 
-    public function show(PurchaseOrder $wish_purchase)
+    public function show(ProductionControl $control)
     {
 
-        return view('pages.wish-purchase.show', compact('wish_purchase'));
+        return view('pages.production-control.show', compact('control'));
     }
 
 

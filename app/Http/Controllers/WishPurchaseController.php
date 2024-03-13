@@ -13,6 +13,7 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\WishPurchase;
+use App\Models\WishPurchaseDetail;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
@@ -91,6 +92,45 @@ class WishPurchaseController extends Controller
         }
         abort(404);
     }
+    public function edit(WishPurchase $wish_purchase)
+    {
+        $branches               = Branch::where('status', true)->pluck('name', 'id');
+        $raw_materials          = RawMaterial::Filter();
+        $product_presentations  = Presentation::Filter();
+        return view('pages.wish-purchase.edit',compact('wish_purchase','branches','raw_materials','product_presentations'));
+    }
+
+//     public function update(WishPurchase $wish_purchase)
+//     {
+//             $wish_purchase->update([
+                
+//                                 'name'       => request()->name,
+//                                 'number'       => request()->number ,
+//                             ]);
+                            
+//         return redirect('wish-purchase');
+// }
+public function update(WishPurchase $request, $id)
+{
+    if($request->ajax())
+    {
+        DB::transaction(function() use ($request, $id)
+        {
+            $detail = WishPurchaseDetail::findOrFail($id);
+
+            $detail->update([
+                'material_id' => $request->detail_product_id,
+                'quantity' => $request->detail_product_quantity,
+                'presentation' => $request->detail_presentation_id,
+                'description' => isset($request->detail_product_description) ? $request->detail_product_name.'('.$request->detail_product_description.')' : $request->detail_product_name,
+            ]);
+        });
+
+        return response()->json(['success' => true]);
+    }
+}
+
+
 
     public function show(WishPurchase $wish_purchase)
     {
@@ -229,4 +269,6 @@ class WishPurchaseController extends Controller
     {
         return str_replace(',', '.',str_replace('.', '', $value));
     }
+    
+
 }

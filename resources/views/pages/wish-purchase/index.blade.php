@@ -38,7 +38,7 @@
                                 <td>
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $purchase->status) }}">{{ config('constants.purchase-status.'. $purchase->status) }}</span>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <div class="dropdown" style="display: inline-block;">
                                         <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             Acción
@@ -59,6 +59,10 @@
                                             </li>
                                             <li>
                                                 <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i>Editar Pedido</a>
+
                                             </li>
                                         </ul>
                                     </div>

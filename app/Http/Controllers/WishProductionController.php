@@ -16,6 +16,7 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\WishProduction;
+use App\Models\WishProductionDetail;
 use Carbon\Carbon;
 use App\Models\WishPurchase;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -81,7 +82,7 @@ class WishProductionController extends Controller
                     $wish_production->wish_production_details()->create([
                         'articulo_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
-                        'wish_production_id'         => $wish_production->id,
+                        'wish_production_id'       => $wish_production->id,
                     ]);
                 }
             });
@@ -97,6 +98,32 @@ class WishProductionController extends Controller
     {
 
         return view('pages.wish-production.show', compact('wish_production'));
+    }
+    public function edit(WishProduction $wish_production)
+    {
+        $productions_client = Client::Filter();
+        $articulos          = Articulo::Filter();
+        $branches           = Branch::where('status', true)->pluck('name', 'id');
+
+        return view('pages.wish-production.edit',compact('wish_production','articulos','productions_client','branches'));
+    }
+
+    public function update(WishProduction $request, $id)
+    {
+        if($request->ajax())
+        {
+            DB::transaction(function() use ($request, $id)
+            {
+                $detail = WishProductionDetail::findOrFail($id);
+    
+                $detail->update([
+                                  'articulo_id'              => $request->detail_product_id,
+                                  'quantity'                 => $request->detail_product_quantity,
+                ]);
+            });
+    
+            return response()->json(['success' => true]);
+        }
     }
 
     public function charge_purchase_budgets(WishPurchase $wish_purchase)
@@ -230,4 +257,5 @@ class WishProductionController extends Controller
     {
         return str_replace(',', '.',str_replace('.', '', $value));
     }
+    
 }

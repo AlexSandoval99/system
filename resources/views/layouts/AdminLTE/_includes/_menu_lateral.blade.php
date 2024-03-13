@@ -155,6 +155,16 @@
 							<span>Control de Calidad</span>
 						</a>
 					</li>
+					<li class="provider">
+						<a href="{{ route('losses') }}" title="Presupuesto">
+							<span>Mermas</span>
+						</a>
+					</li>
+					<li class="provider">
+						<a href="{{ route('production-cost') }}" title="Costo Produccion">
+							<span>Costo Produccion</span>
+						</a>
+					</li>
 				</ul>
 			</li>
 	</section>

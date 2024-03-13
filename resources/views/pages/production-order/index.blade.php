@@ -41,6 +41,8 @@
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $ord->status) }}">{{ config('constants.purchase-status.'. $ord->status) }}</span>
                                 </td>
                                 <td class="text-center"><a href="{{ url('production-order/' . $ord->id) }}"><i class="fa fa-info-circle"></i></a>
+                                <a href="{{ url('production-order/' . $ord->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+
                                 </td>
                             </tr>
                         @endforeach
