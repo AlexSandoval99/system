@@ -50,11 +50,11 @@
                      </div>
                      <div class="form-group col-md-4">
                         <label>Estado Civil</label><br>
-                        <input id="civil_status" class="form-control" name="civil_status" type="text"  value="{{ old('civil_status')}}">
+                        {{ Form::select('civil_status', config('constants.civil_status') ,null, ['class' => 'form-control selectpicker',  'placeholder'  => 'Seleccione una Estado CIvil']) }}
                      </div>
                      <div class="form-group col-md-4">
                         <label>Genero</label><br>
-                        <input id="gender" class="form-control" name="gender" type="text"  value="{{ old('gender')}}">
+                        {{ Form::select('gender', config('constants.gender') ,null, ['class' => 'form-control selectpicker', 'placeholder'  => 'Seleccione un Genero']) }}
                      </div>
                      <div class="row">
                     <div class="form-group col-md-4">
@@ -91,28 +91,10 @@
             success: function(data) {
                 $('#ciudades').html('');
                 $('#ciudades').append('<option value="">Selecciona una ciudad</option>');
+                console.log(data);
                 $.each(data,function (index,element)
                 {
-                    $('#ciudades').append('<option value="' + element.id + '">' + element.ciudad + '</option>');   
-                });
-            }
-        });
-    }
-</script>
-<script>
-    function changeNationalities()
-    {
-        var selected_nation = $('#nationalities option:selected').val();
-        $.ajax({
-            url: '{{ route('ajax.get_nationalities') }}',
-            type: "GET",
-            data: {nationalities_id:selected_nation},
-            success: function(data) {
-                $('#nationalities').html('');
-                $('#nationalities').append('<option value="">Selecciona una nacionalidad</option>');
-                $.each(data,function (index,element)
-                {
-                    $('#nationalities').append('<option value="' + element.id + '">' + element.nation + '</option>');   
+                    $('#ciudades').append('<option value="' + element.id + '">' + element.name + '</option>');   
                 });
             }
         });

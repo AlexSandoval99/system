@@ -9,25 +9,14 @@ use App\Models\CalendarPayment;
 use App\Models\Currency;
 use App\Models\Deposit;
 use App\Models\DepositRequestingDepartment;
-use App\Models\EmergencyMobile;
-use App\Models\PriceUpdateLog;
 use App\Models\Purchase;
 use App\Models\PurchaseMovement;
-use App\Models\PurchaseMovements;
 use App\Models\PurchaseMovementsDetail;
 use App\Models\PurchaseOrderDetail;
-use App\Models\PurchasesCollect;
 use App\Models\PurchasesExistence;
-use App\Models\PurchasesMovement;
-use App\Models\PurchasesOrder;
-use App\Models\PurchasesProduct;
 use App\Models\PurchasesProductCost;
-use App\Models\PurchasesRequestingDepartment;
 use App\Models\RawMaterial;
-use App\Models\SocialReason;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class PurchaseMovementsController extends Controller
 {
@@ -116,11 +105,6 @@ class PurchaseMovementsController extends Controller
                             $affects_stock     = true;
                         }
 
-
-
-                        // //LO QUE NORMALMENTE YA HACIA
-                        // if(!$affects_stock)
-                        // {
                             $purchases_movement_details = $purchases_movement->purchases_movement_details()->create([ 
                                 'raw_materials_id'          => $product_id,
                                 'purchases_order_detail_id' => $request->detail_id[$key],
@@ -169,282 +153,40 @@ class PurchaseMovementsController extends Controller
                                 'price_cost_iva'       => $price_cost_iva 
                             ]);
 
-                            // $purchases_movement_details->update(['purchases_existence_id' => $purchases_existence->id]);
-                            
 
-                                 $purchases_movement_details->update([
-                                     'price_cost'    => $price_cost
-                                 ]);
+                                $purchases_movement_details->update([
+                                    'price_cost'    => $price_cost
+                                ]);
                             //ACTUALIZACION DE COSTO PROMEDIO
-                             $existences = PurchasesExistence::where('raw_material_id',  $product_id)
-                                         ->where('residue', '>', 0)
-                                         ->get()           
-                                         ->sum('residue');
+                            $existences = PurchasesExistence::where('raw_material_id',  $product_id)
+                                        ->where('residue', '>', 0)
+                                        ->get()           
+                                        ->sum('residue');
 
-                             $existence_costs = PurchasesExistence::selectRaw('sum(residue) as total_quantity, price_cost,raw_material_id')
-                                             ->where('raw_material_id', $product_id)
-                                             ->where('residue', '>', 0)
-                                             ->groupBy('price_cost','raw_material_id')
-                                             ->get();
-                             $cost_array = [];
-                             $n_cost = null;
-                             foreach ($existence_costs as $key => $cost) 
-                             {
-                                 if(isset($cost_array[($cost->raw_material_id)]))
-                                 {
-                                     $cost_array[$cost->raw_material_id] += $cost->total_quantity * $cost->price_cost;
-                                 }
-                                 else
-                                 {
-                                     $cost_array[$cost->raw_material_id] = $cost->total_quantity * $cost->price_cost;
-                                 }
-                             }
+                            $existence_costs = PurchasesExistence::selectRaw('sum(residue) as total_quantity, price_cost,raw_material_id')
+                                            ->where('raw_material_id', $product_id)
+                                            ->where('residue', '>', 0)
+                                            ->groupBy('price_cost','raw_material_id')
+                                            ->get();
+                            $cost_array = [];
+                            $n_cost = null;
+                            foreach ($existence_costs as $key => $cost) 
+                            {
+                                if(isset($cost_array[($cost->raw_material_id)]))
+                                {
+                                    $cost_array[$cost->raw_material_id] += $cost->total_quantity * $cost->price_cost;
+                                }
+                                else
+                                {
+                                    $cost_array[$cost->raw_material_id] = $cost->total_quantity * $cost->price_cost;
+                                }
+                            }
 
-                             if($existences) 
-                             {
-                                 $new_cost = ($cost_array[$product_id] / $existences);
+                            if($existences) 
+                            {
+                                $new_cost = ($cost_array[$product_id] / $existences);
                                 $raw_material = RawMaterial::where('id',$product_id)->update(['average_cost' =>$new_cost]);
-                                //   $product_cost->update([
-                                //       'quantity'      => $existences,
-                                //       'price_cost'    => $new_cost]);
-
-                                //  $purchases_movement_details->update([
-                                //      'price_cost'    => $new_cost
-                                //  ]);
-                             }
-        
-                        // }
-                        // else
-                        // {
-                        //     if(isset(request()->{'exp_date_'.$product_id}))
-                        //     {
-                        //         //NUEVA LOGICA MULTIPLES EXISTENCES
-                        //         foreach (request()->{'exp_date_'.$product_id} as $key1 => $expiration) 
-                        //         {
-                        //             $request_quantity = $request->{'exp_product_quantity_'.$product_id}[$key1];
-                        //             $product_quantity = $request->{'exp_product_quantity_'.$product_id}[$key1];
-
-                        //             // LA CONVERSION YA LA REALIZA EN LA ORDEN DE COMPRA
-                        //             $ammount_converter = $purchases_product->conversion_amount && $request->detail_presentation[$key] == 4 ? $purchases_product->conversion_amount : 1;  
-                        //             $product_quantity = $product_quantity * $ammount_converter;
-                                
-                        //             $purchases_movement_details = $purchases_movement->purchases_movement_details()->create([ 
-                        //                 'raw_materials_id'          => $product_id,
-                        //                 'purchases_order_detail_id' => $request->detail_id[$key],
-                        //                 'quantity'                  => $request_quantity,
-                        //                 'affects_stock'             => $affects_stock 
-                        //             ]);
-
-                        //             $quantity_received = PurchaseMovementsDetail::where('purchases_order_detail_id', $request->detail_id[$key])
-                        //             ->whereHas('purchases_movement', function($query){
-                        //             $query->where('status', 1)
-                        //             ->where('type_movement', 1)//SI ES ENTRADA
-                        //             ->where('type_operation', 1);//SI ES RECEPCION
-                        //             })->sum('quantity');
-                        //             $purchases_order_detail = PurchaseOrderDetail::find($request->detail_id[$key]);
-                        //             $purchases_order_detail->update(['quantity_received' => $quantity_received]);
-                        //             //EL CAMPO RESIDUE HACE REFERENCIA A LA CANTIDAD DE PRODUCTO QUE AUN NO FUE PAGADA
-                        //             $purchases_order_detail->increment('residue', intval($request_quantity));
-
-                        //             $price_cost     = NULL;
-                        //             $price_cost_iva = 0;
-                        //             if($purchases_order_detail)
-                        //             {
-                        //                 $price_cost_iva = $purchases_order_detail->amount / $product_quantity;
-                        //                 if($purchases_product->type_iva==1)
-                        //                 {
-                        //                 $price_cost = $purchases_order_detail->amount;
-                        //                 }
-            
-                        //                 if($purchases_product->type_iva==2)
-                        //                 {
-                        //                 $price_cost = $purchases_order_detail->cost_Iva5;
-                        //                 }
-            
-                        //                 if($purchases_product->type_iva==3)
-                        //                 {
-                        //                     $price_cost = $purchases_order_detail->cost_Iva10;
-                        //                 }
-                        //             }
-                        //             //LA RECEPCION Y DEMAS DEBE IR SIEMPRE CON LA CANTIDAD DE CAJAS EN CASO DE QUE EL CONVERTIDOR NO SEA 1. SI EL CONVERTIDOR ES 2 EL PRECIO COSTO AL INGRESAR EN EXISTENCIA
-                        //             //DEBE SER DIVIDIDO ENTRE ESA CANTIDAD SEGUN CONTINUA:
-                        //             //SI LA CANTIDAD A RECEPCIONAR ES DIFERENTE AL CONVERTIR
-                        //             // if($request_quantity != $product_quantity)
-                        //             // {
-                        //             $price_cost = $price_cost / $product_quantity;
-                        //             // }
-                        //             // dd($expiration, Carbon::createFromFormat('d/m/Y',$expiration), request()->all());
-                        //             // Log::info($product_id);
-                        //             // Log::info(Carbon::createFromFormat('d/m/Y',$expiration));
-                        //             $purchases_existence = PurchasesExistence::create([ 
-                        //                 'deposit_id'           => $request->deposits_id, 
-                        //                 'purchases_product_id' => $product_id,
-                        //                 'quantity'             => $product_quantity,
-                        //                 'residue'              => $product_quantity,
-                        //                 'expiration_date'      => Carbon::createFromFormat('d/m/Y',$expiration)->format('Y-m-d'),
-                        //                 'social_reason_id'     => $request->social_reason_id,
-                        //                 'price_cost'           => $price_cost,
-                        //                 'price_cost_iva'       => $price_cost_iva 
-                        //             ]);
-                        //             $purchases_movement_details->update(['purchases_existence_id' => $purchases_existence->id]);
-                        //             $product_cost = PurchasesProductCost::where('purchases_product_id',  $product_id)
-                        //             ->where('social_reason_id', $request->social_reason_id)
-                        //             ->first();
-
-                        //             //ACTUALIZACION DE COSTO PROMEDIO
-                        //             $existences = PurchasesExistence::where('purchases_product_id',  $product_id)
-                        //                         ->where('social_reason_id', $request->social_reason_id)
-                        //                         ->where('residue', '>', 0)
-                        //                         ->get()           
-                        //                         ->sum('residue');
-
-                        //             if($product_cost) 
-                        //             {
-                        //             $new_cost = ((($product_cost->price_cost * $product_cost->quantity) + ($price_cost * $product_quantity))/ $existences);
-
-                        //             $product_cost->update([
-                        //             'quantity'      => $existences,
-                        //             'price_cost'    => $new_cost]);
-
-                        //             $purchases_movement_details->update([
-                        //             'price_cost'    => $new_cost
-                        //             ]);
-
-                        //             } 
-                        //             else
-                        //             {
-                        //             $new_cost = $price_cost;
-
-                        //             PurchasesProductCost::create([
-                        //             'social_reason_id'     => $request->social_reason_id,
-                        //             'purchases_product_id' => $product_id,
-                        //             'price_cost'           => $new_cost,
-                        //             'quantity'             => $existences
-                        //             ]);
-                        //             }
-
-                        //             PriceUpdateLog::updateorcreate([
-                        //             'social_reason_id'      => $request->social_reason_id,
-                        //             'datetime'              => $purchases_movement->created_at,
-                        //             'purchases_product_id'  => $purchases_movement_details->purchases_product_id
-                        //             ],
-                        //             [
-                        //             'quantity'              => $existences,
-                        //             'price_cost'            => $new_cost
-                        //             ]);
-                                
-                        //         }
-                        //     }
-                        //     else
-                        //     {
-                        //         $request_quantity = $request->detail_quantities[$key];
-                        //         $product_quantity = $request->detail_quantities[$key];
-                        //         // LA CONVERSION YA LA REALIZA EN LA ORDEN DE COMPRA
-                        //         $ammount_converter = $purchases_product->conversion_amount && $request->detail_presentation[$key] == 4 ? $purchases_product->conversion_amount : 1;  
-                        //         $product_quantity = $product_quantity * $ammount_converter;
-                            
-                        //         $purchases_movement_details = $purchases_movement->purchases_movement_details()->create([ 'purchases_product_id'=> $product_id,
-                        //         'purchases_order_detail_id' => $request->detail_id[$key],
-                        //         'quantity'                  => $request_quantity,
-                        //         'affects_stock'             => $affects_stock ]);
-
-                        //         $quantity_received = PurchaseMovementsDetail::where('purchases_order_detail_id', $request->detail_id[$key])
-                        //         ->whereHas('purchases_movement', function($query){
-                        //         $query->where('status', 1)
-                        //         ->where('type_movement', 1)//SI ES ENTRADA
-                        //         ->where('type_operation', 1);//SI ES RECEPCION
-                        //         })->sum('quantity');
-                        //         $purchases_order_detail = PurchaseOrderDetail::find($request->detail_id[$key]);
-                        //         $purchases_order_detail->update(['quantity_received' => $quantity_received]);
-                        //         //EL CAMPO RESIDUE HACE REFERENCIA A LA CANTIDAD DE PRODUCTO QUE AUN NO FUE PAGADA
-                        //         $purchases_order_detail->increment('residue', intval($request_quantity));
-
-                        //         $price_cost     = NULL;
-                        //         $price_cost_iva = 0;
-                        //         if($purchases_order_detail)
-                        //         {
-                                    
-                        //             $price_cost_iva = $purchases_order_detail->amount;
-                        //             if($purchases_product->type_iva==1)
-                        //             {
-                        //                 $price_cost = $purchases_order_detail->amount;
-                        //             }
-        
-                        //             if($purchases_product->type_iva==2)
-                        //             {
-                        //                 $price_cost = $purchases_order_detail->cost_Iva5;
-                        //             }
-        
-                        //             if($purchases_product->type_iva==3)
-                        //             {
-                        //                 $price_cost = $purchases_order_detail->cost_Iva10;
-                        //             }
-                        //         }
-                        //         if($request->detail_presentation[$key] == 4)
-                        //         {
-                        //             $price_cost = $price_cost / $product_quantity;
-                        //             $price_cost_iva = $price_cost_iva / $product_quantity;
-                        //         }
-                                
-                        //         $purchases_existence = PurchasesExistence::create([ 
-                        //             'deposit_id'           => $request->deposits_id, 
-                        //             'purchases_product_id' => $product_id,
-                        //             'quantity'             => $product_quantity,
-                        //             'residue'              => $product_quantity,
-                        //             'social_reason_id'     => $request->social_reason_id,
-                        //             'price_cost'           => $price_cost,
-                        //             'price_cost_iva'       => $price_cost_iva 
-                        //         ]);
-                        //         $purchases_movement_details->update(['purchases_existence_id' => $purchases_existence->id]);
-                        //         $product_cost = PurchasesProductCost::where('purchases_product_id',  $product_id)
-                        //         ->where('social_reason_id', $request->social_reason_id)
-                        //         ->first();
-
-                        //         //ACTUALIZACION DE COSTO PROMEDIO
-                        //         $existences = PurchasesExistence::where('purchases_product_id',  $product_id)
-                        //                     ->where('social_reason_id', $request->social_reason_id)
-                        //                     ->where('residue', '>', 0)
-                        //                     ->get()           
-                        //                     ->sum('residue');
-
-                        //         if($product_cost) 
-                        //         {
-                        //         $new_cost = ((($product_cost->price_cost * $product_cost->quantity) + ($price_cost * $product_quantity))/ $existences);
-
-                        //         $product_cost->update([
-                        //         'quantity'      => $existences,
-                        //         'price_cost'    => $new_cost]);
-
-                        //         $purchases_movement_details->update([
-                        //         'price_cost'    => $new_cost
-                        //         ]);
-
-                        //         } 
-                        //         else
-                        //         {
-                        //         $new_cost = $price_cost;
-
-                        //         PurchasesProductCost::create([
-                        //         'social_reason_id'     => $request->social_reason_id,
-                        //         'purchases_product_id' => $product_id,
-                        //         'price_cost'           => $new_cost,
-                        //         'quantity'             => $existences
-                        //         ]);
-                        //         }
-
-                        //         PriceUpdateLog::updateorcreate([
-                        //         'social_reason_id'      => $request->social_reason_id,
-                        //         'datetime'              => $purchases_movement->created_at,
-                        //         'purchases_product_id'  => $purchases_movement_details->purchases_product_id
-                        //         ],
-                        //         [
-                        //         'quantity'              => $existences,
-                        //         'price_cost'            => $new_cost
-                        //         ]);
-                                
-                        //     }
-
-                        // }
+                            }
                     }
                 }
                 //CARGA DE FACTURA
@@ -495,7 +237,6 @@ class PurchaseMovementsController extends Controller
                             'purchases_order_detail_id' => $order_detail_id,
                             'description'               => $request->detail_descriptions[$index],
                             'accounting_plan_id'        => null,
-                            'emergency_mobile_id'       => $request->detail_mobiles[$index],
                             'quantity'                  => $request->detail_quantities[$index],
                             'amount'                    => $request->detail_price[$index],
                             'excenta'                   => $this->parse($request->detail_amounts_exenta[$index]),
@@ -612,6 +353,36 @@ class PurchaseMovementsController extends Controller
         
         return view('pages.purchase-movement.show', compact('purchase_movement'));
     }
+
+    public function edit(PurchaseMovement $purchase_movement)
+    {
+        $branches       = Branch::getAllCached()->pluck('name', 'id');
+        $deposits       = Deposit::where('status',1)->get();
+        $type_vouchers = config('constants.type_purchases');
+        
+
+        return view('pages.purchase-movement.edit',compact('purchase_movement','branches','deposits','type_vouchers'));
+    }
+
+public function update(PurchaseMovement $request, $id)
+{
+    if($request->ajax())
+    {
+        DB::transaction(function() use ($request, $id)
+        {
+            $detail = PurchaseMovementsDetail::findOrFail($id);
+
+            $detail->update([
+                'material_id' => $request->detail_product_id,
+                'quantity' => $request->detail_product_quantity,
+                'presentation' => $request->detail_presentation_id,
+                'description' => isset($request->detail_product_description) ? $request->detail_product_name.'('.$request->detail_product_description.')' : $request->detail_product_name,
+            ]);
+        });
+
+        return response()->json(['success' => true]);
+    }
+}
 
     public function delete(PurchaseMovement $purchases_movement)
     {

@@ -34,15 +34,11 @@
                                 <p>Fecha:</p>
                                 <p>Solicitante: </p>
                                 <p>Sucursal: </p>
-                                {{-- <p>Departamento: </p> --}}
                             </div>
                             <div class="col-md-10">
                                 <p>{{$wish_purchase->date}}</p>
                                 <p> {{$wish_purchase->requested_by}}</p>
                                 <p> {{$wish_purchase->branch->name}}</p>
-                                {{-- <p>
-                                    {{$wish_purchase->purchases_requesting_department->name}}
-                                </p> --}}
                             </div>
                         </div>
                     </div>
@@ -85,15 +81,6 @@
                                     <a href="javascript:;" class="btn btn-danger" onclick="approved_restocking({{$purchase_budget->id}},2)" id="approve-link{{$purchase_budget->id}}" title="Rechazar Solicitud">Rechazar</a>
                                 </div>
                             </div>
-                            {{-- <div id="blueimp-gallery" class="blueimp-gallery">
-                                <div class="slides"></div>
-                                <h3 class="title"></h3>
-                                <a class="prev">‹</a>
-                                <a class="next">›</a>
-                                <a class="close">×</a>
-                                <a class="play-pause"></a>
-                                <ol class="indicator"></ol>
-                            </div> --}}
                         </div>
                     @endforeach
                 </div>

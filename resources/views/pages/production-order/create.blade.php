@@ -65,91 +65,7 @@
                     </table>
                 </div>
             </div>
-            {{-- <div class="ibox-content pb-0" id="div_deposito">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="div_provider_data">
-                            <div class="row">
-                                <div class="form-group col-md-8">
-                                    <label>Proveedor</label>
-                                    <input type="text" name="provider_name" value="" id="provider_name" class="form-control" readonly>
-                                    <input type="hidden" name="purchases_provider_id" value="" id="purchases_provider_id" class="form-control" readonly>
-                                    <input type="hidden" name="ruc" value="" id="ruc" class="form-control" readonly>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Telefono</label>
-                                    <input type="text" name="phone_label" value="" id="phone_label" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label>Dirección</label>
-                                    <input type="text" name="address_label" value="" id="address_label" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div id="div_invoice_header">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="form-group col-md-9">
-                                            <label>Razon Social</label>
-                                            <input type="text" name="social_reason" value="" id="social_reason" class="form-control" readonly>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label>Condición</label>
-                                            <select name="condition" onchange="show_expiration($(this).val())" class="form-control">
-                                                @foreach(config('constants.invoice_condition') as $key => $value)
-                                                    <option value="{{ $key }}">{{ $value }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="ibox-content table-responsive no-padding" id="div_invoice_detail">
-                            <table class="table table-hover table-bordered mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" width="5%">  Cant.</th>
-                                        <th class="text-center" width="17%"> Materia Prima</th>
-                                        <th class="text-center" width="20%"> Descripcion</th>
-                                        <th class="text-center" width="8%">  Movil</th>
-                                        <th class="text-center" width="10%"> Precio</th>
-                                        <th class="text-center" width="10%"> 10%</th>
-                                        <th class="text-center" width="10%"> 5%</th>
-                                        <th class="text-center" width="10%"> Exenta</th>
-                                        <th class="text-center" width="10%"> Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_product"></tbody>
-                            </table>
-                        </div>
-                        <br>
-                        <div id="div_image">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <label>Total factura:</label> <div class="inline-block" id="label_total_invoice">Gs 0.</div>
-                                    <input type="hidden" name="total_invoice" value="" id="total_invoice" class="form-control" readonly>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Total IVA 5%:</label> <div class="inline-block" id="totales_iva5"> </div>
-                                    <input type="hidden" name="total_iva" value="" id="total_iva" class="form-control" readonly>
-                                    <input type="hidden" name="total_iva_5" value="" id="total_iva_5" class="form-control" readonly>
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Total IVA 10%:</label> <div class="inline-block" id="totales_iva10"> </div>
-                                    <input type="hidden" name="total_iva_10" value="" id="total_iva_10" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-            </div> --}}
+            
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
                 <a href="{{ url('budget-production') }}" class="btn btn-sm btn-danger">Cancelar</a>
@@ -172,8 +88,9 @@
                                     </tr>
                                 </thead>
                                 <tbody id="modalBody">
-                                    <!-- Aquí se cargarán los datos -->
                                 </tbody>
+                                <tfoot id="modalfoot">
+                                </tfoot>
                             </table>
                         </div>
                         <div class="modal-footer">
@@ -274,10 +191,8 @@
                         success: function(response) {
                             var modalBody = $('#modalBody');
 
-                            // Limpiar contenido anterior, si lo hubiera
                             modalBody.empty();
-
-                            // Agregar filas a la tabla dentro del modal
+                   
                             response.items.forEach(function(item) {
                                 console.log(item);
                                 var rowHtml = '<tr>';
@@ -301,6 +216,7 @@
 
             loadDate();
         });
+
 
         function loadDate()
         {
@@ -462,7 +378,28 @@
                             $('#date_ped').val(element.date);
                             $('#client_id').val(element.client_id);
                             $('#client').val(element.client);
+
+                            var selectedMaterials = []; 
+                            var selectedProducts = element.product_id; 
+                
+                            $.ajax({
+                                url: '{{ route('ajax.modal-material') }}',
+                                method: 'GET',
+                                data: { product_id: selectedProducts,number_budget:number_budget,envio:1 },
+                                success: function(response) {
+                                    response.items.forEach(function(material) {
+                                        $('#modalfoot').append(
+                                            '<input type="hidden" name="selected_materials_'+selectedProducts+'[]" value="' + material.raw_material_id + '">' +
+                                            '<input type="hidden" name="selected_materials_quantity_'+selectedProducts+'[]" value="' + material.quantity + '">'
+                                        );
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
                         });
+
                         if(conteo>0)
                         {
                             
@@ -482,6 +419,7 @@
                             });
                             return false;
                         }
+
                     },
                     error: function(data){
                         laravelErrorMessages(data);

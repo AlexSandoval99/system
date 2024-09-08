@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\ProductionQuality;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class CreateProductionQualityRequest extends FormRequest
 {
@@ -30,20 +31,22 @@ class CreateProductionQualityRequest extends FormRequest
 
     public function withValidator($validator)
     {
-        $validator->after(function ($validator)
-        {
-            if(!request()->{"quality_id0"} || !request()->{"cantidad_controlada0"})
-            {
-                $validator->errors()->add('ruc', 'La primera Etapa no puede mandar vacio');
-            }
-            if(!request()->{"quality_id1"} || !request()->{"cantidad_controlada1"})
-            {
-                $validator->errors()->add('ruc', 'La segunda Etapa no puede mandar vacio');
-            }
-            if(!request()->{"quality_id2"} || !request()->{"cantidad_controlada2"})
-            {
-                $validator->errors()->add('ruc', 'La tercera Etapa no puede mandar vacio');
-            }
-        });
+        // Log::info(request()->all());
+
+        // $validator->after(function ($validator)
+        // {
+        //     if(!request()->{"quality_id0"} || !request()->{"cantidad_controlada0"})
+        //     {
+        //         $validator->errors()->add('ruc', 'La primera Etapa no puede mandar vacio');
+        //     }
+        //     if(!request()->{"quality_id1"} || !request()->{"cantidad_controlada1"})
+        //     {
+        //         $validator->errors()->add('ruc', 'La segunda Etapa no puede mandar vacio');
+        //     }
+        //     if(!request()->{"quality_id2"} || !request()->{"cantidad_controlada2"})
+        //     {
+        //         $validator->errors()->add('ruc', 'La tercera Etapa no puede mandar vacio');
+        //     }
+        // });
     }
 }

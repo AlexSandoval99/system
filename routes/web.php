@@ -59,6 +59,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('cliente', 'ClienteController@index')->name('cliente');
 	Route::get('cliente/create', 'ClienteController@create')->name('cliente-create');
 	Route::post('cliente', 'ClienteController@store')->name('cliente.store');
+    Route::get('ajax/department', 'ClienteController@ajax_department')->name('ajax.get_deparment');
+
 
     Route::get('ajax/purchases_providers', 'ProveedorController@ajax_providers')->name('ajax.providers');
     Route::get('ajax/purchases_providers_details', 'ProveedorController@ajax_providers_purchases')->name('ajax.providers-purchases');
@@ -105,18 +107,23 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('wish-purchase/{wish_purchase}/confirm-purchase-budgets', 'WishPurchaseController@confirm_purchase_budgets')->name('wish-purchases.charge-budgets');
     Route::get('wish-purchase-budgets/{purchase_budget}/confirm-purchase-budgets', 'WishPurchaseController@confirm_purchase_budgets_store')->name('wish-purchases.confirm_purchase_budgets_store');
     Route::get('wish-purchase-budgets/{wish_purchase}/wish-purchase-budgets-approved', 'WishPurchaseController@wish_purchase_budgets_approved')->name('wish-purchases.budgets_approved');
-    // Route::get('wish-purchase/{wish_purchase}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
 	Route::post('wish-purchase', 'WishPurchaseController@store')->name('wish-purchase.store');
 	Route::get('wish-purchase/{wish_purchase}/edit', 'WishPurchaseController@edit')->name('wish-purchase.edit');
 	Route::put('wish-purchase/{wish_purchase}/update', 'WishPurchaseController@update')->name('wish-purchase.update');
 	Route::get('wish-purchase/{restocking}/pdf', 'WishPurchaseController@pdf')->name('wish-purchases.pdf');
+	Route::get('show-multiple/wish-purchase', 'WishPurchaseController@show_multiple')->name('wish-purchases.show_multiple');
+	Route::post('show-multiple/wish-purchase', 'WishPurchaseController@show_multiple_submit')->name('wish-purchases.show_multiple_submit');
+	Route::get('show-multiple/transfer-create', 'WishPurchaseControllerController@transfer_create')->name('wish-purchases.transfer_create');
+
 
 
 	Route::get('purchase-order', 'PurchaseOrderController@index')->name('purchase-order');
-	Route::get('purchase-order/create', 'PurchaseOrderController@create')->name('purchase-order-create');
-	Route::get('purchase-order/{wish_purchase}', 'PurchaseOrderController@show')->name('purchase-order-create');
+	Route::get('purchase-order/create', 'PurchaseOrderController@create')->name('purchase-order.create');
+	Route::get('purchase-order/{purchase_order}', 'PurchaseOrderController@show')->name('purchase-order-create');
     Route::post('purchase-orders', 'PurchaseOrderController@store')->name('purchase-order.store');
     // Route::get('ajax/purchases_providers', 'ProveedorController@ajax_providers')->name('ajax.providers');
+	Route::get('purchase-order/{purchase_order}/edit', 'PurchaseOrderController@edit')->name('purchase-order.edit');
+	Route::put('purchase-order/{purchase_order}/update', 'PurchaseOrderController@update')->name('purchase-order.update');
 
 	Route::get('purchase-movement', 'PurchaseMovementsController@index')->name('purchase-movement');
 	Route::get('purchase-movement/create', 'PurchaseMovementsController@create')->name('purchase-movement-create');
@@ -126,12 +133,16 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('ajax/purchases-products-movements', 'PurchaseMovementsController@ajax_purchases_products_movements')->name('ajax.purchases-products-movements');
 	Route::get('search/provider-stamped', 'WishPurchaseController@searchProviderStamped')->name('provider-stamped.search');
     Route::get('ajax/purchases_products_last', 'ArticuloController@ajax_purchases_last')->name('ajax.products-purchases-last');
+	Route::get('purchase-movement/{purchase_movement}/edit', 'PurchaseMovementsController@edit')->name('purchase-movement.edit');
+	Route::put('purchase-movement/{purchase_movement}/update', 'PurchaseMovementsController@update')->name('purchase-movement.update');
 
 	Route::get('purchase', 'PurchaseController@index')->name('purchase');
 	Route::get('purchase/create', 'PurchaseController@create')->name('purchase-create');
 	Route::get('purchase/{purchase}', 'PurchaseController@show')->name('purchase-show');
 	Route::post('purchase', 'PurchaseController@store')->name('purchase.store');
 	Route::get('purchase/{purchase}/pdf', 'PurchaseController@pdf')->name('purchases.pdf');
+	Route::get('purchase/{purchase}/edit', 'PurchaseController@edit')->name('purchase.edit');
+	Route::put('purchase/{purchase}/update', 'PurchaseController@update')->name('purchase.update');
 
     Route::get('ajax/purchases_products_orders', 'RawMaterialsController@ajax_purchases_orders')->name('ajax.products-purchases-orders');
 	Route::get('ajax/raw-material', 'RawMaterialsController@ajax_purchases_products')->name('ajax.purchases-products');
@@ -193,7 +204,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('losses/create', 'LossesController@create')->name('losses-create');
 	Route::get('losses/{losses}', 'LossesController@show')->name('losses-show');
 	Route::post('losses', 'LossesController@store')->name('losses-store');
-	Route::get('ajax/control-calidad', 'LossesController@ajax_control_calidad')->name('ajax.control-calidad');
+	// Route::get('ajax/control-calidad', 'LossesController@ajax_control_calidad')->name('ajax.control-calidad');
 	Route::get('ajax/update-control', 'LossesController@ajax_update_control')->name('ajax.update-control');
 
 	Route::get('production-cost', 'ProductionCostController@index')->name('production-cost');

@@ -42,7 +42,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ url('production-control-quality/' . $ord->id) }}"><i class="fa fa-info-circle"></i></a> 
-                                    <a href="{{ url('losses/index') }}"><i class="fa fa-refresh"></i></a> 
+                                    <a href="{{ url('losses/') }}"><i class="fa fa-refresh"></i></a> 
                                 </td>
                             </tr>
                         @endforeach

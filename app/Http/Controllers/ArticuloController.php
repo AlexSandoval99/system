@@ -101,27 +101,36 @@ class ArticuloController extends Controller
                                 'barcode'     => request()->barcode,
                             ]);
             $articulo->setting_product()->delete();
-            foreach ($request->materiales as $key => $value) 
+            if(isset($request->materiales))
             {
-                SettingProduct::create([
-                    'articulo_id'       => $articulo->id,
-                    'raw_materials_id'   => $value,
-                    'quantity'          => $request->cantidades[$key],
-                ]);
+                foreach ($request->materiales as $key => $value) 
+                {
+                    SettingProduct::create([
+                        'articulo_id'       => $articulo->id,
+                        'raw_materials_id'   => $value,
+                        'quantity'          => $request->cantidades[$key],
+                    ]);
+                }
             }
-            foreach ($request->stages as $key1 => $value1) 
+            if(isset($request->stages))
             {
-                SettingProduct::create([
-                    'articulo_id'       => $articulo->id,
-                    'stage_id'       => $value1,
-                ]);
+                foreach ($request->stages as $key1 => $value1) 
+                {
+                    SettingProduct::create([
+                        'articulo_id'       => $articulo->id,
+                        'stage_id'       => $value1,
+                    ]);
+                }
             }
-            foreach ($request->qualitys as $key2 => $value2) 
+            if(isset($request->qualitys))
             {
-                SettingProduct::create([
-                    'articulo_id'       => $articulo->id,
-                    'production_qualities_id'       => $value2,
-                ]);
+                foreach ($request->qualitys as $key2 => $value2) 
+                {
+                    SettingProduct::create([
+                        'articulo_id'       => $articulo->id,
+                        'production_qualities_id'       => $value2,
+                    ]);
+                }
             }
         return redirect('articulo');
     }

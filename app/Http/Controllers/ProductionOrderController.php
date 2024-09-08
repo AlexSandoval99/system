@@ -55,6 +55,7 @@ class ProductionOrderController extends Controller
         {
             DB::transaction(function() use ($request, & $production_order)
             {
+                
                 $production_order = ProductionOrder::create([
                     'date'              => $request->date,
                     'status'            => 1,
@@ -67,12 +68,12 @@ class ProductionOrderController extends Controller
                 // Grabar los Productos
                 foreach($request->detail_product_id as $key => $value)
                 {
-                    foreach ($request->{"detail_material_id_$value"} as $key1 => $value1) 
+                    foreach ($request->{"selected_materials_$value"} as $key1 => $value1) 
                     {
                         $production_order->production_order_details()->create([
                             'material_id'              => $value1,
                             'articulo_id'              => $value,
-                            'quantity_material'        => $request->{"detail_material_quantity_$value"}[$key1],
+                            'quantity_material'        => $request->{"selected_materials_quantity_$value"}[$key1],
                             'quantity'                 => $request->detail_product_quantity[$key],
                             'production_order_id'      => $production_order->id,
                         ]);
@@ -99,21 +100,41 @@ class ProductionOrderController extends Controller
         return view('pages.production-order.edit',compact('production_order'));
     }
 
-    public function update(ProductionOrder $request, $id)
+    public function update(ProductionOrder $production_order)
     {
-        if($request->ajax())
+        if(request()->all())
         {
-            DB::transaction(function() use ($request, $id)
+            DB::transaction(function() use ($production_order)
             {
-                $detail = ProductionOrderDetail::findOrFail($id);
-    
-                $detail->update([
-                                  'articulo_id'              => $request->detail_product_id,
-                                  'quantity'                 => $request->detail_product_quantity,
+                
+                $production_order->update([
+                    'date'              => request()->date,
+                    'status'            => 1,
+                    'client_id'         => request()->client_id,
+                    'team_work_id'      => 1,
+                    'branch_id'         => request()->branch_id,
+                    'user_id'           => auth()->user()->id
                 ]);
+
+                // Grabar los Productos
+            $production_order->production_order_details()->delete();
+                foreach(request()->detail_product_id as $key => $value)
+                {
+                    foreach (request()->{"detail_material_id_$value"} as $key1 => $value1) 
+                    {
+                        $production_order->production_order_details()->create([
+                            'material_id'              => $value1,
+                            'articulo_id'              => $value,
+                            'quantity_material'        => request()->{"detail_material_quantity_$value"}[$key1],
+                            'quantity'                 => request()->detail_product_quantity[$key],
+                            'production_order_id'      => $production_order->id,
+                        ]);
+                    }
+                }
             });
     
-            return response()->json(['success' => true]);
+            return redirect('production-order');
+
         }
     }
 
@@ -164,16 +185,20 @@ class ProductionOrderController extends Controller
             $results = [];        
             $articulo = Articulo::where('id',request()->product_id)->first();
             $order = BudgetProductionDetail::where('budget_production_id',request()->number_budget)->where('articulo_id',request()->product_id)->first();
-            foreach ($articulo->setting_material as $key => $setting)
+            foreach ($articulo->setting_product as $key => $setting)
             {
-                $results['items'][$key]['id']           = $setting->id;
-                $results['items'][$key]['articulo_id']   = $setting->articulo_id;
-                $results['items'][$key]['articulo_name'] = $setting->articulo->name;
-                $results['items'][$key]['raw_material_id']     = $setting->raw_materials_id;
-                $results['items'][$key]['raw_material']     = $setting->raw_material->description;
-                $results['items'][$key]['quantity']        = $setting->quantity * $order->quantity;
+                if($setting->raw_materials_id)
+                {
+                    $results['items'][$key]['id']           = $setting->id;
+                    $results['items'][$key]['articulo_id']   = $setting->articulo_id;
+                    $results['items'][$key]['articulo_name'] = $setting->articulo->name;
+                    $results['items'][$key]['raw_material_id']     = $setting->raw_materials_id;
+                    $results['items'][$key]['raw_material']     = $setting->raw_material->description;
+                    $results['items'][$key]['quantity']        = $setting->quantity * $order->quantity;
+                }
             }         
             return response()->json($results);
+            
         }
         abort(404);
     }

@@ -56,6 +56,7 @@ class ProductionControlQualityController extends Controller
 
     public function store(CreateProductionQualityRequest $request)
     {
+        // log::info(request()->all());
         if(request()->ajax())
         {
             DB::transaction(function() use ($request, & $control)
@@ -69,69 +70,73 @@ class ProductionControlQualityController extends Controller
                 ]);
 
                 // Grabar los Productos
-                foreach($request->detail_product_id as $key => $value)      
+                foreach($request->detail_stage_id as $key => $value)      
                 {
+                    $articulo = explode("_", strval($value));
+
                     $control->production_quality_control_details()->create([
                         
-                        'articulo_id'           => $value,
-                        'quantity'              => $request->{"total$key"} ?? 0,
-                        'residue'               => $request->{"cantidad_controlada$key"} ?? 0,
-                        'observation'           => $request->{"observacion$key"} ?? '',
-                        'quality'                 => $request->{"etapa$key"} ? 1 : 0,
+                        'articulo_id'           => $articulo[0],
+                        'quantity'              => $request->{"total$value"} ?? 0,
+                        'residue'               => $request->{"cantidad_controlada$value"} ?? 0,
+                        'observation'           => $request->{"observacion$value"} ?? '',
+                        'quality'                 => $request->{"etapa$value"} ? 1 : 0,
                         'production_quality_id' => $control->id,
-                        'quality_id'              => $request->{"quality_id$key"}
+                        'quality_id'              => $request->{"stage_id$value"}
                     ]);
                 }
-                $array_products = $control->production_quality_control_details()->groupBy('articulo_id')->get();
+
+                $array_products = $control->production_quality_control_details()->orderBy('id','desc')->groupBy('articulo_id')->get();
                 foreach ($array_products as $key => $product)
                 {
-                    if($request->{"total$key"} > $request->{"cantidad_controlada$key"})
-                    {
-                        $losse = Losse::where('control_quality_id',$control->id)->first();
-                        if(!$losse)
+                        if($request->input("total{$product->articulo_id}_{$product->quality_id}") > $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"))
                         {
-                            $losse = Losse::create([
-                                'status'            => 1,
+                            $losse = Losse::where('control_quality_id',$control->id)->first();
+                            if(!$losse)
+                            {
+                                $losse = Losse::create([
+                                    'status'            => 1,
+                                    'date'               => $request->date,
+                                    'user_id'            => auth()->user()->id,
+                                    'branch_id'          => $request->branch_id,
+                                    'control_quality_id' => $control->id
+                                ]);
+                            }
+        
+                            $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
+                            Log::info($materials);
+                            foreach ($materials as $key => $material) 
+                            {
+                                $losse->losse_detail()->create([
+                                    'articulo_id'   => $product->articulo_id,
+                                    'reason'        => $request->input("observacion{$product->articulo_id}_{$product->quality_id}"),
+                                    'material_id'   => $material->raw_material->id, 
+                                    'quantity'      => $request->input("total{$product->articulo_id}_{$product->quality_id}")  - $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
+                                    'losse_id'      => $losse->id
+                                ]);
+                            }
+                        }
+                        $cost_product = ProductionCost::where('control_quality_id',$control->id)->first();
+                        if(!$cost_product)
+                        {
+                            $cost_product = ProductionCost::create([
                                 'date'               => $request->date,
-                                'user_id'            => auth()->user()->id,
+                                'status'            => 1,
                                 'branch_id'          => $request->branch_id,
+                                'user_id'            => auth()->user()->id,
                                 'control_quality_id' => $control->id
                             ]);
                         }
-    
-                        $materials = RawMaterial::where('articulo_id',$product->articulo_id)->where('status',1)->get();
-                        foreach ($materials as $key => $material) 
-                        {
-                            $losse->losse_detail()->create([
-                                'articulo_id'   => $product->articulo_id,
-                                'reason'        => $request->{"observacion$key"},
-                                'material_id'   => $material->id, 
-                                'quantity'      => $request->{"total$key"} - $request->{"cantidad_controlada$key"},
-                                'losse_id'      => $losse->id
-                            ]);
-                        }
-                    }
-                    $cost_product = ProductionCost::where('control_quality_id',$control->id)->first();
-                    if(!$cost_product)
-                    {
-                        $cost_product = ProductionCost::create([
-                            'date'               => $request->date,
-                            'status'            => 1,
-                            'branch_id'          => $request->branch_id,
-                            'user_id'            => auth()->user()->id,
-                            'control_quality_id' => $control->id
-                        ]);
-                    }
 
-                    $materials = RawMaterial::where('articulo_id',$product->articulo_id)->where('status',1)->get();
+                    $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
                     foreach ($materials as $key => $material) 
                     {
                         $cost_product->production_cost_detail()->create([
                             'articulo_id'           => $product->articulo_id,
-                            'material_id'           => $material->id, 
-                            'quantity'              => $request->{"total$key"},
+                            'material_id'           => $material->raw_material->id,
+                            'quantity'              => $request->input("total{$product->articulo_id}_{$product->quality_id}"),
                             'production_cost_id'    => $cost_product->id,
-                            'price_cost'            => $request->{"total$key"} * $material->average_cost
+                            'price_cost'            => $request->input("total{$product->articulo_id}_{$product->quality_id}") * $material->raw_material->average_cost
                         ]);
                     }
                 }
@@ -156,33 +161,35 @@ class ProductionControlQualityController extends Controller
         if(request()->ajax())
         {
             $results = [];        
-            $order_productions = ProductionControlDetail::with('production_control', 'articulo')
-                                                            ->select("production_control_details.*")
-                                                            ->join('production_controls', 'production_control_details.production_control_id', '=', 'production_controls.id')
-                                                            ->where('production_controls.status', true)
-                                                            ->where('production_controls.id', request()->number_control)
+            foreach (request()->sesion as $key => $session) {
+                $order_productions = ProductionControlDetail::with('production_control', 'articulo')
+                                                                ->select("production_control_details.*")
+                                                                ->join('production_controls', 'production_control_details.production_control_id', '=', 'production_controls.id')
+                                                                ->where('production_controls.status', true)
+                                                                ->where('production_controls.id', request()->number_control)
 
-                                                            ->groupBy('production_control_details.articulo_id')
-                                                            ->get();
-            foreach ($order_productions as $key => $order_detail)
-            {
-                $results['items'][$key]['id']           = $order_detail->id;
-                $results['items'][$key]['product_id']   = $order_detail->articulo_id;
-                $results['items'][$key]['product_name'] = $order_detail->articulo->name;
-                $results['items'][$key]['quantity']     = $order_detail->quantity;
-                $results['items'][$key]['client_id']    = $order_detail->production_control->client_id;
-                $results['items'][$key]['client']       = $order_detail->production_control->client->first_name.' '.$order_detail->production_control->client->last_name;
-                $results['items'][$key]['branch_id']    = $order_detail->production_control->branch_id;
-                $results['items'][$key]['branch']       = $order_detail->production_control->branch->name;
-                $results['items'][$key]['date']         = Carbon::createFromFormat('Y-m-d',$order_detail->production_control->date)->format('d/m/Y');
-                $results['branch_id']                   = $order_detail->production_control->branch_id;
-                $control = SettingProduct::join('production_qualities','setting_products.production_qualities_id','=','production_qualities.id')->where('articulo_id',$order_detail->articulo_id)->whereNotNull('production_qualities_id')->where('production_qualities.number',request()->sesion)->first();
-                if($control)
+                                                                ->groupBy('production_control_details.articulo_id')
+                                                                ->get();
+                foreach ($order_productions as $key => $order_detail)
                 {
-                    $results['items'][$key]['production_qualities_id']           = $control->production_qualities_id;
-                    $results['items'][$key]['qualities_name']         = $control->name;
-                }
+                    $results['items'][$session][$key]['id']           = $order_detail->id;
+                    $results['items'][$session][$key]['product_id']   = $order_detail->articulo_id;
+                    $results['items'][$session][$key]['product_name'] = $order_detail->articulo->name;
+                    $results['items'][$session][$key]['quantity']     = $order_detail->quantity;
+                    $results['items'][$session][$key]['client_id']    = $order_detail->production_control->client_id;
+                    $results['items'][$session][$key]['client']       = $order_detail->production_control->client->first_name.' '.$order_detail->production_control->client->last_name;
+                    $results['items'][$session][$key]['branch_id']    = $order_detail->production_control->branch_id;
+                    $results['items'][$session][$key]['branch']       = $order_detail->production_control->branch->name;
+                    $results['items'][$session][$key]['date']         = Carbon::createFromFormat('Y-m-d',$order_detail->production_control->date)->format('d/m/Y');
+                    $results['branch_id']                   = $order_detail->production_control->branch_id;
+                    $control = SettingProduct::join('production_qualities','setting_products.production_qualities_id','=','production_qualities.id')->where('articulo_id',$order_detail->articulo_id)->whereNotNull('production_qualities_id')->where('production_qualities.number',$session)->first();
+                    if($control)
+                    {
+                        $results['items'][$session][$key]['production_qualities_id']           = $control->production_qualities_id;
+                        $results['items'][$session][$key]['qualities_name']         = $control->name;
+                    }
 
+                }         
             }         
             return response()->json($results);
         }

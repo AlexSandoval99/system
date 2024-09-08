@@ -21,10 +21,12 @@ return [
         1 => 'success',
         2 => 'danger'
     ],
+    
     'presentation' =>[
         1 => 'Unidad',
         2 => 'Caja'
     ],
+
     'type_purchases' => [
         1 => 'Factura',
         2 => 'Boleta',
@@ -54,5 +56,26 @@ return [
         5 => 'Orden de Pago',
         6 => 'Comprobante de Ingreso'
     ],
+
+    'wish-purchase-status' =>[
+        0 => 'Anulado',
+        1 => 'Pendiente de Presupuesto',
+        2 => 'Confirmado'
+    ],
+    'wish-purchase-status-label' =>[
+        0 => 'danger',
+        1 => 'warning',
+        2 => 'success'
+    ],
+
+    'gender' =>[
+        1 => 'Masculino',
+        2 => 'Femenino'
+    ],
+    'civil_status' =>[
+        1 => 'Casado/a',
+        2 => 'Soltero/a'
+    ],
+    
 ]
 ?>

@@ -10,6 +10,7 @@ class PurchaseOrderDetail extends Model
                            'material_id',
                            'quantity_received',
                            'description',
+                           'presentation',
                            'price_cost',
                            'quantity',
                            'amount',
@@ -34,4 +35,6 @@ class PurchaseOrderDetail extends Model
     {
         return $this->hasMany('App\Models\PurchasesMovementDetail', 'purchases_order_detail_id');
     }
+    
+
 }

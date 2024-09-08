@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
-            {{ Form::open(['route' => ['production-order.update', $wish_production->id], 'method' => 'PUT']) }}
+            {{ Form::open(['route' => ['production-order.update', $production_order->id], 'method' => 'PUT']) }}
             <div class="ibox-content">
                 @include('partials.messages')
                 <div class="row">
@@ -19,7 +19,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label>Fecha</label>
-                        <input class="form-control" type="text" name="date" value="{{ old('date', $wish_production->date) }}" readonly>
+                        <input class="form-control" type="text" name="date" value="{{ old('date', $production_order->date) }}" readonly>
 
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Cliente</label>
-                                    <select class="form-control" name="client_id" id="client_id" value="{{ old('client_id', $wish_production->client_id) }}"></select>
+                                    <select class="form-control" name="client_id" id="client_id" value="{{ old('client_id', $production_order->client_id) }}"></select>
                                 </div>
                             </div>
                         </div>

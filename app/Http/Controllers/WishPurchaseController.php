@@ -27,9 +27,9 @@ class WishPurchaseController extends Controller
         $purchases           = WishPurchase::with('branch', 'provider')
             ->orderBy('id', 'desc');
 
-        if (request()->s)
+        if (request()->p)
         {
-            $purchases = $purchases->where('number', 'LIKE', '%' . request()->s . '%');
+            $purchases = $purchases->where('number', 'LIKE', '%' . request()->p . '%');
         }
 
         if (request()->invoice_copy)
@@ -100,37 +100,86 @@ class WishPurchaseController extends Controller
         return view('pages.wish-purchase.edit',compact('wish_purchase','branches','raw_materials','product_presentations'));
     }
 
-//     public function update(WishPurchase $wish_purchase)
-//     {
-//             $wish_purchase->update([
-                
-//                                 'name'       => request()->name,
-//                                 'number'       => request()->number ,
-//                             ]);
-                            
-//         return redirect('wish-purchase');
-// }
-public function update(WishPurchase $request, $id)
-{
-    if($request->ajax())
+    public function update(WishPurchase $wish_purchase)
     {
-        DB::transaction(function() use ($request, $id)
+        if(request()->all())
         {
-            $detail = WishPurchaseDetail::findOrFail($id);
+            DB::transaction(function() use ($wish_purchase)
+            {
+                $wish_purchase->update([
+                    'branch_id'                 => request()->branch_id,
+                    'observation'               => request()->observation,
+                    'user_id'                   => auth()->user()->id
+                ]);
 
-            $detail->update([
-                'material_id' => $request->detail_product_id,
-                'quantity' => $request->detail_product_quantity,
-                'presentation' => $request->detail_presentation_id,
-                'description' => isset($request->detail_product_description) ? $request->detail_product_name.'('.$request->detail_product_description.')' : $request->detail_product_name,
-            ]);
-        });
+                $wish_purchase->wish_purchase_details()->delete();
+                // Grabar los Productos
+                foreach(request()->detail_product_id as $key => $value)
+                {
 
-        return response()->json(['success' => true]);
+                    $wish_purchase->wish_purchase_details()->create([
+                        'material_id'              => request()->detail_product_id[$key],
+                        'quantity'                 => request()->detail_product_quantity[$key],
+                        'wish_purchase_id'         => $wish_purchase->id,
+                        'deposit_id'               => 1,
+                        'presentation'             => request()->detail_presentation_id[$key],
+                        'description'              => isset(request()->detail_product_description[$key]) ? request()->detail_product_name[$key].'('.request()->detail_product_description[$key].')' : request()->detail_product_name[$key],
+                    ]);
+                }
+            });
+
+            return redirect('wish-purchase');
+        }
     }
-}
 
 
+    public function show_multiple()
+    {
+        if(request()->wish_purchase_ids)
+        {
+            $wish_purchases = WishPurchase::whereIn('id',request()->wish_purchase_ids)->get();
+            $raw_materials     = RawMaterial::Filter();
+
+            return view('pages.wish-purchase.show_multiple', compact('wish_purchases','raw_materials'));
+        }
+        else
+        {
+            toastr()->warning('Debe seleccionar una solicitud aprobada');
+            return back();
+        }
+
+    }
+    public function show_multiple_submit()
+    {
+        if(request()->ajax())
+        {
+            $message = null;
+            $status = true;
+            $detail = WishPurchaseDetail::find(request()->detail_id);
+            if($detail && request()->aproved_quantity)
+            {
+                if($detail->quantity < request()->aproved_quantity)
+                {
+                    $message = 'La cantidad Aprobada supera al Saldo Actual: '.$detail->residue;
+                    $status = false;
+                }
+                else
+                {
+                    $detail->update([
+                        'material_id'       => request()->product_id,
+                        'presentation '     => request()->presentation]);
+                    //EL RESIDUO DEBE RESTAR RECIEN CUANDO SE APRUEBA LA SOLICITUD
+                    // $detail->decrement('residue',request()->aproved_quantity);
+                }
+                return response()->json(['success'=>$status, 'message'=> $message, 'restocking_id'=> $detail->wish_purchase_id]);
+    
+            }
+            else
+            {
+                return response()->json(['success'=>$status, 'message'=> 'no entro']);
+            }
+        }
+    }
 
     public function show(WishPurchase $wish_purchase)
     {
@@ -201,13 +250,13 @@ public function update(WishPurchase $request, $id)
         // APROBAR EL PRESUPUESTO
         if(request()->type == 1)
         {
-            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>2]);
-            $purchase_budget->wish_purchase->update(['status' => 5]);
+            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>1]);
+            $purchase_budget->wish_purchase->update(['status' => 2]);
         }
         //BORRAR EL PRESUPUESTO
         elseif(request()->type == 2)
         {
-            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>3]);
+            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>0]);
             $text = 'Presupuesto Rechazado';
 
         }

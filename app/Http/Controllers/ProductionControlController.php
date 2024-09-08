@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateProductionControlRequest;
 use App\Http\Requests\CreateProductionOrderRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
@@ -46,7 +47,7 @@ class ProductionControlController extends Controller
         return view('pages.production-control.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds'));
     }
 
-    public function store(CreateProductionOrderRequest $request)
+    public function store(CreateProductionControlRequest $request)
     {
         if(request()->ajax())
         {
@@ -61,16 +62,17 @@ class ProductionControlController extends Controller
                 ]);
 
                 // Grabar los Productos
-                foreach($request->detail_product_id as $key => $value)
+                foreach($request->detail_stage_id as $key => $value)
                 {
+                    $articulo = explode("_", strval($value));
                     $control->production_control_details()->create([
-                        'articulo_id'           => $value,
-                        'quantity'              => $request->{"total$key"} ?? 0,
-                        'residue'               => $request->{"cantidad_controlada$key"} ?? 0,
-                        'observation'           => $request->{"observacion$key"} ?? '',
-                        'stage'                 => $request->{"etapa$key"} ? 1 : 0,
+                        'articulo_id'           => $articulo[0],
+                        'quantity'              => $request->{"total$value"} ?? 0,
+                        'residue'               => $request->{"cantidad_controlada$value"} ?? 0,
+                        'observation'           => $request->{"observacion$value"} ?? '',
+                        'stage'                 => $request->{"etapa$value"} ? 1 : 0,
                         'production_control_id' => $control->id,
-                        'stage_id'              => $request->{"stage_id$key"}
+                        'stage_id'              => $request->{"stage_id$value"}
                     ]);
                 }
             });
@@ -94,34 +96,36 @@ class ProductionControlController extends Controller
         if(request()->ajax())
         {
             $results = [];        
-            $order_productions = ProductionOrderDetail::with('production_order', 'articulo')
-                                                            ->select("production_order_details.*")
-                                                            ->join('production_orders', 'production_order_details.production_order_id', '=', 'production_orders.id')
-                                                            ->where('production_orders.status', true)
-                                                            ->where('production_orders.id', request()->number_order)
-
-                                                            ->groupBy('production_order_details.articulo_id')
-                                                            ->get();
-            foreach ($order_productions as $key => $order_detail)
-            {
-                $results['items'][$key]['id']           = $order_detail->id;
-                $results['items'][$key]['product_id']   = $order_detail->articulo_id;
-                $results['items'][$key]['product_name'] = $order_detail->articulo->name;
-                $results['items'][$key]['quantity']     = $order_detail->quantity;
-                $results['items'][$key]['client_id']    = $order_detail->production_order->client_id;
-                $results['items'][$key]['client']       = $order_detail->production_order->client->first_name.' '.$order_detail->production_order->client->last_name;
-                $results['items'][$key]['branch_id']    = $order_detail->production_order->branch_id;
-                $results['items'][$key]['branch']       = $order_detail->production_order->branch->name;
-                $results['items'][$key]['date']         = Carbon::createFromFormat('Y-m-d',$order_detail->production_order->date)->format('d/m/Y');
-                $results['branch_id']                   = $order_detail->production_order->branch_id;
-                $control = SettingProduct::join('production_stages','setting_products.stage_id','=','production_stages.id')->where('articulo_id',$order_detail->articulo_id)->whereNotNull('stage_id')->where('production_stages.number',request()->sesion)->first();
-                if($control)
+            foreach (request()->sesion as $key => $session) {
+                $order_productions = ProductionOrderDetail::with('production_order', 'articulo')
+                                                                ->select("production_order_details.*")
+                                                                ->join('production_orders', 'production_order_details.production_order_id', '=', 'production_orders.id')
+                                                                ->where('production_orders.status', true)
+                                                                ->where('production_orders.id', request()->number_order)
+    
+                                                                ->groupBy('production_order_details.articulo_id')
+                                                                ->get();
+                foreach ($order_productions as $key => $order_detail)
                 {
-                    $results['items'][$key]['stage_id']           = $control->stage_id;
-                    $results['items'][$key]['stage_name']         = $control->name;
-                }
-
-            }         
+                    $results['items'][$session][$key]['id']           = $order_detail->id;
+                    $results['items'][$session][$key]['product_id']   = $order_detail->articulo_id;
+                    $results['items'][$session][$key]['product_name'] = $order_detail->articulo->name;
+                    $results['items'][$session][$key]['quantity']     = $order_detail->quantity;
+                    $results['items'][$session][$key]['client_id']    = $order_detail->production_order->client_id;
+                    $results['items'][$session][$key]['client']       = $order_detail->production_order->client->first_name.' '.$order_detail->production_order->client->last_name;
+                    $results['items'][$session][$key]['branch_id']    = $order_detail->production_order->branch_id;
+                    $results['items'][$session][$key]['branch']       = $order_detail->production_order->branch->name;
+                    $results['items'][$session][$key]['date']         = Carbon::createFromFormat('Y-m-d',$order_detail->production_order->date)->format('d/m/Y');
+                    $results['branch_id']                   = $order_detail->production_order->branch_id;
+                    $control = SettingProduct::join('production_stages','setting_products.stage_id','=','production_stages.id')->where('articulo_id',$order_detail->articulo_id)->whereNotNull('stage_id')->where('production_stages.number',$session)->first();
+                    if($control)
+                    {
+                        $results['items'][$session][$key]['stage_id']           = $control->stage_id;
+                        $results['items'][$session][$key]['stage_name']         = $control->name;
+                    }
+    
+                }         
+            }
             return response()->json($results);
         }
         abort(404);

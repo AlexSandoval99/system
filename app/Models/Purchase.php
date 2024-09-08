@@ -188,9 +188,5 @@ class Purchase extends Model
         return $this->hasMany('App\Models\CalendarPayment');
     }
 
-    public function emergency_mobile()
-    {
-        return $this->belongsTo('App\Models\EmergencyMobile');
-    }
 }
 

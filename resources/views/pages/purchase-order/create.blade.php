@@ -509,9 +509,8 @@
                 return false;
             }
         }
-
-        @if (isset($restockings))
-            @foreach ($detail_restocking as $detail)
+        @if (isset($wish_purchases))
+            @foreach ($detail_wish_purchase as $detail)
                 addToTable(  {{ $detail['product_id'] }},
                             '{{ $detail['product_name'] }}',
                              {{ $detail['amount'] }},

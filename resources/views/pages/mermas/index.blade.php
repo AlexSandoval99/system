@@ -6,7 +6,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <div class="btn-group pull-right">
-                    <a href="{{ url('mermas/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    <a href="{{ url('losses/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
                 </div>
             </div>
             <div class="ibox-content pb-0">

@@ -46,7 +46,7 @@
                             <th>Proveedor</th>
                             <th>Monto</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,9 +63,11 @@
                                 <td>
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $purchase->status) }}">{{ config('constants.purchase-status.'. $purchase->status) }}</span>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a href="{{ url('purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i></a>
                                     <a href="{{ url('purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-file"></i></a>
+                                    <a href="{{ url('purchase/' . $purchase->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+
                                     {{-- @permission('purchases.delete') --}}
                                         @if($purchase->status == 1)
                                             <a href="{{ url('purchases/' . $purchase->id . '/delete') }}"><i class="fa fa-trash"></i></a>

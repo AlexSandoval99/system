@@ -51,15 +51,24 @@
                     <thead>
                         <tr>
                             <th>Articulo</th>
+                            <th>Materia</th>
+                            <th>Cant. Materia</th>
                             <th>Cantidad</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($production_order->production_order_details as $detail)
-
-                               <td>{{ $detail->articulo->name }}</td>
-                               <td>{{ $detail->quantity }}</td>
+                        @foreach($production_order->production_order_details->groupBy('articulo_id') as $articuloId => $details)
+                            <tr>
+                                <td colspan="3"><b>{{ $details->first()->articulo->name }}</b></td>
+                                <td>{{ $details->first()->quantity }}</td>
                             </tr>
+                            @foreach($details as $detail)
+                                <tr>
+                                    <td></td>
+                                    <td>{{ $detail->raw_material->description }}</td>
+                                    <td colspan="3">{{ $detail->quantity_material }}</td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>

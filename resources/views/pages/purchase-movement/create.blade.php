@@ -1,5 +1,5 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Orden de Compras')
+@section('title', 'Recepcion de Compras')
 @section('content')
 <div class="row">
     {{ Form::open(['id' => 'form']) }}
@@ -163,7 +163,6 @@
                                         <th class="text-center" width="5%">  Cant.</th>
                                         <th class="text-center" width="17%"> Materia Prima</th>
                                         <th class="text-center" width="20%"> Descripcion</th>
-                                        <th class="text-center" width="8%">  Movil</th>
                                         <th class="text-center" width="10%"> Precio</th>
                                         <th class="text-center" width="10%"> 10%</th>
                                         <th class="text-center" width="10%"> 5%</th>
@@ -437,7 +436,6 @@
                                                 '<input type="hidden" name="detail_invoice_product_ids[]" value="'+product_id+'">'+
                                                 '<input type="hidden" name="detail_price[]" value="' + amount + '">'+
                                                 '<input type="hidden" name="detail_quantities[]" value="'+quantity+'">'+
-                                                '<input type="hidden" name="detail_mobiles[]" value="'+mobil_id+'">' +
                                                 '<input type="hidden" name="detail_total_amount[]" value="'+subtotal+'">'+
                                             '<td width="5%"  class="text-center">'+ quantity+'</td>'+
                                             '<td width="17%" class="text-center">'+ product_name+'</td>'+

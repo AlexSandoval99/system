@@ -54,7 +54,6 @@
         $(document).ready(function () {
             $('#form').submit(function(e)
             {
-                // $('input[type="submit"]').prop('disabled', true);
                 e.preventDefault();
                 $.ajax({
                     url: '{{ route('wish-purchases.charge_purchase_budgets_store',$wish_purchase->id) }}',

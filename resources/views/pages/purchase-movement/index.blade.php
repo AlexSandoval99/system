@@ -39,7 +39,7 @@
                             <th class="text-right">Numero OC</th>
                             <th class="text-center">Factura</th>
                             <th>Deposito</th>
-                            <th>Acciones</th>
+                            <th class="text-center">Acciones</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -51,8 +51,10 @@
                                 <td class="text-right">{{ $purchases_movement->purchases_movement_details()->first() ? $purchases_movement->purchases_movement_details()->first()->purchases_order_detail->purchase_order->number : ''}}</td>
                                 <td class="text-center">{{ $purchases_movement->invoice_number }}</td>
                                 <td>{{ $purchases_movement->deposit->name }}</td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     <a href="{{ url('purchase-movement/' . $purchases_movement->id) }}"><i class="fa fa-info-circle"></i></a>
+                                <a href="{{ url('purchase-movement/' . $purchases_movement->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+
                                     {{-- @permission('purchases-movements.delete') --}}
                                             <a href="{{ url('purchases-movements/' . $purchases_movement->id . '/delete') }}"><i class="fa fa-trash"></i></a>
                                     {{-- @endpermission --}}

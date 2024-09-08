@@ -27,7 +27,7 @@
                             <th>Sucursal</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,31 +40,10 @@
                                 <td>
                                     <span class="label label-{{ config('constants.purchase-status-label.' . $ord->status) }}">{{ config('constants.purchase-status.'. $ord->status) }}</span>
                                 </td>
-                                <td class="text-right">
-                                    <div class="dropdown" style="display: inline-block;">
-                                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Acción
-                                            <span class="caret"></span>
-                                        </button>
-                                        {{-- <ul class="dropdown-menu pull-right">
-                                            <li>
-                                                    <a href="{{ url('wish-purchase-budgets/' . $purchase->id . '/wish-purchase-budgets-approved') }}"><i class="fa fa-user"></i> Ver Presupuestos Aprobados</a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i>Ver</a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i>Anclar Presupuestos</a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>
-                                            </li>
-                                            <li>
-                                                <a href="{{ url('wish-purchase/' . $purchase->id . '/pdf') }}" target="_blank"><i class="fa fa-wheelchair"></i>Orden de compra</a>
-                                            </li>
-                                        </ul> --}}
-                                    </div>
+                                <td class="text-center">
+                                    <a href="{{ url('purchase-order/' . $ord->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
                                 </td>
+                               
                             </tr>
                         @endforeach
                     </tbody>

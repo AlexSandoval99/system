@@ -22,7 +22,8 @@ class ClienteController extends Controller
     public function create()
     {
         $departamentos = Departamento::pluck('departamento','id');
-        return view('pages.cliente.create', compact('departamentos'));
+        $nation = Nationality::pluck('name','id');
+        return view('pages.cliente.create', compact('departamentos','nation'));
    }
 
     public function store(CreateClienteRequest $request)
@@ -42,6 +43,7 @@ class ClienteController extends Controller
                 'civil_status'=> $request->civil_status,
                 'gender'=> $request->gender,
                 'observation'=> $request->observation,
+                'nationality_id' => $request->nationalities_id,
                  ]);
                  
         });
@@ -66,6 +68,22 @@ class ClienteController extends Controller
             {
                 $result[$key]['id'] = $nations->id;    
                 $result[$key]['name'] = $nations->name;
+            }
+            return $result;
+        }
+    }
+
+    public function ajax_department()
+    {
+        if(request()->ajax())
+        {
+            $nation = Ciudad::where('departamentos_id',request()->departamento_id)->get();
+            Log::info($nation);
+            $result = [];
+            foreach ($nation as $key => $nations) 
+            {
+                $result[$key]['id'] = $nations->id;    
+                $result[$key]['name'] = $nations->ciudad;
             }
             return $result;
         }

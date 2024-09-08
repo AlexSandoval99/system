@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateProviderInvoiceRequest;
 use App\Http\Requests\CreatePurchasesRequest;
 use App\Http\Requests\DeletePurchasesRequest;
-use App\Http\Requests\UpdateProviderInvoiceRequest;
-use App\Http\Requests\UpdatePurchasesProvidersPendingsRequest;
 use App\Http\Requests\UpdatePurchasesRequest;
 use App\Jobs\AccountingMovementsJob;
 use App\Models\AccountingEntry;
 use App\Models\AccountingPlan;
-use App\Models\AccountingPlanUnion;
-use App\Models\AccountingTypeIva;
 use App\Models\Branch;
 use App\Models\CalendarPayment;
 use App\Models\CashBox;
 use App\Models\CashBoxDetail;
 use App\Models\CostCenter;
 use App\Models\Currency;
-use App\Models\EmergencyMobile;
-use App\Models\PaymentServicesAuthorization;
 use App\Models\Provider;
 use App\Models\Purchase;
 use App\Models\PurchasesAccountingPlan;
@@ -29,10 +22,8 @@ use App\Models\PurchasesCostCenter;
 use App\Models\PurchasesDetail;
 use App\Models\PurchasesNoteCredit;
 use App\Models\PurchasesOrderDetail;
-use App\Models\PurchasesProduct;
 use App\Models\PurchasesProvider;
 use App\Models\PurchasesCollect;
-use App\Models\PurchasesOrder;
 use App\Models\SocialReason;
 use App\Services\PurchasesService;
 use Barryvdh\DomPDF\Facade as PDF;

@@ -47,11 +47,6 @@ class PurchaseDetail extends Model
         return $this->belongsTo('App\Models\AccountingPlan');
     }
 
-    public function emergency_mobile()
-    {
-        return $this->belongsTo('App\Models\EmergencyMobile');
-    }
-
     public function purchase_order_detail()
     {
         return $this->belongsTo('App\Models\PurchasesMovementDetail', 'purchases_order_detail_id');

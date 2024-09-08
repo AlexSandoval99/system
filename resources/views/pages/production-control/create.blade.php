@@ -69,7 +69,6 @@
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
                                                     <th>Etapa</th>
-                                                    <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
                                             </thead>
@@ -88,7 +87,6 @@
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
                                                     <th>Etapa</th>
-                                                    <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
                                             </thead>
@@ -108,7 +106,6 @@
                                                     <th>Articulos</th>
                                                     <th>Cantidad</th>
                                                     <th>Etapa</th>
-                                                    <th>OBS:</th>
                                                     <th class="text-center">Acciones</th>
                                                 </tr>
                                             </thead>
@@ -124,130 +121,6 @@
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
                 <a href="{{ url('production-control') }}" class="btn btn-sm btn-danger">Cancelar</a>
-            </div>
-            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Control</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
-                                    <br>
-                                    <td><span id="stage_name0"></span></td>
-                                    <input type="checkbox" id="etapa0" name="etapa0">
-                                    <input type="hidden" id="stage_id0" name="stage_id0">
-
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="total">Cantidad Total:</label>
-                                    <input type="text" id="total_quantity0" name="total0" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="observacion">Observación:</label>
-                                    <input type="text" id="observacion0" name="observacion0" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cantidad_controlada">Cantidad Controlada:</label>
-                                    <input type="text" id="cantidad_controlada0" name="cantidad_controlada0" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            {{-- <button type="button" class="btn btn-primary" id="updateForm">Actualizar</button> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Control</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
-                                    <br>
-                                    <td><span id="stage_name1"></span></td>
-                                    <input type="checkbox" id="etapa1" name="etapa1">
-                                    <input type="hidden" id="stage_id1" name="stage_id1">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="total">Cantidad Total:</label>
-                                    <input type="text" id="total_quantity1" name="total1" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="observacion">Observación:</label>
-                                    <input type="text" id="observacion1" name="observacion1" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cantidad_controlada">Cantidad Controlada:</label>
-                                    <input type="text" id="cantidad_controlada1" name="cantidad_controlada1" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            {{-- <button type="button" class="btn btn-primary" id="updateForm">Actualizar</button> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">Control</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="etapa">Etapa Verificada:</label>
-                                    <br>
-                                    <td><span id="stage_name2"></span></td>
-                                    <input type="checkbox" id="etapa2" name="etapa2">
-                                    <input type="hidden" id="stage_id2" name="stage_id2">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="total">Cantidad Total:</label>
-                                    <input type="text" id="total_quantity2" name="total2" class="form-control" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="observacion">Observación:</label>
-                                    <input type="text" id="observacion2" name="observacion2" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cantidad_controlada">Cantidad Controlada:</label>
-                                    <input type="text" id="cantidad_controlada2" name="cantidad_controlada2" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            {{-- <button type="button" class="btn btn-primary" id="updateForm">Actualizar</button> --}}
-                        </div>
-                    </div>
-                </div>
             </div>
         {{ Form::close() }}
 </div>
@@ -266,10 +139,13 @@
 @endsection
 
 @section('layout_js')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         var invoice_items_array = [];
+    
         $(document).ready(function ()
         {
+            window.addEventListener('beforeunload', limpiarLocalStorage);
             $('#form').submit(function(e)
             {
                 $('input[type="submit"]').prop('disabled', true);
@@ -277,9 +153,9 @@
                 $.ajax({
                     url: '{{ route('production-control-store') }}',
                     type: "POST",
-                    data: $(this).serialize(),
+                    data: $('#form').serialize(), // Serializar el formulario completo
                     success: function(data) {
-                        redirect ("{{ url('budget-production') }}");
+                        redirect ("{{ url('production-order') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
@@ -303,38 +179,35 @@
             });
 
             $(document).ready(function(){
-                $(document).on('click', '.open-modal1', function () {
-                    var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
-                    var quantity = $(this).data('quantity');
+                function poblarModal(numeroModal) {
+                    $(document).on('click', '.open-modal' + numeroModal, function () {
+                        var stageName = $(this).data('stage');
+                        var stageId = $(this).data('stage_id');
+                        var quantity = $(this).data('quantity');
+                        var product_id = $(this).data('product');
+                        // Poblar el modal con los datos
+                        $('#stage_name' + numeroModal).text(stageName);
+                        $('#stage_id' + numeroModal).val(stageId);
+                        $('#total_quantity' + numeroModal).val(quantity);
+                        $('.product_id' + numeroModal).val(product_id);
+                    });
+                }
 
-                    // Poblar el modal con los datos
-                    $('#stage_name0').text(stageName);
-                    $('#stage_id0').val(stageId);
-                    $('#total_quantity0').val(quantity);
-                });
+                for (var i = 0; i < 3; i++) {
+                    poblarModal(i);
+                }
+            });
 
-                $(document).on('click', '.open-modal2', function () {
-                    var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
-                    var quantity = $(this).data('quantity');
-                    console.log(stageName,quantity);
-                    // Poblar el modal con los datos
-                    $('#stage_name1').text(stageName);
-                    $('#stage_id1').val(stageId);
-                    $('#total_quantity1').val(quantity);
-                });
+            // Variables para almacenar los valores temporales de observación y cantidad controlada para cada producto
+            var observacionTemporal = {};
+            var cantidadControladaTemporal = {};
 
-                $(document).on('click', '.open-modal3', function () {
-                    var stageName = $(this).data('stage');
-                    var stageId = $(this).data('stage_id');
-                    var quantity = $(this).data('quantity');
-
-                    // Poblar el modal con los datos
-                    $('#stage_name2').text(stageName);
-                    $('#stage_id2').val(stageId);
-                    $('#total_quantity2').val(quantity);
-                });
+            $(document).on('click', '.open-modal-btn', function() {
+                var productId = $(this).data('product');
+                var stageName = $(this).data('stage');
+                var stageId = $(this).data('stage_id');
+                var quantity = $(this).data('quantity');
+                generarModal(productId, stageName, stageId, quantity);
             });
 
         });
@@ -370,6 +243,7 @@
             $("#number_ped").prop("readonly", false);
             $("#button_search").show();
         }
+
         function Search_order()
         {
             var number_order    = $("#number_order").val();
@@ -384,31 +258,32 @@
                     },
                     url: '{{ route('ajax.control-production') }}',
                     type: "GET",
-                    data: { number_order : number_order, sesion:1},
+                    data: { number_order: number_order, sesion: [1, 2, 3] }, // Envía las sesiones en un array
                     success: function(data) {
-                        $.each(data.items, function(index, element) {
-                            invoice_items_array.push(element.product_id);
-
-                            $('#tbody_detail1').append(     
-                            '<tr>' +
-                                '<td>' + element.product_id + '</td>' +
-                                '<td>' + element.product_name + '</td>' +
-                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
-                                '<td>' + element.observation + '</td>' + 
-                                '<td></td>' +
-                                '<td><i class="fa fa-info-circle open-modal1" data-toggle="modal" data-target="#myModal1" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
-                                '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
-                                '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
-                            '</tr>');
-                            conteo++;
-                            $('#branch_id').val(element.branch_id);
-                            $('#branch').val(element.branch);
-                            $('#date_ped').val(element.date);
-                            $('#client_id').val(element.client_id);
-                            $('#client').val(element.client);
+                        $.each(data.items, function(sesion, values) {
+                            $.each(values, function(index, element) {
+                                    invoice_items_array.push(element.product_id);
+                                    var session = sesion; // Obtiene el número de sesión
+                                    var tbody = '#tbody_detail' + session; // Genera el ID del tbody correspondiente
+                                    $(tbody).append(     
+                                        '<tr>' +
+                                        '<td>' + element.product_id + '</td>' +
+                                        '<td>' + element.product_name + '</td>' +
+                                        '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
+                                        '<td>' + element.stage_name + '</td>' +
+                                        '<td></td>' +
+                                        '<td><button type="button" class="open-modal-btn btn btn-primary recuperar' + element.product_id + '_' + element.stage_id + '" data-product="' + element.product_id + '" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"><i class="fa fa-info-circle"></i></button></td>' +
+                                        '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
+                                        '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
+                                        '<input type="hidden" name="detail_stage_id[]" value="' + element.product_id+'_'+element.stage_id + '">' +
+                                        '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
+                                        '</tr>');
+                                conteo++;
+                                $('#branch_id').val(element.branch_id);
+                                $('#branch').val(element.branch);
+                                $('#date_ped').val(element.date);
+                                $('#client_id').val(element.client_id);
+                            });
                         });
                         if(conteo>0)
                         {
@@ -435,71 +310,6 @@
                     }
                 });
 
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{ route('ajax.control-production') }}',
-                    type: "GET",
-                    data: { number_order : number_order, sesion:2},
-                    success: function(data) {
-                        $.each(data.items, function(index, element) {
-                            invoice_items_array.push(element.product_id);
-
-                            $('#tbody_detail2').append(     
-                            '<tr>' +
-                                '<td>' + element.product_id + '</td>' +
-                                '<td>' + element.product_name + '</td>' +
-                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' +
-                                '<td>' + element.observation + '</td>' + 
-                                '<td></td>' +
-
-                                '<td><i class="fa fa-info-circle open-modal2" data-toggle="modal" data-target="#myModal2" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
-                                '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
-                                '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
-                            '</tr>');
-                        });
-                    },
-                    error: function(data){
-                        laravelErrorMessages(data);
-                    }
-                });
-
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{ route('ajax.control-production') }}',
-                    type: "GET",
-                    data: { number_order : number_order, sesion:3},
-                    success: function(data) {
-                        $.each(data.items, function(index, element) {
-                            invoice_items_array.push(element.product_id);
-                            $('#tbody_detail3').append(     
-                            '<tr>' +
-                                '<td>' + element.product_id + '</td>' +
-                                '<td>' + element.product_name + '</td>' +
-                                '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
-                                '<td>' + element.stage_name + '</td>' + 
-                                '<td>' + element.observation + '</td>' + 
-                                '<td></td>' +
-                                '<td><i class="fa fa-info-circle open-modal3" data-toggle="modal" data-target="#myModal3" data-stage="' + element.stage_name + '" data-stage_id="' + element.stage_id + '" data-quantity="' + element.quantity + '"></i></td>' +
-                                '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
-                                '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.product_name + '">' +
-                                '<input type="hidden" name="detail_product_name[]" value="' + element.observation + '">' +
-                            '</tr>');
-                        });
-                    },
-                    error: function(data){
-                        laravelErrorMessages(data);
-                    }
-                });
-
-
             }
             else
             {
@@ -513,7 +323,106 @@
             }
         }
 
+        function limpiarLocalStorage() 
+        {
+            localStorage.clear();
+        }
+        function guardarTemporal(product,stage) 
+        {
+            cargarDatosModal('.myModal'+product+'_'+stage,product,stage);
+        }
+        function cargarDatosModal(modalClass,product,stage) 
+        {
+            $(modalClass).on('click', '.guardar-temporal', function(event) {
+                var productId = $(this).closest(modalClass).find('.product_id'+product+'_'+stage).val();
+                var observacionValue = $(this).closest(modalClass).find('.observacion-input').val();
+                var cantidadControladaValue = $(this).closest(modalClass).find('.cantidad-controlada-input').val();
+                var isChecked = $(this).closest(modalClass).find('#etapa'+product+'_'+stage).prop('checked');
+                // Guarda los valores temporalmente en localStorage
+                localStorage.setItem('checkbox_' + product+'-'+stage, isChecked);
+                localStorage.setItem('observacion_' + product+'-'+stage, observacionValue);
+                localStorage.setItem('cantidad_controlada_' + product+'-'+stage, cantidadControladaValue);
+                $('#observacion' + product + '_' + stage).val(observacionValue);
+                $('#cantidad_controlada' + product + '_' + stage).val(cantidadControladaValue);
+                $('#etapa' + product + '_' + stage).prop('checked', isChecked === 'true');
 
+                // También puedes asignar los valores al atributo 'value' de los elementos correspondientes
+                $('#observacion' + product + '_' + stage).attr('value', observacionValue);
+                $('#cantidad_controlada' + product + '_' + stage).attr('value', cantidadControladaValue);
+                $('#etapa' + product + '_' + stage).attr('value', isChecked);
+            });
+
+        }
+
+        function generarModal(product_id, stage_name,stage_id,quantity)
+        {
+            if ($(`.myModal${product_id}_${stage_id}`).length) 
+            {
+                $(`.myModal${product_id}_${stage_id}`).modal('show');
+            } else 
+            {
+                var modalHtml = `
+                    <div class="modal fade in myModal${product_id}_${stage_id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Control</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="etapa">Etapa Verificada:</label>
+                                            <br>
+                                            <span id="stage_name${product_id}_${stage_id}">${stage_name}</span>
+                                            <input type="checkbox" id="etapa${product_id}_${stage_id}" name="etapa${product_id}_${stage_id}">
+                                            <input type="hidden" id="stage_id${product_id}_${stage_id}" name="stage_id${product_id}_${stage_id}" value="${stage_id}">
+                                            <input type="hidden" name="product_id${product_id}_${stage_id}" class="form-control product_id${product_id}_${stage_id}" value="${product_id}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="total">Cantidad Total:</label>
+                                            <input type="text" id="total_quantity${product_id}_${stage_id}" name="total${product_id}_${stage_id}" class="form-control" readonly value="${quantity}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="observacion">Observación:</label>
+                                            <input type="text" id="observacion${product_id}_${stage_id}" name="observacion${product_id}_${stage_id}" class="form-control observacion-input">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="cantidad_controlada">Cantidad Controlada:</label>
+                                            <input type="text" id="cantidad_controlada${product_id}_${stage_id}" name="cantidad_controlada${product_id}_${stage_id}" class="form-control cantidad-controlada-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar Temporalmente</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Filtrar los campos con atributo 'name' y agregarlos al formulario
+                var $modal = $(modalHtml);
+                var $fields = $modal.find('[name], input');
+
+                $fields.each(function() {
+                    var $fieldClone = $(this).clone();
+                    $fieldClone.attr('type', 'hidden');
+                    $('#form').append($fieldClone);
+                });
+
+                    // Agregar el modal generado al cuerpo del documento
+                $('body').append(modalHtml);
+
+                // Mostrar el modal
+                $(`.myModal${product_id}_${stage_id}`).modal('show');
+            }
+        }
     </script>
 @endsection
 

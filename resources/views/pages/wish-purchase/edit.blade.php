@@ -105,29 +105,6 @@
                     '{{$wish->material->description}}', 
                     '{{$wish->material->description}}');
             @endforeach
-            
-            $('#form').submit(function(e) {
-                $('input[type="submit"]').prop('disabled', true);
-                e.preventDefault();
-                $.ajax({
-                    url: '{{ route('wish-purchase.store') }}',
-                    type: "POST",
-                    data: new FormData(this),
-                    dataType:'JSON',
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    success: function(data) {
-                        redirect ("{{ url('wish-purchase') }}");
-                    },
-                    error: function(data){
-
-                        laravelErrorMessages(data);
-
-                        $('input[type="submit"]').prop('disabled', false);
-                    }
-                });
-            });
 
             $("#button_add_product").click(function() {
                 addProduct();
