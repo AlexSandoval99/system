@@ -19,7 +19,7 @@ class CreateProductionOrderDetailsTable extends Migration
             $table->integer('quantity_material');
 
             $table->unsignedBIgInteger('articulo_id'); 
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
             $table->unsignedInteger('material_id');
             $table->foreign('material_id')->references('id')->on('raw_materials');
 

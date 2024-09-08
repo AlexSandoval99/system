@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingProductsTable extends Migration
+class CreateSettingMaterialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +20,7 @@ class CreateSettingProductsTable extends Migration
             $table->unsignedInteger('raw_materials_id');
             $table->foreign('raw_materials_id')->references('id')->on('raw_materials');
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
 
 
             $table->timestamps();

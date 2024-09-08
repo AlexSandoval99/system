@@ -16,7 +16,7 @@ class CreateProductionCostDetailsTable extends Migration
         Schema::create('production_cost_details', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
             $table->unsignedInteger('material_id');
             $table->foreign('material_id')->references('id')->on('raw_materials');
             $table->decimal('price_cost',11,2);

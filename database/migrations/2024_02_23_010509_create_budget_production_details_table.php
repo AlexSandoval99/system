@@ -21,7 +21,7 @@ class CreateBudgetProductionDetailsTable extends Migration
             $table->unsignedInteger('budget_production_id');
             $table->foreign('budget_production_id')->references('id')->on('budget_productions');
             $table->unsignedBIgInteger('articulo_id'); 
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
 
             $table->timestamps();
         });

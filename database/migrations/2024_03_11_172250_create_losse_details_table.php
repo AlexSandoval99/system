@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLossesDetailsTable extends Migration
+class CreateLosseDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateLossesDetailsTable extends Migration
             $table->string('reason');
 
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
             $table->timestamps();
         });
 

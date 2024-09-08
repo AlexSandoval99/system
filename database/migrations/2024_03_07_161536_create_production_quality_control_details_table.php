@@ -20,7 +20,7 @@ class CreateProductionQualityControlDetailsTable extends Migration
             $table->integer('residue');
           
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
 
             $table->unsignedInteger('quality_id');
             $table->foreign('quality_id')->references('id')->on('production_qualities');

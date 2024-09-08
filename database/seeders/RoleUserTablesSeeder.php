@@ -33,26 +33,12 @@ class RoleUserTablesSeeder extends Seeder
         ]);
         
         $this->command->info('User dev created');
-
-        User::create([
-            'email' => 'admin@admin.com', 
-            'name'  => 'Administrator',
-            'password' => bcrypt('admin'),
-            'avatar'  => 'img/config/nopic.png',
-            'active'  => true
-        ]);
-
-        $this->command->info('Users dev and admin created');
     }
 
     private function sync()
     {       
         $role = User::find(1);
         $role->roles()->sync([1]);
-
-        $role = User::find(2);
-        $role->roles()->sync([2]);        
-
         $this->command->info('Users linked to roles!');
     }
 }

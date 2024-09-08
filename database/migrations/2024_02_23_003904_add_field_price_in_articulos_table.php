@@ -13,7 +13,7 @@ class AddFieldPriceInArticulosTable extends Migration
      */
     public function up()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->decimal('price', 13,2)->nullable()->after('name');
         });
     }
@@ -25,7 +25,7 @@ class AddFieldPriceInArticulosTable extends Migration
      */
     public function down()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->dropColumn('price');
         });
     }

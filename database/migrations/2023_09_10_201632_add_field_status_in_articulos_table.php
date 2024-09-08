@@ -13,7 +13,7 @@ class AddFieldStatusInArticulosTable extends Migration
      */
     public function up()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->integer('status')->after('barcode');
         });
     }
@@ -25,7 +25,7 @@ class AddFieldStatusInArticulosTable extends Migration
      */
     public function down()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->dropColumn('status');
         });
     }

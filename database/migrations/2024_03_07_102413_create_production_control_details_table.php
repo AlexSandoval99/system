@@ -21,7 +21,7 @@ class CreateProductionControlDetailsTable extends Migration
             $table->boolean('stage');
           
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
 
             $table->unsignedBigInteger('stage_id');
             $table->foreign('stage_id')->references('id')->on('production_stages');

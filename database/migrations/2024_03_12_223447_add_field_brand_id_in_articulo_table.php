@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldBrandIdInArticulosTable extends Migration
+class AddFieldBrandIdInArticuloTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddFieldBrandIdInArticulosTable extends Migration
      */
     public function up()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->unsignedBigInteger('brand_id')->nullable()->after('barcode');
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brand');
         });
     }
 
@@ -26,7 +26,7 @@ class AddFieldBrandIdInArticulosTable extends Migration
      */
     public function down()
     {
-        Schema::table('articulos', function (Blueprint $table) {
+        Schema::table('articulo', function (Blueprint $table) {
             $table->dropForeign(['brand_id']);
             $table->dropColumn('brand_id');
         });

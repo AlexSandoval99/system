@@ -19,7 +19,7 @@ class CreateRawMaterialsTable extends Migration
             $table->integer('status');
 
             $table->unsignedBigInteger('articulo_id');
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
 
             $table->timestamps();
         });

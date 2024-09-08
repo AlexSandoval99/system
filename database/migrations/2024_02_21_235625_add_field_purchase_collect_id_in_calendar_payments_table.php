@@ -15,7 +15,7 @@ class AddFieldPurchaseCollectIdInCalendarPaymentsTable extends Migration
     {
         Schema::table('calendar_payments', function (Blueprint $table) {
             $table->unsignedBigInteger('purchase_collect_id')->nullable()->after('provider_id');
-            $table->foreign('purchase_collect_id')->references('id')->on('purchases_collect')->nullable();
+            $table->foreign('purchase_collect_id')->references('id')->on('purchases_collects')->nullable();
         });
     }
 

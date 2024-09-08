@@ -18,7 +18,7 @@ class CreateWishProductionDetailsTable extends Migration
             $table->integer('quantity');
 
             $table->unsignedBIgInteger('articulo_id'); 
-            $table->foreign('articulo_id')->references('id')->on('articulos');
+            $table->foreign('articulo_id')->references('id')->on('articulo');
             $table->unsignedInteger('wish_production_id'); 
             $table->foreign('wish_production_id')->references('id')->on('wish_productions');
 
