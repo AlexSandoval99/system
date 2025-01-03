@@ -16,7 +16,8 @@ class WishPurchase extends Model
                             'provider_id',
                             'status',
                             'user_id',
-                            'observation'
+                            'observation',
+                            'token'
                         ];
     public function setDateAttribute($value)
     {
@@ -41,5 +42,9 @@ class WishPurchase extends Model
     public function purchase_budgets()
     {
         return $this->hasMany('App\Models\PurchaseBudget');
+    }
+    public function budget_purchases()
+    {
+        return $this->hasMany('App\Models\BudgetPurchase','wish_id');
     }
 }

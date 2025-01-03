@@ -11,8 +11,8 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">                        
-                    <div class="col-md-12"> 
+                <div class="row">
+                    <div class="col-md-12">
                         <div class="ibox-content">
                             <div class="row">
                                 <div class="col-md-3"><b>Nro° Pedido:</b></div>
@@ -33,7 +33,7 @@
                             <div class="row">
                                 <div class="col-md-3"><b>Fecha:</b></div>
                                 <div class="col-md-9">{{ $control->date}}</div>
-                            </div>                                
+                            </div>
                             <div class="row">
                                 <div class="col-md-3"><b>Fecha Creación:</b></div>
                                 <div class="col-md-9">{{ $control->created_at->format('d/m/Y H:m:s') }}</div>
@@ -50,15 +50,35 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="tabs-container">
-                    <ul class="nav nav-tabs fs-3">
-                        <li class="active"><a data-toggle="tab" href="#seccion1" onclick="ChangeTab1();"><h5>Primera Calidad </h5></a></li>
-                        <li class=""><a data-toggle="tab" href="#seccion2" onclick="ChangeTab2();"><h5>Segunda Calidad </h5></a></li>
-                        <li class=""><a data-toggle="tab" href="#seccion3" onclick="ChangeTab3();"><h5>Tercera Calidad </h5></a></li>
-                    </ul>
-           
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                    </div>
+                    <div class="ibox-content table-responsive no-padding">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Parametro de Calidad</th>
+                                    <th>Articulo</th>
+                                    <th>Cantidad Total</th>
+                                    <th>Cantidad Aprovada</th>
+                                    <th>Observacion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($control->production_quality_control_details as $res)
+                                    <tr>
+                                        <td>{{ $res->production_qualitie->name }}</td>
+                                        <td>{{ $res->articulo->name }}</td>
+                                        <td>{{ $res->quantity }}</td>
+                                        <td>{{ $res->residue }}</td>
+                                        <td>{{ $res->observation }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 @endsection

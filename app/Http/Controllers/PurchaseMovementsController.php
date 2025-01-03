@@ -27,7 +27,7 @@ class PurchaseMovementsController extends Controller
                                                 ->where('type_movement', 1)
                                                 ->where('type_operation', 1)
                                                 ->orderBy('id', 'desc');
-                                                
+
         $deposits = Deposit::where('status',1)->pluck('name','id');
         if(request()->s)
         {
@@ -59,9 +59,9 @@ class PurchaseMovementsController extends Controller
             $array_deposits[$deposit->branch_id][$deposit->id] = $deposit->name;
         }
         $type_vouchers = config('constants.type_purchases');
-        foreach ($type_vouchers as $key => $value) 
+        foreach ($type_vouchers as $key => $value)
         {
-            if (!in_array($key, [1, 2])) 
+            if (!in_array($key, [1, 2]))
             {
                 unset($type_vouchers[$key]);
             }
@@ -69,47 +69,46 @@ class PurchaseMovementsController extends Controller
         return view('pages.purchase-movement.create', compact('array_deposits', 'branches', 'type_vouchers'));
     }
 
-    public function store(CreatePurchasesMovementsRequest $request) 
+    public function store(CreatePurchasesMovementsRequest $request)
     {
         if(request()->ajax())
         {
             DB::transaction(function() use ($request)
-            { 
-                $purchases_movement = PurchaseMovement::create([ 'deposit_id'      => $request->deposits_id,   
-                                                                  'observation'      => $request->observation, 
+            {
+                $purchases_movement = PurchaseMovement::create([ 'deposit_id'      => $request->deposits_id,
+                                                                  'observation'      => $request->observation,
                                                                   'invoice_number'   => $request->invoice_number,
                                                                   'invoice_date'     => $request->date,
-                                                                  'date_payment'     => $request->expiration[0],                     
+                                                                  'date_payment'     => $request->expiration[0],
                                                                   'type_operation'   => 1,
-                                                                  'type_movement'    => 1,                                   
+                                                                  'type_movement'    => 1,
                                                                   'status'           => true,
                                                                   'branch_id'        => $request->branch_id,
                                                                   'invoice_condition'=> $request->condition,
                                                                   'invoice_stamped'  => $request->stamped,
                                                                   'stamp_validity'   => $request->stamped_validity,
-                                                                  'reason_deleted'   => $request->reason_deleted,
+                                                                  'reason_deleted'   => $request->reason_deleted ?$request->reason_deleted : '',
                                                                   'user_id'          => auth()->user()->id,
                                                                   'recived_person'   => auth()->user()->id
                                                                 ]);
-
                 foreach($request->detail_product_id as $key => $product_id)
                 {
                     $product_quantity = $request->detail_product_quantity[$key];
-                    if($product_quantity && $product_quantity != '' and $product_quantity != 0) 
+                    if($product_quantity && $product_quantity != '' and $product_quantity != 0)
                     {
                         // Solo productos que sean mercaderias
                         $purchases_product = RawMaterial::find($product_id);
                         $affects_stock     =  false;
-                        if($purchases_product->type == 2 && $purchases_product->purchases_category->stockeable == true) 
+                        if($purchases_product->type == 2 && $purchases_product->purchases_category->stockeable == true)
                         {
                             $affects_stock     = true;
                         }
 
-                            $purchases_movement_details = $purchases_movement->purchases_movement_details()->create([ 
-                                'raw_materials_id'          => $product_id,
+                            $purchases_movement_details = $purchases_movement->purchases_movement_details()->create([
+                                'raw_materials_id'          => $purchases_product->id,
                                 'purchases_order_detail_id' => $request->detail_id[$key],
                                 'quantity'                  => $product_quantity,
-                                'affects_stock'             => $affects_stock 
+                                'affects_stock'             => $affects_stock
                             ]);
 
                             $quantity_received = PurchaseMovementsDetail::where('purchases_order_detail_id', $request->detail_id[$key])
@@ -143,14 +142,14 @@ class PurchaseMovementsController extends Controller
                                 $price_cost_iva = $purchases_order_detail->amount * 1.1;
                             }
                             }
-                            $purchases_existence = PurchasesExistence::create([ 
-                                'deposit_id'           => $request->deposits_id, 
-                                'type'                 => 1, 
+                            $purchases_existence = PurchasesExistence::create([
+                                'deposit_id'           => $request->deposits_id,
+                                'type'                 => 1,
                                 'raw_material_id'      => $product_id,
                                 'quantity'             => $product_quantity,
                                 'residue'              => $product_quantity,
                                 'price_cost'           => $price_cost,
-                                'price_cost_iva'       => $price_cost_iva 
+                                'price_cost_iva'       => $price_cost_iva
                             ]);
 
 
@@ -160,7 +159,7 @@ class PurchaseMovementsController extends Controller
                             //ACTUALIZACION DE COSTO PROMEDIO
                             $existences = PurchasesExistence::where('raw_material_id',  $product_id)
                                         ->where('residue', '>', 0)
-                                        ->get()           
+                                        ->get()
                                         ->sum('residue');
 
                             $existence_costs = PurchasesExistence::selectRaw('sum(residue) as total_quantity, price_cost,raw_material_id')
@@ -170,7 +169,7 @@ class PurchaseMovementsController extends Controller
                                             ->get();
                             $cost_array = [];
                             $n_cost = null;
-                            foreach ($existence_costs as $key => $cost) 
+                            foreach ($existence_costs as $key => $cost)
                             {
                                 if(isset($cost_array[($cost->raw_material_id)]))
                                 {
@@ -182,7 +181,7 @@ class PurchaseMovementsController extends Controller
                                 }
                             }
 
-                            if($existences) 
+                            if($existences)
                             {
                                 $new_cost = ($cost_array[$product_id] / $existences);
                                 $raw_material = RawMaterial::where('id',$product_id)->update(['average_cost' =>$new_cost]);
@@ -228,7 +227,7 @@ class PurchaseMovementsController extends Controller
                                             'provider_type'         => 3 //proveedores
                                         ]);
 
-                                        
+
                     $purchases_movement->update(['purchase_id' => $pending_purchase->id]);
                     foreach ($request->order_detail_id as $index => $order_detail_id)
                     {
@@ -333,7 +332,7 @@ class PurchaseMovementsController extends Controller
                         ]);
                     }
                 }
-                
+
                 // toastr()->success('Agregado exitosamente');
             });
 
@@ -347,10 +346,10 @@ class PurchaseMovementsController extends Controller
     public function show(PurchaseMovement $purchase_movement)
     {
 
-        $purchase_movement->load(['purchases_movement_details', 
-                'purchases_movement_details.raw_material', 
+        $purchase_movement->load(['purchases_movement_details',
+                'purchases_movement_details.raw_material',
                 'purchases_movement_details.purchases_order_detail']);
-        
+
         return view('pages.purchase-movement.show', compact('purchase_movement'));
     }
 
@@ -359,7 +358,7 @@ class PurchaseMovementsController extends Controller
         $branches       = Branch::getAllCached()->pluck('name', 'id');
         $deposits       = Deposit::where('status',1)->get();
         $type_vouchers = config('constants.type_purchases');
-        
+
 
         return view('pages.purchase-movement.edit',compact('purchase_movement','branches','deposits','type_vouchers'));
     }
@@ -398,14 +397,14 @@ public function update(PurchaseMovement $request, $id)
                                           'reason_deleted' => $request->motive,
                                           'user_deleted'   => auth()->user()->id ]);
 
-            foreach($purchases_movement->purchases_movement_details as $details) 
-            {            
+            foreach($purchases_movement->purchases_movement_details as $details)
+            {
                 if($details->purchases_order_detail)
                 {
                     $details->purchases_order_detail->decrement('quantity_received', $details->quantity);
                     $details->purchases_order_detail->decrement('residue', $details->quantity);
-                }   
-                
+                }
+
                 if($details->affects_stock)
                 {
                     $purchases_existence = PurchasesExistence::where([ 'id' => $details->purchases_existence_id ])->first();
@@ -417,7 +416,7 @@ public function update(PurchaseMovement $request, $id)
                     //ACTUALIZACION DE COSTO PROMEDIO 31/08/2021
                     $existences = PurchasesExistence::where('purchases_product_id',  $details->purchases_product_id)
                                         ->where('social_reason_id', $details->purchases_existence->social_reason_id)
-                                        ->where('residue', '>', 0)  
+                                        ->where('residue', '>', 0)
                                         ->get();
                     $product_quantity = 0;
                     $total_product_cost  = 0;
@@ -463,14 +462,14 @@ public function update(PurchaseMovement $request, $id)
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $purchases_order_details = PurchaseOrderDetail::with('purchase_order', 'raw_material')
                                                             ->select("purchase_order_details.*")
                                                             ->join('purchase_orders', 'purchase_order_details.purchases_order_id', '=', 'purchase_orders.id')
                                                             ->where('purchase_orders.status', true)
                                                             ->where('purchase_orders.number', request()->number_oc)
                                                             ->get();
-            
+
             foreach ($purchases_order_details as $key => $order_detail)
             {
                 if($order_detail->quantity !=( $order_detail->quantity_received + $order_detail->quantity_cereada))
@@ -495,8 +494,8 @@ public function update(PurchaseMovement $request, $id)
                 $results['social_reason']       = $order_detail->purchase_order->razon_social;
                 $results['address']             = $order_detail->purchase_order->address;
                 $results['branch_id']           = $order_detail->purchase_order->branch_id;
-            }         
-    
+            }
+
             return response()->json($results);
         }
         abort(404);
@@ -506,8 +505,8 @@ public function update(PurchaseMovement $request, $id)
     {
         if(request()->ajax())
         {
-            $results = []; 
-            $count   = 0;       
+            $results = [];
+            $count   = 0;
             $purchases_order_details = PurchaseOrderDetail::with('purchases_order', 'purchases_product', 'purchases_product_presentation')
                                                             ->select("purchases_order_details.*")
                                                             ->join('purchases_order', 'purchases_order_details.purchase_order_id', '=', 'purchases_order.id')
@@ -518,7 +517,7 @@ public function update(PurchaseMovement $request, $id)
             {
                 if($order_detail->quantity_received > 0)
                 {
-                    $existence         = 0;                    
+                    $existence         = 0;
                     $product_existence = PurchasesExistence::where('residue', '>', 0)
                                                             ->where('deposit_id', request()->deposit_id)
                                                             ->where('raw_material_id', $order_detail->raw_material_id);
@@ -528,17 +527,17 @@ public function update(PurchaseMovement $request, $id)
                     }
 
                     if($existence > 0)
-                    { 
-                        $results['items'][$key]['id']                    = $order_detail->purchases_product_id;                        
-                        $results['items'][$key]['name']                  = $order_detail->purchases_product->name;                        
+                    {
+                        $results['items'][$key]['id']                    = $order_detail->purchases_product_id;
+                        $results['items'][$key]['name']                  = $order_detail->purchases_product->name;
                         $results['items'][$key]['quantity']              = $order_detail->quantity_received > $existence ? $existence : $order_detail->quantity_received;
                         $count++;
                     }
-                }                
+                }
             }
 
             $results['total_count'][0] = $count ;
-            
+
             return response()->json($results);
         }
         abort(404);
@@ -562,7 +561,7 @@ public function update(PurchaseMovement $request, $id)
                     if($purchases_existence->purchases_product)
                     {
 
-                        $results['items'][$purchases_existence->id] = 
+                        $results['items'][$purchases_existence->id] =
                         [
                             'id' => $purchases_existence->id,
                             'product_id' => $purchases_existence->purchases_product_id,
@@ -590,7 +589,7 @@ public function update(PurchaseMovement $request, $id)
                     $results['items'][0]['existence']  = 0;
                 }
             }
-                                   
+
             return response()->json($results);
         }
         abort(404);
@@ -638,7 +637,7 @@ public function update(PurchaseMovement $request, $id)
     {
         // if(request()->ajax())
         // {
-        //     $results = [];       
+        //     $results = [];
         //     $purchases = Purchase::where('purchases_provider_id', request()->provider_id)
         //                                             ->where('social_reason_id', request()->social_reason_id)
         //                                             ->where('amount', request()->amount)
@@ -653,8 +652,8 @@ public function update(PurchaseMovement $request, $id)
         //         $results['items'][$key]['stamped']   = $purchase->stamped;
         //         $results['items'][$key]['stamped_validity']   = $purchase->stamped_validity->format('d-m-Y');
         //         $results['items'][$key]['date']   = $purchase->date->format('d-m-Y');
-        //     }         
-    
+        //     }
+
         //     return response()->json($results);
         // }
         // abort(404);

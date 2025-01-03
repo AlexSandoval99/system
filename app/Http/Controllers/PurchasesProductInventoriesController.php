@@ -48,13 +48,13 @@ class PurchasesProductInventoriesController extends Controller
                 $purchases_product_inventories = $purchases_product_inventories->where('date', '<=', $until_date);
             }
         }
-        
+
         $purchases_product_inventories = $purchases_product_inventories->paginate(20);
         return view('pages.purchases-product-inventories.index', compact('purchases_product_inventories', 'deposits'));
     }
 
     public function create()
-    {        
+    {
         $deposits = Deposit::where('status',true)->pluck('name','id');
         $deposit_destiny      = Deposit::where('id', '<>', auth()->user()->deposit_id)->where('status',true)->get();
         $purchases_products   = '';
@@ -74,10 +74,10 @@ class PurchasesProductInventoriesController extends Controller
                                                     ->where('residue', '>', 0)
                                                     ->groupBy('raw_material_id')
                                                     ->get();
-            foreach ($purchases_existences as $purchases_existence) 
+            foreach ($purchases_existences as $purchases_existence)
             {
                 $existences[$purchases_existence->raw_material_id] = $purchases_existence->existence;
-            }           
+            }
         }
 
         return view('pages.purchases-product-inventories.create', compact( 'deposit_destiny', 'existences', 'purchases_products', 'deposits'));
@@ -89,9 +89,9 @@ class PurchasesProductInventoriesController extends Controller
         {
             // Inventario
             $purchases_product_inventory = Inventory::create([ 'date'        => date('Y-m-d'),
-                                                                               'social_reason_id'  => $request->social_reason_id,                                                                       
-                                                                               'purchases_category_id'  => $request->purchases_category_id,                                                                       
-                                                                               'deposit_id'  => $request->deposit_id,    
+                                                                               'social_reason_id'  => $request->social_reason_id,
+                                                                               'purchases_category_id'  => $request->purchases_category_id,
+                                                                               'deposit_id'  => $request->deposit_id,
                                                                                'observation' => $request->observation,
                                                                                'status'      => 2,
                                                                                'user_id'     => auth()->user()->id ]);
@@ -100,7 +100,7 @@ class PurchasesProductInventoriesController extends Controller
             {
                 if($quantity != '')
                 {
-                    $purchases_product_inventory->purchases_product_inventory_details()->create([ 
+                    $purchases_product_inventory->purchases_product_inventory_details()->create([
                                                                                               'material_id' => $product_id,
                                                                                               'quantity'   => $quantity,
                                                                                               'existence'  => $request->old_existences[$product_id],
@@ -117,7 +117,7 @@ class PurchasesProductInventoriesController extends Controller
     }
 
     public function show(PurchasesProductInventory $purchases_product_inventory)
-    {   
+    {
         $purchases_product_inventory->load(['purchases_product_inventory_details.purchases_product']);
         return view('pages.purchases-product-inventories.show', compact('purchases_product_inventory'));
     }
@@ -129,7 +129,7 @@ class PurchasesProductInventoriesController extends Controller
                                                 ->where('status', true)
                                                 ->orderBy('name')
                                                 ->where('purchases_category_id', $purchases_product_inventory->purchases_category_id)
-                                                ->get(); 
+                                                ->get();
         // Buscar el ultimo Costo del Producto
         $product_cost = PurchasesProductCost::where('social_reason_id', $purchases_product_inventory->social_reason_id)
                 ->whereHas('purchases_product', function ($query) {
@@ -138,7 +138,7 @@ class PurchasesProductInventoriesController extends Controller
                 ->get();
         $cost_product = [];
         foreach($product_cost as $cost)
-        {                
+        {
             $cost_product[$cost->purchases_product_id] = $cost->price_cost;
         }
 
@@ -153,11 +153,11 @@ class PurchasesProductInventoriesController extends Controller
                                                 ->where('residue', '>', 0)
                                                 ->groupBy('purchases_product_id')
                                                 ->get();
-    
-        foreach ($purchases_existences as $purchases_existence) 
+
+        foreach ($purchases_existences as $purchases_existence)
         {
             $existences[$purchases_existence->purchases_product_id] = $purchases_existence->existence;
-        }   
+        }
 
         foreach($purchases_product_inventory->purchases_product_inventory_details as $key => $detail)
         {
@@ -197,16 +197,16 @@ class PurchasesProductInventoriesController extends Controller
     {
         foreach($purchases_product_inventory->purchases_product_inventory_details as $key => $detail)
         {
-            
+
             // $purchases_existence  = PurchasesExistence::where('raw_material_id', $detail->raw_material_id)
             //     ->where('deposit_id', $purchases_product_inventory->deposit_id)
             //     ->where('residue', '>', 0)
             //     ->sum('residue');
-            // if( $detail->quantity != $purchases_existence) 
+            // if( $detail->quantity != $purchases_existence)
             // {
             //     toastr()->error('Faltan configurar precios de los productos.');
 
-            //     return redirect('inventories');            
+            //     return redirect('inventories');
             // }
         }
         DB::transaction(function() use ($purchases_product_inventory)
@@ -219,24 +219,23 @@ class PurchasesProductInventoriesController extends Controller
                     $quantity_final = $detail->quantity - $detail->existence;
                     $dividendo =  11;
                     $price_cost_iva = $detail->old_cost - ($detail->old_cost / $dividendo);
-                    
                     $purchases_movement = PurchaseMovement::create([ 'deposits_id'                  => $purchases_product_inventory->deposit_id,
-                                                                    'observation'                    => $purchases_product_inventory->observation,
+                                                                    'observation'                    => $purchases_product_inventory->observation  ? $purchases_product_inventory->observation : 'no tiene',
                                                                     'type_operation'                 => 8,
-                                                                    'type_movement'                  => 1,                                   
+                                                                    'type_movement'                  => 1,
                                                                     'status'                         => true,
                                                                     'inventory_id'                   => $purchases_product_inventory->id,
-                                                                    'user_id'                        => auth()->user()->id 
+                                                                    'user_id'                        => auth()->user()->id
                                                                 ]);
-                    
-                    $purchases_existence = PurchasesExistence::create([ 'deposit_id'           => $purchases_product_inventory->deposit_id, 
+
+                    $purchases_existence = PurchasesExistence::create([ 'deposit_id'           => $purchases_product_inventory->deposit_id,
                                                                         'raw_material_id' => $detail->material_id,
                                                                         'quantity'             => $quantity_final,
                                                                         'residue'              => $quantity_final,
                                                                         'price_cost'           => $price_cost_iva,
                                                                         'price_cost_iva'       => $detail->old_cost
                                                                     ]);
-                        
+
                     $purchases_movement->purchases_movement_details()->create([ 'raw_material_id'   => $detail->material_id,
                                                                                 'quantity'               => $quantity_final,
                                                                                 'purchases_existence_id' => $purchases_existence->id,
@@ -256,18 +255,20 @@ class PurchasesProductInventoriesController extends Controller
                                                             ->get();
 
                         $purchases_movement = PurchaseMovement::create(['deposits_id'    => $purchases_product_inventory->deposit_id,
-                                                                        'observation'    => $purchases_product_inventory->observation,
+                                                                        'observation'    => $purchases_product_inventory->observation  ? $purchases_product_inventory->observation : 'no tiene',
                                                                         'type_operation' => 8,
-                                                                        'type_movement'  => 2,                                   
+                                                                        'type_movement'  => 2,
                                                                         'status'         => true,
-                                                                        'user_id'        => auth()->user()->id ]); 
-                                                                        
+                                                                        'branch_id'      => 1,
+                                                                        'user_id'        => auth()->user()->id
+                                                                    ]);
+
                         foreach($product_existences as $product_existence)
                         {
                             if($quantity_process > 0)
                             {
                                 $quantity_residue = $quantity_process > $product_existence->residue ? $product_existence->residue : $quantity_process;
-                                $movement_detail = $purchases_movement->purchases_movement_details()->create([ 
+                                $movement_detail = $purchases_movement->purchases_movement_details()->create([
                                                                                             'raw_material_id'   => $detail->material_id,
                                                                                             'quantity'               => $quantity_residue,
                                                                                             'price_cost'             =>  0,
@@ -277,8 +278,8 @@ class PurchasesProductInventoriesController extends Controller
                                 $product_existence->update(['residue' => $product_existence->residue - $quantity_residue]);
 
                                 $quantity_process = $quantity_process - $quantity_residue;
-                            }                        
-                        }                            
+                            }
+                        }
                 }
             }
         });
@@ -298,7 +299,7 @@ class PurchasesProductInventoriesController extends Controller
     }
 
     public function xls(PurchasesProductInventory $purchases_product_inventory)
-    {  
+    {
         $excelArray   = [];
         $excelArray[] = [ 'Código',
                           'Producto',
@@ -321,7 +322,7 @@ class PurchasesProductInventoriesController extends Controller
         // }
 
         foreach($purchases_product_inventory->purchases_product_inventory_details as $detail)
-        {                
+        {
             $excelArray[] = [ $detail->product_id,
                             $detail->purchases_product->name,
                             $detail->quantity > $detail->existence ? 'Entrada' : ($detail->quantity == $detail->existence ? 'Sin Movimiento' : 'Salida'),
@@ -339,9 +340,9 @@ class PurchasesProductInventoriesController extends Controller
     }
 
     public function pdf(PurchasesProductInventory $purchases_product_inventory)
-    {                  
+    {
         return PDF::loadView('pages.purchases-product-inventories.pdf', compact('purchases_product_inventory'))
-                    ->setPaper('A5', 'portrait')                  
+                    ->setPaper('A5', 'portrait')
                     ->stream();
     }
 
@@ -355,7 +356,7 @@ class PurchasesProductInventoriesController extends Controller
         $results = [];
         $results['product_costs'] = 0;
         $results['product_quantity'] = 0;
-                    
+
         foreach($existences as $key => $existence)
         {
             $results['product_costs'] += $existence->price_cost * $existence->residue;

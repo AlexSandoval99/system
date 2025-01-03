@@ -37,8 +37,8 @@ class RawMaterialsController extends Controller
     public function ajax_purchases_orders()
     {
         if(request()->ajax())
-        {            
-            $results        = [];        
+        {
+            $results        = [];
             $product_orders = PurchaseOrderDetail::with('raw_material')
                                                   ->where('residue', '>', 0)
                                                   ->where('purchases_order_id', request()->id)
@@ -62,8 +62,8 @@ class RawMaterialsController extends Controller
             $purchases_movements = PurchaseOrder::select("purchases_movements.invoice_number", "purchases_movements.invoice_date", "purchases_movements.date_payment", "purchases_movements.branch_id", "purchases_movements.currency_id", "purchases_movements.invoice_condition", "purchases_movements.invoice_stamped", "purchases_movements.stamp_validity")
                                                 ->join('purchases_order_details', 'purchases_order_details.purchases_order_id', '=', 'purchases_orders.id')
                                                 ->join('purchases_movement_details', 'purchases_movement_details.purchases_order_detail_id', '=', 'purchases_order_details.id')
-                                                ->join('purchases_movements', 'purchases_movement_details.purchases_movements_id', '=', 'purchases_movements.id')                                                  
-                                                ->where('purchases_orders.id', request()->id) 
+                                                ->join('purchases_movements', 'purchases_movement_details.purchases_movements_id', '=', 'purchases_movements.id')
+                                                ->where('purchases_orders.id', request()->id)
                                                 ->whereNotNull('purchases_movements.date_payment')
                                                 ->orderBy('purchases_movements.id', 'DESC')
                                                 ->groupBy('purchases_movements.id')
@@ -72,7 +72,7 @@ class RawMaterialsController extends Controller
             if($purchases_movements)
             {
                 foreach ($purchases_movements as $movement)
-                {   
+                {
                     $results['invoice_branch_id'] = $movement->branch_id;
                     $results['invoice_currency_id'] = $movement->currency_id;
                     $results['invoice_condition'] = $movement->invoice_condition;
@@ -88,7 +88,7 @@ class RawMaterialsController extends Controller
                 $results['orders'][0]['invoice_date']   = '';
                 $results['orders'][0]['date_payment']   = '';
             }
-            
+
             return response()->json($results);
         }
         abort(404);
@@ -133,6 +133,6 @@ class RawMaterialsController extends Controller
             }
             return response()->json($results);
         }
-        abort(404); 
+        abort(404);
     }
 }

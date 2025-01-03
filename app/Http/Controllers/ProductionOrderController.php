@@ -55,7 +55,6 @@ class ProductionOrderController extends Controller
         {
             DB::transaction(function() use ($request, & $production_order)
             {
-                
                 $production_order = ProductionOrder::create([
                     'date'              => $request->date,
                     'status'            => 1,
@@ -68,7 +67,7 @@ class ProductionOrderController extends Controller
                 // Grabar los Productos
                 foreach($request->detail_product_id as $key => $value)
                 {
-                    foreach ($request->{"selected_materials_$value"} as $key1 => $value1) 
+                    foreach ($request->{"selected_materials_$value"} as $key1 => $value1)
                     {
                         $production_order->production_order_details()->create([
                             'material_id'              => $value1,
@@ -90,8 +89,8 @@ class ProductionOrderController extends Controller
 
     public function show(ProductionOrder $production_order)
     {
-       
-        
+
+
         return view('pages.production-order.show', compact('production_order'));
     }
     public function edit(ProductionOrder $production_order)
@@ -106,7 +105,7 @@ class ProductionOrderController extends Controller
         {
             DB::transaction(function() use ($production_order)
             {
-                
+
                 $production_order->update([
                     'date'              => request()->date,
                     'status'            => 1,
@@ -120,7 +119,7 @@ class ProductionOrderController extends Controller
             $production_order->production_order_details()->delete();
                 foreach(request()->detail_product_id as $key => $value)
                 {
-                    foreach (request()->{"detail_material_id_$value"} as $key1 => $value1) 
+                    foreach (request()->{"detail_material_id_$value"} as $key1 => $value1)
                     {
                         $production_order->production_order_details()->create([
                             'material_id'              => $value1,
@@ -132,7 +131,7 @@ class ProductionOrderController extends Controller
                     }
                 }
             });
-    
+
             return redirect('production-order');
 
         }
@@ -147,7 +146,7 @@ class ProductionOrderController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $order_productions = BudgetProductionDetail::with('budget_production', 'articulo')
                                                             ->select("budget_production_details.*")
                                                             ->join('budget_productions', 'budget_production_details.budget_production_id', '=', 'budget_productions.id')
@@ -172,7 +171,7 @@ class ProductionOrderController extends Controller
                 // $results['social_reason']       = $order_detail->purchase_order->razon_social;
                 // $results['address']             = $order_detail->purchase_order->address;
                 $results['branch_id']           = $order_detail->budget_production->branch_id;
-            }         
+            }
             return response()->json($results);
         }
         abort(404);
@@ -182,7 +181,7 @@ class ProductionOrderController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $articulo = Articulo::where('id',request()->product_id)->first();
             $order = BudgetProductionDetail::where('budget_production_id',request()->number_budget)->where('articulo_id',request()->product_id)->first();
             foreach ($articulo->setting_product as $key => $setting)
@@ -196,11 +195,11 @@ class ProductionOrderController extends Controller
                     $results['items'][$key]['raw_material']     = $setting->raw_material->description;
                     $results['items'][$key]['quantity']        = $setting->quantity * $order->quantity;
                 }
-            }         
+            }
             return response()->json($results);
-            
+
         }
         abort(404);
     }
-    
+
 }

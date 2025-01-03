@@ -4,26 +4,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
-
 Route::get('/', 'App\Http\Controllers\HomeController@index');
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
 Route::get('/config', 'App\Http\Controllers\ConfigController@index')->name('config');
 Route::put('/config/update/{id}', 'App\Http\Controllers\ConfigController@update')->name('config.update');
 
 Route::group(['namespace' => 'App\Http\Controllers\Profile'], function (){
-	Route::get('/profile', 'ProfileController@index')->name('profile');
+    Route::get('/profile', 'ProfileController@index')->name('profile');
 	Route::put('/profile/update/profile/{id}', 'ProfileController@updateProfile')->name('profile.update.profile');
 	Route::put('/profile/update/password/{id}', 'ProfileController@updatePassword')->name('profile.update.password');
 	Route::put('/profile/update/avatar/{id}', 'ProfileController@updateAvatar')->name('profile.update.avatar');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Error'], function (){
-	Route::get('/unauthorized', 'ErrorController@unauthorized')->name('unauthorized');
+    Route::get('/unauthorized', 'ErrorController@unauthorized')->name('unauthorized');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers'], function (){
-	
-	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
+    Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+    Route::get('budgets/create/{id}/{token}', 'WishPurchaseController@budget')->withoutMiddleware('auth')->name('budget.create');
+    Route::post('budgets/store/{id}/{token}', 'WishPurchaseController@budget_store')->withoutMiddleware('auth')->name('budget.store');
 	//Users
 	Route::get('user', 'UserController@index')->name('user');
 	Route::get('user/create', 'UserController@create')->name('user.create');
@@ -52,15 +53,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('articulo/{articulo}/edit', 'ArticuloController@edit')->name('articulo.edit');
 	Route::put('articulo/{articulo}/update', 'ArticuloController@update')->name('articulo.update');
 
-
-
-
-
 	Route::get('cliente', 'ClienteController@index')->name('cliente');
 	Route::get('cliente/create', 'ClienteController@create')->name('cliente-create');
 	Route::post('cliente', 'ClienteController@store')->name('cliente.store');
     Route::get('ajax/department', 'ClienteController@ajax_department')->name('ajax.get_deparment');
-
 
     Route::get('ajax/purchases_providers', 'ProveedorController@ajax_providers')->name('ajax.providers');
     Route::get('ajax/purchases_providers_details', 'ProveedorController@ajax_providers_purchases')->name('ajax.providers-purchases');
@@ -98,6 +94,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
 	Route::post('nationalities', 'NationalitiesController@store')->name('nationalities.store');
 
+	Route::get('budget/{purchase_budget}/view-purchase-budgets', 'WishPurchaseController@view_purchase_budgets')->name('wish-purchases.view-purchase-budgets');
 
     Route::get('wish-purchase', 'WishPurchaseController@index')->name('wish-purchase');
 	Route::get('wish-purchase/create', 'WishPurchaseController@create')->name('wish-purchase-create');
@@ -114,8 +111,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('show-multiple/wish-purchase', 'WishPurchaseController@show_multiple')->name('wish-purchases.show_multiple');
 	Route::post('show-multiple/wish-purchase', 'WishPurchaseController@show_multiple_submit')->name('wish-purchases.show_multiple_submit');
 	Route::get('show-multiple/transfer-create', 'WishPurchaseControllerController@transfer_create')->name('wish-purchases.transfer_create');
-
-
 
 	Route::get('purchase-order', 'PurchaseOrderController@index')->name('purchase-order');
 	Route::get('purchase-order/create', 'PurchaseOrderController@create')->name('purchase-order.create');
@@ -192,7 +187,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('ajax/control-production', 'ProductionControlController@ajax_control_production')->name('ajax.control-production');
 	Route::get('ajax/update-control', 'ProductionControlController@ajax_update_control')->name('ajax.update-control');
 
-	
+
 	Route::get('production-control-quality', 'ProductionControlQualityController@index')->name('production-control-quality');
 	Route::get('production-control-quality/create', 'ProductionControlQualityController@create')->name('production-control-quality-create');
 	Route::get('production-control-quality/{control}', 'ProductionControlQualityController@show')->name('production-control-quality-show');
@@ -209,11 +204,5 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 
 	Route::get('production-cost', 'ProductionCostController@index')->name('production-cost');
 	Route::get('production-cost/{production_cost}', 'ProductionCostController@show')->name('production-cost-show');
-	
-	
-	
-
-
-
 
 });

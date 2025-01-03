@@ -76,7 +76,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="tab-content">
                                 <div class="tab-pane" id="seccion2">
                                     <div class="panel-body table-responsive" id="div_sec2">
@@ -95,8 +95,8 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> 
-                            <div class="tab-content">                                              
+                            </div>
+                            <div class="tab-content">
                                 <div class="tab-pane" id="seccion3">
                                     <div class="panel-body table-responsive" id="div_sec3">
                                         <table class="table table-stripped" data-limit-navigation="8" data-sort="true" data-paging="true" data-filter=#filter1>
@@ -113,7 +113,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>         
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,10 +139,9 @@
 @endsection
 
 @section('layout_js')
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         var invoice_items_array = [];
-    
+
         $(document).ready(function ()
         {
             window.addEventListener('beforeunload', limpiarLocalStorage);
@@ -155,7 +154,7 @@
                     type: "POST",
                     data: $('#form').serialize(), // Serializar el formulario completo
                     success: function(data) {
-                        redirect ("{{ url('production-order') }}");
+                        redirect ("{{ url('production-control') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
@@ -217,22 +216,22 @@
                 $('#div_sec1').show();
                 $('#div_sec3').hide();
                 $('#div_sec2').hide();
-                
+
         }
         function ChangeTab2()
         {
                 $('#div_sec2').show();
                 $('#div_sec1').hide();
                 $('#div_sec3').hide();
-                
+
         }
-        
+
         function ChangeTab3()
         {
                 $('#div_sec3').show();
                 $('#div_sec1').hide();
                 $('#div_sec2').hide();
-                
+
         }
 
         changeStatus();
@@ -265,7 +264,7 @@
                                     invoice_items_array.push(element.product_id);
                                     var session = sesion; // Obtiene el número de sesión
                                     var tbody = '#tbody_detail' + session; // Genera el ID del tbody correspondiente
-                                    $(tbody).append(     
+                                    $(tbody).append(
                                         '<tr>' +
                                         '<td>' + element.product_id + '</td>' +
                                         '<td>' + element.product_name + '</td>' +
@@ -287,7 +286,7 @@
                         });
                         if(conteo>0)
                         {
-                            
+
                             $("#div_details, #div_footer").show();
                             $("#number_ped").prop("readonly", true);
                             $("#button_search").hide();
@@ -323,15 +322,15 @@
             }
         }
 
-        function limpiarLocalStorage() 
+        function limpiarLocalStorage()
         {
             localStorage.clear();
         }
-        function guardarTemporal(product,stage) 
+        function guardarTemporal(product,stage)
         {
             cargarDatosModal('.myModal'+product+'_'+stage,product,stage);
         }
-        function cargarDatosModal(modalClass,product,stage) 
+        function cargarDatosModal(modalClass,product,stage)
         {
             $(modalClass).on('click', '.guardar-temporal', function(event) {
                 var productId = $(this).closest(modalClass).find('.product_id'+product+'_'+stage).val();
@@ -350,16 +349,27 @@
                 $('#observacion' + product + '_' + stage).attr('value', observacionValue);
                 $('#cantidad_controlada' + product + '_' + stage).attr('value', cantidadControladaValue);
                 $('#etapa' + product + '_' + stage).attr('value', isChecked);
+
+                $(modalClass).modal('hide');
+
+                // Muestra un mensaje de confirmación
+                swal({
+                    title: "Guardado exitosamente",
+                    text: "Los datos se han guardado correctamente.",
+                    icon: "success",
+                    buttons: false,
+                    timer: 1500
+                });
             });
 
         }
 
         function generarModal(product_id, stage_name,stage_id,quantity)
         {
-            if ($(`.myModal${product_id}_${stage_id}`).length) 
+            if ($(`.myModal${product_id}_${stage_id}`).length)
             {
                 $(`.myModal${product_id}_${stage_id}`).modal('show');
-            } else 
+            } else
             {
                 var modalHtml = `
                     <div class="modal fade in myModal${product_id}_${stage_id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -398,7 +408,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar Temporalmente</button>
+                                    <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>

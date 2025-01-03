@@ -54,14 +54,14 @@
                                                     <li>
                                                         <a href="{{ url('wish-purchase/' . $purchase->id) }}"><i class="fa fa-info-circle"></i>Ver Pedido </a>
                                                     </li>
-                                                @if($purchase->status == 1)
+                                                {{-- @if($purchase->status == 1)
                                                     <li>
                                                         <a href="{{ url('wish-purchase/' . $purchase->id . '/charge-purchase-budgets') }}"><i title="Anclar Presupuestos" class="fa fa-upload"></i>Anclar Presupuestos</a>
                                                     </li>
-                                                @endif
+                                                @endif --}}
                                                 @if($purchase->status == 1)
                                                     <li>
-                                                        <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>                                            
+                                                        <a href="{{ url('wish-purchase/' . $purchase->id . '/confirm-purchase-budgets') }}"><i class="fa fa-user"></i> Ir a Confirmar Presupuestos</a>
                                                     </li>
                                                 @endif
                                                     <li>
@@ -70,6 +70,13 @@
                                                     <li>
                                                         <a href="{{ url('wish-purchase/' . $purchase->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i>Editar Pedido</a>
                                                     </li>
+                                                @if($purchase->status == 1)
+                                                    <li>
+                                                        <a href="javascript:void(0);" onclick="copyLink('{{ url('budgets/create/' . $purchase->id . '/' . $purchase->token) }}')">
+                                                            <i class="fa fa-link"></i> Copiar Enlace
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </td>
@@ -102,11 +109,36 @@
 </div>
 @endsection
 @section('layout_js')
+    <style>
+        .dropdown-menu {
+            position: absolute !important;
+            will-change: transform;
+            z-index: 1050; /* Por encima de otros elementos */
+        }
+        .ibox-content {
+            overflow: visible !important;
+        }
+    </style>
     <script>
-
+        function copyLink(link)
+        {
+            var tempInput = document.createElement("input");
+            tempInput.value = link;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            swal({
+                title: "Generado",
+                text: "Enlace copiado al portapapeles.",
+                icon: "success",
+                buttons: false,
+                timer: 1500
+            });
+        }
         function showVerifyButton() {
             let wish_purchase_ids = $('input[name="wish_purchase_ids[]"]:checked');
-            if (wish_purchase_ids.length > 0) 
+            if (wish_purchase_ids.length > 0)
             {
                 $('#verify_button').show();
             } else{

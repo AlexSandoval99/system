@@ -1,39 +1,35 @@
-<?php 
+<?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;  
+use Illuminate\Http\Request;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\UpdatePasswordUserRequest;
-use App\Models\User; 
-use App\Models\Role; 
+use App\Models\User;
+use App\Models\Role;
 
-class UserController extends Controller 
-{ 
+class UserController extends Controller
+{
     public function index()
-    { 
-        $this->authorize('show-user', User::class);
-
+    {
         $users = User::paginate(15);
-
         return view('users.index', compact('users'));
     }
 
     public function show($id)
-    { 
-    	$this->authorize('show-user', User::class);
+    {
 
     	$user = User::find($id);
 
     	if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');            
+        	$this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
-        }  
+        }
 
         $roles = Role::all();
 
-		$roles_ids = Role::rolesUser($user);      	               
+		$roles_ids = Role::rolesUser($user);
 
         return view('users.show',compact('user', 'roles', 'roles_ids'));
     }
@@ -65,19 +61,19 @@ class UserController extends Controller
     }
 
     public function edit($id)
-    { 
+    {
     	$this->authorize('edit-user', User::class);
 
     	$user = User::find($id);
 
     	if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');            
+        	$this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
-        }  
+        }
 
         $roles = Role::all();
 
-		$roles_ids = Role::rolesUser($user);       	               
+		$roles_ids = Role::rolesUser($user);
 
         return view('users.edit',compact('user', 'roles', 'roles_ids'));
     }
@@ -89,7 +85,7 @@ class UserController extends Controller
     	$user = User::find($id);
 
         if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');            
+        	$this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
         }
 
@@ -111,7 +107,7 @@ class UserController extends Controller
     	$user = User::find($id);
 
         if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');            
+        	$this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
         }
 
@@ -125,15 +121,15 @@ class UserController extends Controller
     }
 
     public function editPassword($id)
-    { 
+    {
     	$this->authorize('edit-user', User::class);
 
     	$user = User::find($id);
 
     	if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');            
+        	$this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
-        }              	               
+        }
 
         return view('users.edit_password',compact('user'));
     }
@@ -145,7 +141,7 @@ class UserController extends Controller
         $user = User::find($id);
 
         if(!$user){
-            $this->flashMessage('warning', 'User not found!', 'danger');            
+            $this->flashMessage('warning', 'User not found!', 'danger');
             return redirect()->route('user');
         }
 

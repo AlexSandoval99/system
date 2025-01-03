@@ -545,7 +545,7 @@
                     '<input type="hidden" name="detail_restocking_detail_id[]" value="' + restockin_detail_id + '">' +
                 '</tr>');
 
-            loadPeriodDataMaskDecimal();
+            // loadPeriodDataMaskDecimal();
             calculateGrandTotal();
         }
 

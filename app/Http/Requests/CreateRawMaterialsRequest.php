@@ -35,12 +35,12 @@ class CreateRawMaterialsRequest extends FormRequest
     {
         $validator->after(function ($validator)
         {
-            if(request()->name)
+            if(request()->description)
             {
-                $provider = RawMaterial::where('name',request()->name)->first();
-                if($provider)
+                $material = RawMaterial::where('description',request()->description)->first();
+                if($material)
                 {
-                    $validator->errors()->add('name', 'El nombre de la marca ya fue registrado');
+                    $validator->errors()->add('description', 'El la materia prima ya fue registrado');
                 }
             }
         });

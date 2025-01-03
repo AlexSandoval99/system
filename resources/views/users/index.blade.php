@@ -38,7 +38,7 @@
 							</thead>
 							<tbody>
 								@foreach($users as $user)
-									@if ($user->id != 1)
+									{{-- @if ($user->id != 1) --}}
 										<tr>
 											<td>
 												@if($user->isOnline())
@@ -83,7 +83,7 @@
 												</div>
 											</div>
 										</div>
-									@endif
+									{{-- @endif --}}
 								@endforeach
 							</tbody>
 							<tfoot>

@@ -77,7 +77,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="tab-content">
                                 <div class="tab-pane" id="seccion2">
                                     <div class="panel-body table-responsive" id="div_sec2">
@@ -97,8 +97,8 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> 
-                            <div class="tab-content">                                              
+                            </div>
+                            <div class="tab-content">
                                 <div class="tab-pane" id="seccion3">
                                     <div class="panel-body table-responsive" id="div_sec3">
                                         <table class="table table-stripped" data-limit-navigation="8" data-sort="true" data-paging="true" data-filter=#filter1>
@@ -116,7 +116,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>         
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -142,10 +142,9 @@
 @endsection
 
 @section('layout_js')
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         var invoice_items_array = [];
-    
+
         $(document).ready(function ()
         {
             window.addEventListener('beforeunload', limpiarLocalStorage);
@@ -158,7 +157,7 @@
                     type: "POST",
                     data: $('#form').serialize(), // Serializar el formulario completo
                     success: function(data) {
-                        // redirect ("{{ url('production-control-quality') }}");
+                        redirect ("{{ url('production-control-quality') }}");
                     },
                     error: function(data){
                         laravelErrorMessages(data);
@@ -220,22 +219,22 @@
                 $('#div_sec1').show();
                 $('#div_sec3').hide();
                 $('#div_sec2').hide();
-                
+
         }
         function ChangeTab2()
         {
                 $('#div_sec2').show();
                 $('#div_sec1').hide();
                 $('#div_sec3').hide();
-                
+
         }
-        
+
         function ChangeTab3()
         {
                 $('#div_sec3').show();
                 $('#div_sec1').hide();
                 $('#div_sec2').hide();
-                
+
         }
 
         changeStatus();
@@ -269,7 +268,7 @@
                                     var session = sesion; // Obtiene el número de sesión
                                     var tbody = '#tbody_detail' + session; // Genera el ID del tbody correspondiente
                                     console.log(element);
-                                    $(tbody).append(     
+                                    $(tbody).append(
                                         '<tr>' +
                                         '<td>' + element.product_id + '</td>' +
                                         '<td>' + element.product_name + '</td>' +
@@ -287,17 +286,18 @@
                                 $('#branch').val(element.branch);
                                 $('#date_ped').val(element.date);
                                 $('#client_id').val(element.client_id);
+                                $('#client').val(element.client);
                             });
                         });
                         if(conteo>0)
                         {
-                            
+
                             $("#div_details, #div_footer").show();
                             $("#number_ped").prop("readonly", true);
                             $("#button_search").hide();
-                            $("[select2]").select2({
-                                language: 'es'
-                            });
+                            // $("[select2]").select2({
+                            //     language: 'es'
+                            // });
                         }else
                         {
                             swal({
@@ -327,15 +327,15 @@
             }
         }
 
-        function limpiarLocalStorage() 
+        function limpiarLocalStorage()
         {
             localStorage.clear();
         }
-        function guardarTemporal(product,stage) 
+        function guardarTemporal(product,stage)
         {
             cargarDatosModal('.myModal'+product+'_'+stage,product,stage);
         }
-        function cargarDatosModal(modalClass,product,stage) 
+        function cargarDatosModal(modalClass,product,stage)
         {
             $(modalClass).on('click', '.guardar-temporal', function(event) {
                 var productId = $(this).closest(modalClass).find('.product_id'+product+'_'+stage).val();
@@ -360,10 +360,10 @@
 
         function generarModal(product_id, stage_name,stage_id,quantity)
         {
-            if ($(`.myModal${product_id}_${stage_id}`).length) 
+            if ($(`.myModal${product_id}_${stage_id}`).length)
             {
                 $(`.myModal${product_id}_${stage_id}`).modal('show');
-            } else 
+            } else
             {
                 var modalHtml = `
                     <div class="modal fade in myModal${product_id}_${stage_id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -115,13 +115,13 @@ class WishProductionController extends Controller
             DB::transaction(function() use ($request, $id)
             {
                 $detail = WishProductionDetail::findOrFail($id);
-    
+
                 $detail->update([
                                   'articulo_id'              => $request->detail_product_id,
                                   'quantity'                 => $request->detail_product_quantity,
                 ]);
             });
-    
+
             return response()->json(['success' => true]);
         }
     }
@@ -257,5 +257,5 @@ class WishProductionController extends Controller
     {
         return str_replace(',', '.',str_replace('.', '', $value));
     }
-    
+
 }

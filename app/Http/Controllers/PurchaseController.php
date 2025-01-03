@@ -26,7 +26,7 @@ use App\Models\PurchasesProvider;
 use App\Models\PurchasesCollect;
 use App\Models\SocialReason;
 use App\Services\PurchasesService;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -58,7 +58,7 @@ class PurchaseController extends Controller
             $purchases = $purchases->where('provider_id', request()->provider_id);
         }
         $purchases = $purchases->whereIn('status', [1,2])->paginate(20);
-        
+
         return view('pages.purchase.index', compact('purchases', 'providers'));
     }
 
@@ -139,7 +139,7 @@ class PurchaseController extends Controller
                 ]);
 
                 // //Agendar Pago
-                // if(in_array($request->type, [1,3])) 
+                // if(in_array($request->type, [1,3]))
                 // {
 
                 //     $old_calendar_payment = CalendarPayment::where('status', 1)
@@ -149,7 +149,7 @@ class PurchaseController extends Controller
 
                 //     if($old_calendar_payment) $old_calendar_payment->update(['status' => 7, 'user_rescheduled_id' => auth()->user()->id]);
 
-                //     if($request->expiration) 
+                //     if($request->expiration)
                 //     {
                 //         CalendarPayment::create([
                 //             'social_reason_id' => $purchase->social_reason_id,
@@ -165,7 +165,7 @@ class PurchaseController extends Controller
                 //             'user_id'          => auth()->user()->id,
                 //             'status'           => 1
                 //         ]);
-                //     }                    
+                //     }
                 // }
 
                 if($request->invoice_copy)
@@ -318,7 +318,7 @@ class PurchaseController extends Controller
                     'fromable_type' => 'App\Models\Purchase',
                     'fromable_id'   => $purchase->id
                 ])->first();
-                
+
                 if ($accounting_entry)
                 {
                     AccountingMovementsJob::dispatch(37, $purchase->id, $purchase->user_id);
@@ -339,7 +339,7 @@ class PurchaseController extends Controller
 
     public function pdf(Purchase $purchase)
     {
-        return PDF::loadView('pages.purchase.pdf', compact('purchase'))
+        return Pdf::loadView('pages.purchase.pdf', compact('purchase'))
             ->setPaper('A4', 'portrait')
             ->stream();
     }

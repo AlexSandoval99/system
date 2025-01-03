@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePurchaseImageRequest;
 use App\Http\Requests\CreateWishPurchaseRequest;
+use App\Http\Requests\Request;
 use App\Models\Branch;
+use App\Models\BudgetPurchase;
 use App\Models\Presentation;
 use App\Models\Provider;
 use App\Models\Purchase;
@@ -14,7 +16,9 @@ use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\WishPurchase;
 use App\Models\WishPurchaseDetail;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
@@ -60,6 +64,7 @@ class WishPurchaseController extends Controller
                 $last_number = WishPurchase::orderBy('number', 'desc')->limit(1)->first();
                 $last_number = $last_number ? $last_number->number : 0;
                 $last_number = $last_number + 1;
+                $token = Str::random(40);
 
                 $wish_purchase = WishPurchase::create([
                     'number'                    => $last_number,
@@ -67,7 +72,8 @@ class WishPurchaseController extends Controller
                     'branch_id'                 => $request->branch_id,
                     'observation'               => $request->observation,
                     'status'                    => 1,
-                    'user_id'                   => auth()->user()->id
+                    'user_id'                   => auth()->user()->id,
+                    'token'                     => $token
                 ]);
 
                 // Grabar los Productos
@@ -84,10 +90,12 @@ class WishPurchaseController extends Controller
                     ]);
                 }
             });
+            $sharedLink = url("budgets/create/{$wish_purchase->id}/{$wish_purchase->token}");
 
             return response()->json([
                 'success'            => true,
-                'purchases_order_id' => $wish_purchase->id
+                'purchases_order_id' => $wish_purchase->id,
+                'token'              => $sharedLink
             ]);
         }
         abort(404);
@@ -172,7 +180,7 @@ class WishPurchaseController extends Controller
                     // $detail->decrement('residue',request()->aproved_quantity);
                 }
                 return response()->json(['success'=>$status, 'message'=> $message, 'restocking_id'=> $detail->wish_purchase_id]);
-    
+
             }
             else
             {
@@ -236,21 +244,27 @@ class WishPurchaseController extends Controller
 
         return $signature_name;
     }
+
+    public function view_purchase_budgets(BudgetPurchase $purchase_budget)
+    {
+        $purchase_budget = $purchase_budget;
+        return view('pages.wish-purchase.view-purchase-budgets',compact('purchase_budget'));
+    }
+
     public function confirm_purchase_budgets(WishPurchase $wish_purchase)
     {
-
         $wish_purchases = $wish_purchase->purchase_budgets()->get();
 
         return view('pages.wish-purchase.confirm-purchase-budgets',compact('wish_purchase'));
     }
 
-    public function confirm_purchase_budgets_store(PurchaseBudget $purchase_budget)
+    public function confirm_purchase_budgets_store(BudgetPurchase $purchase_budget)
     {
         $text = 'Presupuesto Aprobado';
         // APROBAR EL PRESUPUESTO
         if(request()->type == 1)
         {
-            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>1]);
+            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>2]);
             $purchase_budget->wish_purchase->update(['status' => 2]);
         }
         //BORRAR EL PRESUPUESTO
@@ -279,7 +293,7 @@ class WishPurchaseController extends Controller
 
     public function wish_purchase_budgets_approved(WishPurchase $wish_purchase)
     {
-        $purchase_budgets = $wish_purchase->purchase_budgets()->where('status',2)->get();
+        $purchase_budgets = $wish_purchase->budget_purchases()->where('status',2)->get();
 
         return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
     }
@@ -309,7 +323,7 @@ class WishPurchaseController extends Controller
 
     public function pdf(WishPurchase $restocking)
     {
-        return PDF::loadView('pages.wish-purchase.pdf', compact('restocking'))
+        return Pdf::loadView('pages.wish-purchase.pdf', compact('restocking'))
                     ->setPaper([0, 0, 250, 100], 'portrait')
                     // ->setPaper([0,0,300,300], 'portrait')
                     ->stream();
@@ -318,6 +332,50 @@ class WishPurchaseController extends Controller
     {
         return str_replace(',', '.',str_replace('.', '', $value));
     }
-    
+    public function budget($wishPurchaseId, $token)
+    {
+        try
+        {
+            $wishPurchase = WishPurchase::with('wish_purchase_details')
+                ->where('id', $wishPurchaseId)
+                ->where('token', $token)
+                ->firstOrFail();
+
+            return view('pages.wish-purchase.budget', compact('wishPurchase'));
+        }
+        catch (Exception $e)
+        {
+            // Mostrar un error si el pedido no existe o el token no es válido
+            return abort(404, 'El enlace no es válido o ha expirado.');
+        }
+    }
+
+    public function budget_store(HttpRequest $request, $id, $token)
+    {
+        DB::transaction(function() use ($request, &$wish_purchase)
+            {
+                $wish = WishPurchase::find(request()->wish_id);
+                $budget_purchase = BudgetPurchase::create([
+                    'date'                      => now()->format('d/m/Y'),
+                    'status'                    => 1,
+                    'provider_id'               => null,
+                    'wish_id'                   => $wish->id,
+                    'name'                      => request()->name,
+                    'ruc'                       => request()->ruc
+                ]);
+
+                foreach($request->prices as $key => $value)
+                {
+                    $budget_purchase->budget_purchase_details()->create([
+                        'material_id' => $key,
+                        'quantity'    => $request->quantities[$key],
+                        'budget_id'   => $budget_purchase->id,
+                        'price'       => $value,
+                        'total_price' => $request->total_prices[$key]
+                    ]);
+                }
+            });
+        return redirect()->route('budget.create', ['id' => $id, 'token' => $token])->with('success', 'Presupuesto guardado correctamente');
+    }
 
 }

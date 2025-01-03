@@ -464,20 +464,20 @@
                 daysOfWeekDisabled: [0]
             });
 
-            $("[period-data-mask]").inputmask({
-                alias: 'decimal',
-                groupSeparator: '.',
-                radixPoint: ',',
-                autoGroup: true,
-                allowMinus: false,
-                rightAlign: false,
-                digits: 0,
-                removeMaskOnSubmit: true,
-            });
+            // $("[period-data-mask]").inputmask({
+            //     alias: 'decimal',
+            //     groupSeparator: '.',
+            //     radixPoint: ',',
+            //     autoGroup: true,
+            //     allowMinus: false,
+            //     rightAlign: false,
+            //     digits: 0,
+            //     removeMaskOnSubmit: true,
+            // });
 
-            $("[date-mask]").inputmask({
-                alias: 'date'
-            });
+            // $("[date-mask]").inputmask({
+            //     alias: 'date'
+            // });
 
             $(".date").datepicker({
                 format: 'dd/mm/yyyy hh:ii',
@@ -486,9 +486,9 @@
                 todayBtn: true,
             });
 
-            $("[date-mask]").inputmask({
-                alias: 'date'
-            });
+            // $("[date-mask]").inputmask({
+            //     alias: 'date'
+            // });
 
             $("#purchases_provider_id").select2({
                 language: 'es',
@@ -688,20 +688,20 @@
                 daysOfWeekDisabled: [0]
             });
 
-            $("[period-data-mask]").inputmask({
-                alias: 'decimal',
-                groupSeparator: '.',
-                radixPoint: ',',
-                autoGroup: true,
-                allowMinus: false,
-                rightAlign: false,
-                digits: 0,
-                removeMaskOnSubmit: true,
-            });
+            // $("[period-data-mask]").inputmask({
+            //     alias: 'decimal',
+            //     groupSeparator: '.',
+            //     radixPoint: ',',
+            //     autoGroup: true,
+            //     allowMinus: false,
+            //     rightAlign: false,
+            //     digits: 0,
+            //     removeMaskOnSubmit: true,
+            // });
 
-            $("[date-mask]").inputmask({
-                alias: 'date'
-            });
+            // $("[date-mask]").inputmask({
+            //     alias: 'date'
+            // });
 
             $(".date").datepicker({
                 format: 'dd/mm/yyyy hh:ii',
@@ -710,9 +710,9 @@
                 todayBtn: true,
             });
 
-            $("[date-mask]").inputmask({
-                alias: 'date'
-            });
+            // $("[date-mask]").inputmask({
+            //     alias: 'date'
+            // });
         }
 
         function loadStamped()
@@ -751,19 +751,19 @@
         //     }
         // }
 
-        function loadPeriodDataMaskDecimal()
-        {
-            $("[period-data-mask-decimal]").inputmask({
-                alias: 'decimal',
-                groupSeparator: '.',
-                radixPoint: ',',
-                autoGroup: true,
-                allowMinus: false,
-                rightAlign: true,
-                digits: 2,
-                removeMaskOnSubmit: true,
-            });
-        }
+        // function loadPeriodDataMaskDecimal()
+        // {
+        //     $("[period-data-mask-decimal]").inputmask({
+        //         alias: 'decimal',
+        //         groupSeparator: '.',
+        //         radixPoint: ',',
+        //         autoGroup: true,
+        //         allowMinus: false,
+        //         rightAlign: true,
+        //         digits: 2,
+        //         removeMaskOnSubmit: true,
+        //     });
+        // }
 
         function ChangeTypePurchase()
         {
@@ -1256,9 +1256,9 @@
             $('#tbody_detail').append('<tr>' +
                 '<td width="5%">' + counter + '</td>' +
                 '<td width="5%" class="text-right">' + id + '<input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
-                '<td width="20%">' + name + ( emergency_mobile==1 ? '<br><i><b><span class="red">'+ emergency_mobile_name +'</span></b></i>' : '' ) + 
+                '<td width="20%">' + name + ( emergency_mobile==1 ? '<br><i><b><span class="red">'+ emergency_mobile_name +'</span></b></i>' : '' ) +
                     '<input type="hidden" name="detail_product_name[]" value="' + name + '">'+
-                '</td>' + 
+                '</td>' +
                 '<td width="5%" class="text-center">' + number_orders + ' <input type="hidden" name="detail_product_orders_id[]" value="' + id_orders + '"></td>' +
                 '<td width="5%" class="text-center">' + $.number(quantity, 0, ',', '.') + '<input type="hidden" name="detail_product_quantity[]" onkeyup="changeReCalculo();" value="' + quantity + '"></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_product_amount[]" onkeyup="changeReCalculo();" value="' + amount + '" period-data-mask-decimal></td>' +
@@ -1275,7 +1275,7 @@
                                     language: 'es'
                                 });
             change_load_accounting_account(counter, accounting_plan, baccounting_plan);
-            loadPeriodDataMaskDecimal();
+            // loadPeriodDataMaskDecimal();
             calculateGrandTotal();
             changeReCalculo()
         }

@@ -134,7 +134,7 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Producto</label>
-                            {{ Form::select('raw_materials_id', $raw_materials, old('raw_materials_id'), ['id' => 'raw_materials_id', 'placeholder' => 'Seleccione Materia Prima', 'class' => 'form-control', 'select2']) }} 
+                            {{ Form::select('raw_materials_id', $raw_materials, old('raw_materials_id'), ['id' => 'raw_materials_id', 'placeholder' => 'Seleccione Materia Prima', 'class' => 'form-control', 'select2']) }}
                             <span class="red" id="text_last_purchases"></span>
                         </div>
                         <div class="form-group col-md-2">
@@ -227,10 +227,10 @@
             addToTable(
                         {{$order->material_id}},
                         '{{$order->raw_material->description}}' ,
-                        {{$order->amount}}, 
+                        {{$order->amount}},
                         {{$order->quantity}},
-                        {{$order->presentation}}, 
-                        '{{config('constants.presentation.' . $order->presentation)}}', 
+                        {{$order->presentation}},
+                        '{{config('constants.presentation.' . $order->presentation)}}',
                         );
 
             @endforeach
@@ -460,7 +460,7 @@
                     '<td class="text-right"><a href="javascript:;" onClick="removeRow(this, '+ id +');"><i style="font-size:17px;" class="fa fa-times"></i></a></td>' +
                 '</tr>');
 
-            loadPeriodDataMaskDecimal();
+            // loadPeriodDataMaskDecimal();
             calculateGrandTotal();
         }
 

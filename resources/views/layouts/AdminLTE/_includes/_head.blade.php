@@ -18,8 +18,6 @@
 <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/AdminLTE.min.css') }}">
 <!-- adminlte Skins. -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/skins/_all-skins.min.css') }}">
-<!-- Morris chart -->
-<link rel="stylesheet" href="{{ asset('assets/node_modules/morris.js/morris.css') }}">
 <!-- jvectormap -->
 <link rel="stylesheet" href="{{ asset('assets/adminlte/bower_components/jvectormap/jquery-jvectormap.css') }}">
 <!-- Date Picker -->
@@ -35,8 +33,6 @@
 <link rel="stylesheet" href="{{ asset('assets/adminlte/documentation/style.css') }}">
 <!-- jQuery 3 -->
 <script src="{{ asset('assets/adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
-<!-- MAskMoney -->
-<script src="{{ asset('assets/node_modules/maskMoney/jquery.maskMoney.min.js') }}"></script>
 <style>
         .link_menu_page{ color:#222d32; }
         .caixa-alta { text-transform:uppercase; }
