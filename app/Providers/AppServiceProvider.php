@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (config('app.env') === 'production') {
+        if (config('app.env') === 'local') {
             URL::forceScheme('https'); // Fuerza que todas las URLs generadas usen HTTPS
         }
         Paginator::useBootstrap();
