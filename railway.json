@@ -1,5 +1,8 @@
 {
-    "build": {
-        "builder": "nixpacks"
-    }
-}
+    "builds": [
+      {
+        "src": "composer.json",
+        "use": "@railway/php"
+      }
+    ]
+  }
