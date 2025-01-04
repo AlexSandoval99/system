@@ -1,10 +1,10 @@
-@extends('layouts.AdminLTE.index') 
+@extends('layouts.AdminLTE.index')
 
-@section('icon_page', 'user') 
+@section('icon_page', 'user')
 
-@section('title', 'User Profile') 
+@section('title', 'User Profile')
 
-@section('content') 
+@section('content')
 
 <div class="row">
 	<div class="col-md-3">
@@ -13,20 +13,20 @@
 				@if(file_exists(Auth::user()->avatar))
 	              <img src="{{ asset(Auth::user()->avatar) }}" class="profile-user-img img-responsive img-circle">
 	            @else
-	              <img src="{{ asset('img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
-	            @endif							
+	              <img src="{{ secure_asset('img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
+	            @endif
 				<h3 class="profile-username text-center">
 					@if(Auth::user('name'))
 		              {{ Auth::user()->name }}
 		            @endif
-				</h3>	
+				</h3>
 				@foreach($roles as $role)
                     @if(in_array($role->id, $roles_ids))
-                        <div class="text-center"><span class="label label-primary">{{ $role->name }}</span></div> 
-                    @endif                                             
-                @endforeach	
+                        <div class="text-center"><span class="label label-primary">{{ $role->name }}</span></div>
+                    @endif
+                @endforeach
 			</div>
-		</div>		
+		</div>
 	</div>
 	<div class="col-md-9">
 		<div class="nav-tabs-custom">
@@ -57,11 +57,11 @@
                                     <strong>{{ $errors->first('email') }}</strong>
                                 </span>
                             @endif
-                        </div>	
+                        </div>
                         <div class="form-group text-right">
                            <button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i> Save Profile</button>
                         </div>
-					</form>						
+					</form>
 				</div>
 				<div class="tab-pane" id="settings">
 					<form action="{{ route('profile.update.password',$user->id) }}" method="post">
@@ -84,11 +84,11 @@
                                     <strong>{{ $errors->first('password-confirm') }}</strong>
                                 </span>
                             @endif
-                        </div>	
+                        </div>
                         <div class="form-group text-right">
                            <button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i> Save Password</button>
                         </div>
-					</form>						
+					</form>
 				</div>
 				<div class="tab-pane" id="avatar">
 					<form action="{{ route('profile.update.avatar',$user->id) }}" method="post" enctype="multipart/form-data">
@@ -102,7 +102,7 @@
                                     <strong>{{ $errors->first('avatar') }}</strong>
                                 </span>
                             @endif
-                        </div>	
+                        </div>
                         <div class="form-group text-right">
                            <button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-save"></i> Save Avatar</button>
                         </div>

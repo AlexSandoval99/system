@@ -23,7 +23,7 @@ class PurchaseBudget extends Model
 
     public function filePath()
     {
-        return asset('storage/wish_purchases_budgets/' . $this->name);
+        return secure_asset('storage/wish_purchases_budgets/' . $this->name);
     }
 
 
