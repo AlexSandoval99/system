@@ -5,13 +5,13 @@
     }
     @font-face {
         font-family: texta;
-        src: url("{{ secure_secure_asset('fonts/Texta-Regular.ttf') }}");
+        src: url("{{ secure_asset('fonts/Texta-Regular.ttf') }}");
         font-weight: normal;
         line-height: 0px;
     }
     @font-face {
         font-family: texta;
-        src: url("{{ secure_secure_asset('fonts/Texta-Bold.ttf') }}");
+        src: url("{{ secure_asset('fonts/Texta-Bold.ttf') }}");
         font-weight: bold;
         line-height: 0px;
     }
