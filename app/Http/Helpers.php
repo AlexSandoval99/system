@@ -111,7 +111,7 @@ function numberToWords($num)
     return $formatter->format($num);
 }
 
-function cached_asset($path, $bustQuery = true)
+function cached_secure_asset($path, $bustQuery = true)
 {
     // Get the full path to the asset.
     $realPath = public_path($path);
@@ -137,7 +137,7 @@ function cached_asset($path, $bustQuery = true)
         $path  .= '?' . $timestamp;
     }
 
-    return asset($path);
+    return secure_asset($path);
 }
 
 function activeRoutes(array $routes, $output = 'active')
@@ -243,32 +243,32 @@ function math_operator($value1, $value2, $operator)
     }
 }
 
-function numberToRoman($num)  
-{ 
+function numberToRoman($num)
+{
     // Be sure to convert the given parameter into an integer
     $n = intval($num);
-    $result = ''; 
- 
-    // Declare a lookup array that we will use to traverse the number: 
+    $result = '';
+
+    // Declare a lookup array that we will use to traverse the number:
     $lookup = array(
-        'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 
-        'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 
+        'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+        'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
         'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1
-    ); 
- 
-    foreach ($lookup as $roman => $value)  
+    );
+
+    foreach ($lookup as $roman => $value)
     {
         // Look for number of matches
-        $matches = intval($n / $value); 
- 
-        // Concatenate characters
-        $result .= str_repeat($roman, $matches); 
- 
-        // Substract that from the number 
-        $n = $n % $value; 
-    } 
+        $matches = intval($n / $value);
 
-    return $result; 
+        // Concatenate characters
+        $result .= str_repeat($roman, $matches);
+
+        // Substract that from the number
+        $n = $n % $value;
+    }
+
+    return $result;
 }
 
 function TicketAgentBusinessDepartmentsHelper($user = null)
@@ -280,7 +280,7 @@ function TicketAgentBusinessDepartmentsHelper($user = null)
         {
             array_push($business_departments,1);
         }
-        
+
         if($user->can('tickets-general-services.index'))
         {
             array_push($business_departments,16);
@@ -304,7 +304,7 @@ function TicketAgentBusinessDepartmentsHelper($user = null)
         {
             array_push($business_departments,1);
         }
-        
+
         if(auth()->user()->can('tickets-general-services.index'))
         {
             array_push($business_departments,16);
@@ -345,7 +345,7 @@ function cleartStringNumber($value)
 
 function custom_array_keys($keys,$array)
 {
-    foreach ($keys as $key) 
+    foreach ($keys as $key)
     {
         unset($array[$key]);
     }
@@ -354,7 +354,7 @@ function custom_array_keys($keys,$array)
 
 function get_customKeys($keys,$array)
 {
-    foreach ($array as $key => $arr) 
+    foreach ($array as $key => $arr)
     {
         if(!in_array($key,$keys))
         {

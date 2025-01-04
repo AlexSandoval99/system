@@ -5,11 +5,11 @@
 @section('title', 'Application Settings')
 
 @section('content')
-	
+
     <div class="box box-primary">
         <div class="box-body">
             <div class="row">
-                <div class="col-md-12"> 
+                <div class="col-md-12">
                     <form action="{{ route('config.update',$config->id) }}" method="post" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         <input type="hidden" name="_method" value="put">
@@ -97,7 +97,7 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>  
+                            </div>
                             <div class="col-lg-12">
                                 <br>
                                 <h4><b><i class="fa fa-fw fa-arrow-right"></i> Login Options</b></h4>
@@ -133,7 +133,7 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-lg-2">
                                 <div class="form-group {{ $errors->has('tamanho_img_login') ? 'has-error' : '' }}">
                                     <label for="nome">Image size Login</label>
@@ -148,9 +148,9 @@
                             <div class="col-lg-1">
                                 <label>Current Login Image</label>
                                 <br>
-                                <img src="{{ asset($config->caminho_img_login) }}" width="30px" class="img-thumbnail">
+                                <img src="{{ secure_asset($config->caminho_img_login) }}" width="30px" class="img-thumbnail">
                                 <br><br>
-                            </div>                            
+                            </div>
                             <div class="col-lg-3">
                                 <div class="form-group {{ $errors->has('caminho_img_login') ? 'has-error' : '' }}">
                                     <label>Image Login</label>
@@ -166,15 +166,15 @@
                                 <br>
                                 <h4><b><i class="fa fa-fw fa-arrow-right"></i> Layout options</b></h4>
                                 <hr/>
-                            </div> 
+                            </div>
                             <div class="col-lg-4">
                                 <div class="form-group {{ $errors->has('layout') ? 'has-error' : '' }}">
                                     <label for="nome">Layout</label>
                                     <select class="form-control" name="layout">
                                         <option value="{{$config->layout}}">{{$config->layout}}</option>
-                                        <option value="layout-boxed">layout-boxed</option>                                        
-                                        <option value="sidebar-collapse">sidebar-collapse</option>                                        
-                                        <option value="fixed">fixed</option>                                        
+                                        <option value="layout-boxed">layout-boxed</option>
+                                        <option value="sidebar-collapse">sidebar-collapse</option>
+                                        <option value="fixed">fixed</option>
                                     </select>
                                     @if($errors->has('layout'))
                                         <span class="help-block">
@@ -182,18 +182,18 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-lg-4">
                                 <div class="form-group {{ $errors->has('skin') ? 'has-error' : '' }}">
                                     <label>Skin</label>
                                     <select class="form-control" name="skin">
                                         <option value="{{$config->skin}}">{{$config->skin}}</option>
-                                        <option value="black">Black</option>                                        
-                                        <option value="purple">Purple</option>                                        
-                                        <option value="green">Green</option>                                        
-                                        <option value="red">Red</option>                                        
-                                        <option value="yellow">Yellow</option>                                        
-                                        <option value="blue">Blue</option>                                        
+                                        <option value="black">Black</option>
+                                        <option value="purple">Purple</option>
+                                        <option value="green">Green</option>
+                                        <option value="red">Red</option>
+                                        <option value="yellow">Yellow</option>
+                                        <option value="blue">Blue</option>
                                     </select>
                                     @if($errors->has('skin'))
                                         <span class="help-block">
@@ -201,13 +201,13 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-lg-1">
                                 <label>Current Favicon</label>
                                 <br>
-                                <img src="{{ asset($config->favicon) }}" width="30px" class="img-thumbnail">
+                                <img src="{{ secure_asset($config->favicon) }}" width="30px" class="img-thumbnail">
                                 <br><br>
-                            </div> 
+                            </div>
                             <div class="col-lg-3">
                                 <div class="form-group {{ $errors->has('favicon') ? 'has-error' : '' }}">
                                     <label>Favicon</label>
@@ -218,12 +218,12 @@
                                         </span>
                                     @endif
                                 </div>
-                            </div>                                 
+                            </div>
                             <div class="col-lg-12"><hr/></div>
                             <div class="col-lg-12">
                                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-save"></i> Save</button>
-                            </div>                           
-                        </div>                        
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

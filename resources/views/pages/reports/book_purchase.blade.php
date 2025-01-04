@@ -160,12 +160,12 @@
 </div>
 @endsection
 @section('layout_css')
-    <link rel="stylesheet" href="{{  cached_secure_asset('css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{  cached_secure_secure_asset('css/bootstrap-select.min.css') }}">
     <style>
     </style>
 @endsection
 @section('layout_js')
-    <script src="{{ cached_secure_asset('js/bootstrap-select.min.js') }}"></script>
+    <script src="{{ cached_secure_secure_asset('js/bootstrap-select.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('.selectpicker').selectpicker();

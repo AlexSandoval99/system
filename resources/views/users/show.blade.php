@@ -23,9 +23,9 @@
     					<div class="col-lg-3 text-center">
                             <br>
                             @if(file_exists($user->avatar))
-                              <img src="{{ asset($user->avatar) }}" class="profile-user-img img-responsive img-circle">
+                              <img src="{{ secure_asset($user->avatar) }}" class="profile-user-img img-responsive img-circle">
                             @else
-                              <img src="{{ secure_asset('public/img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
+                              <img src="{{ secure_secure_asset('public/img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
                             @endif
                             <h3 class="profile-username text-center">
                                 {{ $user->name }}

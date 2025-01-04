@@ -11,9 +11,9 @@
 		<div class="box box-primary">
 			<div class="box-body box-profile">
 				@if(file_exists(Auth::user()->avatar))
-	              <img src="{{ asset(Auth::user()->avatar) }}" class="profile-user-img img-responsive img-circle">
+	              <img src="{{ secure_asset(Auth::user()->avatar) }}" class="profile-user-img img-responsive img-circle">
 	            @else
-	              <img src="{{ secure_asset('img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
+	              <img src="{{ secure_secure_asset('img/config/nopic.png') }}" class="profile-user-img img-responsive img-circle">
 	            @endif
 				<h3 class="profile-username text-center">
 					@if(Auth::user('name'))

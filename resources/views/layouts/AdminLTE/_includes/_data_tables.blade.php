@@ -1,22 +1,22 @@
 @section('layout_css')
 
-	<link rel="stylesheet" href="{{ secure_asset('assets/plugins/dataTables/css/dataTables.bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ secure_asset('assets/plugins/dataTables/css/buttons.dataTables.min.css') }}">
+	<link rel="stylesheet" href="{{ secure_secure_asset('assets/plugins/dataTables/css/dataTables.bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ secure_secure_asset('assets/plugins/dataTables/css/buttons.dataTables.min.css') }}">
 
 @endsection
 
 @section('layout_js')
 
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/jquery.dataTables.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/dataTables.bootstrap.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/dataTables.buttons.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/buttons.flash.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/jszip.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/pdfmake.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/vfs_fonts.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/buttons.html5.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/buttons.print.min.js') }}"></script>
-	<script src="{{ secure_asset('assets/plugins/dataTables/js/buttons.colVis.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/dataTables.buttons.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/buttons.flash.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/jszip.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/pdfmake.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/vfs_fonts.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/buttons.html5.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/buttons.print.min.js') }}"></script>
+	<script src="{{ secure_secure_asset('assets/plugins/dataTables/js/buttons.colVis.min.js') }}"></script>
 	<script>
 		$(function (){
 			var table = $('#tabelapadrao').DataTable({

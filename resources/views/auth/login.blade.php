@@ -20,7 +20,7 @@
             <div class="login-logo">
 
                 @if(\App\Models\Config::find(1)->img_login == 'T')
-                    <img src="{{ asset(\App\Models\Config::find(1)->caminho_img_login) }}" width="{{ \App\Models\Config::find(1)->tamanho_img_login }}%"/>
+                    <img src="{{ secure_asset(\App\Models\Config::find(1)->caminho_img_login) }}" width="{{ \App\Models\Config::find(1)->tamanho_img_login }}%"/>
                     <br/>
                 @endif
 

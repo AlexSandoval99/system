@@ -13,9 +13,9 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               @if(file_exists(Auth::user()->avatar))
-                <img src="{{ asset(Auth::user()->avatar) }}" class="user-image">
+                <img src="{{ secure_asset(Auth::user()->avatar) }}" class="user-image">
               @else
-                <img src="{{ secure_asset('public/img/config/nopic.png') }}" class="user-image">
+                <img src="{{ secure_secure_asset('public/img/config/nopic.png') }}" class="user-image">
               @endif
               <span class="hidden-xs">
                 {{ Auth::user()->name }}
@@ -24,9 +24,9 @@
             <ul class="dropdown-menu">
               <li class="user-header">
                 @if(file_exists(Auth::user()->avatar))
-                  <img src="{{ asset(Auth::user()->avatar) }}" class="img-circle">
+                  <img src="{{ secure_asset(Auth::user()->avatar) }}" class="img-circle">
                 @else
-                  <img src="{{ secure_asset('public/img/config/nopic.png') }}" class="img-circle">
+                  <img src="{{ secure_secure_asset('public/img/config/nopic.png') }}" class="img-circle">
                 @endif
                 <p>
                   {{ Auth::user()->name }}
