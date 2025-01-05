@@ -981,7 +981,7 @@
             $('#accounting_account_provider, #accounting_account_provider_id').val();
 
             var purchases_provider_id = $("#purchases_provider_id").val();
-            var social_reason_id      = $("#social_reason_id").val();
+            var social_reason_id      = 1;
             var conteo_purchases      = 0;
             var conteo_pendings       = 0;
             var conteo_orders         = 0;
@@ -1117,7 +1117,7 @@
 
         function changeOrdersDetailProducts(id)
         {
-            if (form_ready == true)
+            if (true)
             {
                 $.ajax({
                     headers: {
@@ -1130,7 +1130,6 @@
                     {
                         if(data.total_count > 0)
                         {
-                            console.log(data);
                             $(data.items).each(function(index, element)
                             {
                                 addToTable(element.id,
@@ -1274,8 +1273,6 @@
             $("#select2_"+counter).select2({
                                     language: 'es'
                                 });
-            change_load_accounting_account(counter, accounting_plan, baccounting_plan);
-            // loadPeriodDataMaskDecimal();
             calculateGrandTotal();
             changeReCalculo()
         }

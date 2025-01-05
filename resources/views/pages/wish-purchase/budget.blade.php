@@ -27,11 +27,11 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Proveedor</label>
-                            <input class="form-control" name="name" type="text" value="">
+                            {{ Form::select('provider_id', $provider, request()->provider_id, ['placeholder' => 'Seleccione Proveedor', 'class' => 'form-control', 'select2']) }}
+                            {{-- <input class="form-control" name="name" type="text" value=""> --}}
                         </div>
-                        <div class="form-group col-md-4">
-                            <label>RUC</label>
-                            <input class="form-control" name="ruc" type="text" value="">
+                        <div class="input-group-append col-md-1" style="margin-top:27px; margin-left:-20px;">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addProviderModal"><i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -83,6 +83,43 @@
         <a href="{{ url('/') }}" class="btn btn-sm btn-danger">Cancelar</a>
     </div>
 {{ Form::close() }}
+<div class="modal fade" id="addProviderModal" tabindex="-1" role="dialog" aria-labelledby="addProviderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProviderModalLabel">Agregar Proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addProviderForm">
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="provider_name">Nombre</label>
+                            <input type="text" class="form-control" id="provider_name" name="name" required autocomplete="off">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="provider_ruc">RUC</label>
+                            <input type="text" class="form-control" id="provider_ruc" name="ruc" required autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="provider_name">Direccion</label>
+                            <input type="text" class="form-control" id="provider_address" name="address" required autocomplete="off">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="provider_name">Telefono</label>
+                            <input type="text" class="form-control" id="provider_phone" name="phone" required autocomplete="off">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('layout_js')
@@ -103,6 +140,49 @@
 
             // Actualiza el valor en el campo oculto <input type="hidden">
             row.find(`#total_price_input_${materialId}`).val(total.toFixed(2));
+        });
+
+        $(document).on('submit', '#addProviderForm', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const data = form.serialize();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('provider.store') }}",
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    if (response.success) {
+                        const provider = response.provider;
+                        const newOption = new Option(provider.name, provider.id, false, true);
+                        $('select[name="provider_id"]').append(newOption).trigger('change');
+
+                        $('#addProviderModal').modal('hide');
+                        form[0].reset();
+
+                        swal("Éxito", response.message, "success");
+                    } else {
+                        swal("Error", response.message, "error");
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessage = "Se encontraron los siguientes errores:\n";
+
+                        for (let field in errors) {
+                            errorMessage += `- ${errors[field][0]}\n`;
+                        }
+
+                        swal("Error de validación", errorMessage, "error");
+                    } else {
+                        swal("Error", "Ocurrió un error inesperado.", "error");
+                    }
+                }
+            });
         });
 
         // Envía el formulario vía AJAX

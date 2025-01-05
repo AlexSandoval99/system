@@ -38,12 +38,12 @@
                                 <td>{{ $ord->branch->name }}</td>
                                 <td>{{ $ord->date }}</td>
                                 <td>
-                                    <span class="label label-{{ config('constants.purchase-status-label.' . $ord->status) }}">{{ config('constants.purchase-status.'. $ord->status) }}</span>
+                                    <span class="label label-{{ config('constants.purchase_order_status_label.' . $ord->status) }}">{{ config('constants.purchase_order_status.'. $ord->status) }}</span>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ url('purchase-order/' . $ord->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
                                 </td>
-                               
+
                             </tr>
                         @endforeach
                     </tbody>

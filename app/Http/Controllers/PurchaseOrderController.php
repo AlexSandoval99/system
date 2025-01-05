@@ -7,6 +7,7 @@ use App\Http\Requests\CreatePurchaseImageRequest;
 use App\Http\Requests\CreatePurchaseOrderRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
+use App\Models\BudgetPurchase;
 use App\Models\Presentation;
 use App\Models\Provider;
 use App\Models\PurchaseBudget;
@@ -57,15 +58,15 @@ class PurchaseOrderController extends Controller
             $wish_purchases = WishPurchase::with('wish_purchase_details.material')
                                     ->whereIn('id',request()->wish_purchase_ids)->get();
 
-            
+
             if($wish_purchases)
             {
                 $count                     = 0;
-                foreach ($wish_purchases as $wish_purchase) 
+                foreach ($wish_purchases as $wish_purchase)
                 {
                     $requesting_departments_id = $wish_purchase->requesting_departments_id;
                     $requested_by              = $wish_purchase->requested_by;
-                   
+
                     foreach($wish_purchase->wish_purchase_details as $key => $detail)
                     {
                         if($detail->quantity > 0)
@@ -87,8 +88,8 @@ class PurchaseOrderController extends Controller
                     if($count==0)
                     {
                         $wish_purchase_id             = NULL;
-                        $social_reason_id          = NULL;                          
-                        $currency_id               = NULL;                          
+                        $social_reason_id          = NULL;
+                        $currency_id               = NULL;
                         $requesting_departments_id = NULL;
                         $requested_by              = NULL;
                         $detail_wish_purchase         = [];
@@ -129,7 +130,7 @@ class PurchaseOrderController extends Controller
                 // Grabar los Productos
                 foreach($request->detail_product_id as $key => $value)
                 {
-                    $purchase_order->purchase_order_details()->create([              
+                    $purchase_order->purchase_order_details()->create([
                         'material_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
                         'presentation'             => intVal($request->detail_presentation_id[$key]),
@@ -139,6 +140,13 @@ class PurchaseOrderController extends Controller
                     ]);
                 }
             });
+
+            if($request->budget_id)
+            {
+                $budget = BudgetPurchase::find($request->budget_id)->update([
+                    'status' => 3
+                ]);
+            }
 
             return response()->json([
                 'success'            => true,
@@ -184,7 +192,7 @@ public function update(PurchaseOrder $purchase_order)
             foreach(request()->detail_product_id as $key => $value)
             {
 
-                $purchase_order->purchase_order_details()->create([              
+                $purchase_order->purchase_order_details()->create([
                     'material_id'              => request()->detail_product_id[$key],
                     'quantity'                 => request()->detail_product_quantity[$key],
                     'presentation'             => request()->detail_presentation_id[$key],

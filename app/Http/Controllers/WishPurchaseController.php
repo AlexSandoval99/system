@@ -340,8 +340,8 @@ class WishPurchaseController extends Controller
                 ->where('id', $wishPurchaseId)
                 ->where('token', $token)
                 ->firstOrFail();
-
-            return view('pages.wish-purchase.budget', compact('wishPurchase'));
+            $provider = Provider::where('status',1)->pluck('name','id');
+            return view('pages.wish-purchase.budget', compact('wishPurchase','provider'));
         }
         catch (Exception $e)
         {
@@ -358,7 +358,7 @@ class WishPurchaseController extends Controller
                 $budget_purchase = BudgetPurchase::create([
                     'date'                      => now()->format('d/m/Y'),
                     'status'                    => 1,
-                    'provider_id'               => null,
+                    'provider_id'               => $request->provider_id,
                     'wish_id'                   => $wish->id,
                     'name'                      => request()->name,
                     'ruc'                       => request()->ruc
@@ -377,5 +377,36 @@ class WishPurchaseController extends Controller
             });
         return redirect()->route('budget.create', ['id' => $id, 'token' => $token])->with('success', 'Presupuesto guardado correctamente');
     }
+    public function getBudgetDetails()
+    {
+        $budgetId = request()->budget_id;
+
+        // Recuperar el presupuesto y sus detalles
+        $budget = BudgetPurchase::with('budget_purchase_details')->find($budgetId);
+
+        if (!$budget) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Presupuesto no encontrado.',
+            ], 404);
+        }
+
+        $items = $budget->budget_purchase_details->map(function ($item) {
+            return [
+                'code' => $item->material->id,
+                'product' => $item->material->description,
+                'presentation_name' => $item->material->presentation->name,
+                'presentation' => $item->material->presentation->id,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'items' => $items,
+        ]);
+    }
+
 
 }

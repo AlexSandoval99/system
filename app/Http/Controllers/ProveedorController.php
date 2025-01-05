@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\NombreExport;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateProveedorRequest;
+use App\Models\BudgetPurchase;
 use App\Models\Provider;
 use App\Models\Purchase;
 use App\Models\PurchaseOrder;
@@ -33,16 +34,28 @@ class ProveedorController extends Controller
 
     public function store(CreateProveedorRequest $request)
     {
-        DB::transaction(function() use ($request)
-        {
+        $proveedor = null;
+
+        DB::transaction(function() use ($request, &$proveedor) {
             $proveedor = Provider::create([
-                                        'name'       => $request->name,
-                                        'ruc'        => $request->ruc,
-                                        'address'     => $request->address,
-                                        'phone'      => $request->phone]);
+                'name'    => $request->name,
+                'ruc'     => $request->ruc,
+                'address' => $request->address,
+                'phone'   => $request->phone,
+            ]);
         });
-        return redirect('provider');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'provider' => $proveedor,
+                'message' => 'Proveedor creado exitosamente.',
+            ]);
+        } else {
+            return redirect('provider');
+        }
     }
+
 
     public function update(Provider $provider_id)
     {
@@ -140,8 +153,22 @@ class ProveedorController extends Controller
     {
          if(request()->ajax())
          {
+            $results   = [];
+
+            //buscar ultimos presupuestos aprobados
+            $budget_approved = BudgetPurchase::orderBy('id', 'desc')
+                                    ->where('status', 2)
+                                    ->where('provider_id', request()->purchases_provider_id)
+                                    ->limit(6)
+                                    ->get();
+            foreach ($budget_approved as $key => $budget)
+            {
+                $results['budget_approved'][$key]['id']         = $budget->id;
+                $results['budget_approved'][$key]['date']       = $budget->date;
+                $results['budget_approved'][$key]['amount']     = number_format($budget->budget_purchase_details->sum('total_price'), 0, ',', '.');
+            }
+
              // Buscar las Ultimas 5 Compras
-             $results   = [];
              $purchases = Purchase::orderBy('id', 'desc')
                                      ->where('status', true)
                                      ->where('type', '<', 5)
@@ -157,6 +184,7 @@ class ProveedorController extends Controller
                  $results['purchases'][$key]['number']     = $purchase->number;
                  $results['purchases'][$key]['amount']     = number_format($purchase->amount, 0, ',', '.');
              }
+
 
         //     // Buscar las Facturas Pendientes de Pago
              $residue = DB::raw("SUM(b.residue) as residue");
@@ -185,15 +213,15 @@ class ProveedorController extends Controller
                  $purchases_orders = PurchaseOrder::select("purchase_orders.*")
                                                    ->join('purchase_order_details', 'purchase_order_details.purchases_order_id', '=', 'purchase_orders.id')
                                                    ->where('purchase_orders.provider_id', request()->purchases_provider_id)
-                                                   ->where('purchase_orders.status', true)
-                                                   ->where('purchases_order_details.residue', '>', 0)
+                                                   ->where('purchase_orders.status', 1) //pendiente de recepcion
+                                                   ->where('purchase_order_details.residue', '>', 0)
                                                    ->groupBy('purchase_orders.id')
                                                    ->get();
 
                  foreach ($purchases_orders as $key => $purchases_order)
                  {
                      $results['orders'][$key]['id']        = $purchases_order->id;
-                     $results['orders'][$key]['date']      = $purchases_order->date->format('d/m/Y');
+                     $results['orders'][$key]['date']      = $purchases_order->date;
                      $results['orders'][$key]['condition'] = config('constants.invoice_condition.'. $purchases_order->condition);
                      $results['orders'][$key]['number']    = $purchases_order->number;
                  }
@@ -233,7 +261,6 @@ class ProveedorController extends Controller
                      $results['advances_total'][0]['amount'] = number_format($total_advances, 0, ',', '.');
                  }
              }
-
              return response()->json($results);
          }
          abort(404);

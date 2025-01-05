@@ -442,7 +442,6 @@
                                             '<td width="20%" class="text-center">'+
                                                 '<input type="text" name="detail_descriptions[]" value="'+description+'">'+
                                             '</td>'+
-                                            '<td width="8%"  class="text-center">'+mobil+'</td>'+
                                             '<td width="10%" class="text-right">'+$.number(amount, 2, ',', '.')+'</td>' +
                                             '<td width="10%" class="text-right">'+
                                                 '<input style="width:107px;" type="text" class="text-right" period-data-mask-decimal name="detail_amounts[]" onkeyup="calculateIva();" value="'+$.number(amount_10, 2, ',', '.')+'">'+

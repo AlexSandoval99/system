@@ -39,34 +39,32 @@ class RawMaterialsController extends Controller
         if(request()->ajax())
         {
             $results        = [];
-            $product_orders = PurchaseOrderDetail::with('raw_material')
-                                                  ->where('residue', '>', 0)
+            $product_orders = PurchaseOrderDetail::where('residue', '>', 0)
                                                   ->where('purchases_order_id', request()->id)
                                                   ->get();
             $results                = [];
             $results['total_count'] = count($product_orders);
             foreach ($product_orders as $key => $product_order)
             {
-                $results['items'][$key]['id']                    = $product_order->raw_material_id;
-                $results['items'][$key]['name']                  = $product_order->raw_material->name;
+                $results['items'][$key]['id']                    = $product_order->material_id;
+                $results['items'][$key]['name']                  = $product_order->raw_material->description;
                 $results['items'][$key]['description']           = $product_order->description;
                 $results['items'][$key]['price']                 = number_format($product_order->amount, 2,',','');
-                $results['items'][$key]['quantity']              = $product_order->residue;
-                $results['items'][$key]['type_iva']              = $product_order->purchases_product->type_iva;
-                $results['items'][$key]['number_order']          = $product_order->purchases_order->number;
+                $results['items'][$key]['quantity']              = $product_order->quantity;
+                $results['items'][$key]['number_order']          = $product_order->purchase_order->number;
                 $results['items'][$key]['id_order']              = $product_order->id;
 
             }
 
             // Buscar la fecha de Recepcion
-            $purchases_movements = PurchaseOrder::select("purchases_movements.invoice_number", "purchases_movements.invoice_date", "purchases_movements.date_payment", "purchases_movements.branch_id", "purchases_movements.currency_id", "purchases_movements.invoice_condition", "purchases_movements.invoice_stamped", "purchases_movements.stamp_validity")
-                                                ->join('purchases_order_details', 'purchases_order_details.purchases_order_id', '=', 'purchases_orders.id')
-                                                ->join('purchases_movement_details', 'purchases_movement_details.purchases_order_detail_id', '=', 'purchases_order_details.id')
-                                                ->join('purchases_movements', 'purchases_movement_details.purchases_movements_id', '=', 'purchases_movements.id')
-                                                ->where('purchases_orders.id', request()->id)
-                                                ->whereNotNull('purchases_movements.date_payment')
-                                                ->orderBy('purchases_movements.id', 'DESC')
-                                                ->groupBy('purchases_movements.id')
+            $purchases_movements = PurchaseOrder::select("purchase_movements.invoice_number", "purchase_movements.invoice_date", "purchase_movements.date_payment", "purchase_movements.branch_id", "purchase_movements.invoice_condition", "purchase_movements.invoice_stamped", "purchase_movements.stamp_validity")
+                                                ->join('purchase_order_details', 'purchase_order_details.purchases_order_id', '=', 'purchase_orders.id')
+                                                ->join('purchase_movements_details', 'purchase_movements_details.purchases_order_detail_id', '=', 'purchase_order_details.id')
+                                                ->join('purchase_movements', 'purchase_movements_details.purchase_movement_id', '=', 'purchase_movements.id')
+                                                ->where('purchase_orders.id', request()->id)
+                                                ->whereNotNull('purchase_movements.date_payment')
+                                                ->orderBy('purchase_movements.id', 'DESC')
+                                                ->groupBy('purchase_movements.id')
                                                 ->limit(1)
                                                 ->get();
             if($purchases_movements)
