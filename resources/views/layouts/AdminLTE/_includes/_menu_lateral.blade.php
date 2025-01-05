@@ -1,3 +1,45 @@
+<style>
+    .main-sidebar {
+        position: fixed; /* Fija la posición del sidebar */
+        top: 0;
+        left: 0;
+        height: 100vh; /* Ocupa toda la altura de la pantalla */
+        overflow-y: auto; /* Habilita el scroll vertical */
+        overflow-x: hidden; /* Desactiva el scroll horizontal */
+        background-color: #222d32; /* Fondo del sidebar */
+        scrollbar-width: thin; /* Para navegadores como Firefox */
+        scrollbar-color: #444 transparent; /* Color de la barra y el fondo */
+    }
+
+    /* Estilo específico para navegadores WebKit (Chrome, Edge, Safari) */
+    .main-sidebar::-webkit-scrollbar {
+        width: 6px; /* Ancho del scroll vertical */
+    }
+
+    .main-sidebar::-webkit-scrollbar-thumb {
+        background-color: #444; /* Color del scroll */
+        border-radius: 3px; /* Bordes redondeados */
+    }
+
+    .main-sidebar::-webkit-scrollbar-track {
+        background-color: transparent; /* Fondo del track */
+    }
+
+    .sidebar {
+        padding-bottom: 20px; /* Espacio adicional para un mejor diseño */
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar-menu > li {
+        margin: 5px 0;
+    }
+</style>
+
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<ul class="sidebar-menu" data-widget="tree">
