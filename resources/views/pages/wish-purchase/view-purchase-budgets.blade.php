@@ -37,8 +37,8 @@
                             </div>
                             <div class="col-md-10">
                                 <p>{{$purchase_budget->date}}</p>
-                                <p> {{$purchase_budget->name}}</p>
-                                <p> {{$purchase_budget->ruc}}</p>
+                                <p> {{$purchase_budget->provider->name}}</p>
+                                <p> {{$purchase_budget->provider->ruc}}</p>
                             </div>
                         </div>
                     </div>

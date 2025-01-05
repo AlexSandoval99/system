@@ -120,7 +120,7 @@ class PurchaseMovementsController extends Controller
                             $purchases_order_detail = PurchaseOrderDetail::find($request->detail_id[$key]);
                             $purchases_order_detail->update(['quantity_received' => $quantity_received]);
                             //EL CAMPO RESIDUE HACE REFERENCIA A LA CANTIDAD DE PRODUCTO QUE AUN NO FUE PAGADA
-                            $purchases_order_detail->increment('residue', intval($product_quantity));
+                            // $purchases_order_detail->increment('residue', intval($product_quantity));
 
 
                             $price_cost_iva = 0;
@@ -300,15 +300,16 @@ class PurchaseMovementsController extends Controller
                                             'total_iva10'           => $this->array_sum($request->detail_amounts),
                                             'amount_iva5'           => $request->total_iva_5 ?  $this->parse($request->total_iva_5) : 0,
                                             'amount_iva10'          => $request->total_iva_10 ?  $this->parse($request->total_iva_10) : 0,
-                                            'status'                => 4,//Autorizado por RRHH
+                                            'status'                => 1,
                                             'user_id'               => auth()->user()->id,
                                         ]);
 
                     $purchases_movement->update(['purchase_id' => $purchase->id]);
+                    $order = $purchases_movement->purchases_movement_details()->first()->purchases_order_detail->purchase_order->update(['status' => 2]);
                     foreach ($request->order_detail_id as $index => $order_detail_id)
                     {
                         $purchase->purchase_details()->create([
-                            'material_id'      => $request->detail_invoice_product_ids[$index],
+                            'material_id'               => $request->detail_invoice_product_ids[$index],
                             'description'               => $request->detail_descriptions[$index],
                             'quantity'                  => $request->detail_quantities[$index],
                             'amount'                    => $request->detail_price[$index],

@@ -235,8 +235,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error(error);
-                        // Manejar el error si es necesario
                     }
                 });
             });
@@ -451,7 +449,7 @@
                         });
                         if(conteo>0)
                         {
-                            
+
                             $("#div_details, #div_footer").show();
                             calculateTotal();
                             $("#number_ped").prop("readonly", true);
@@ -489,7 +487,7 @@
             }
         }
 
-        function updateSubtotal(input) 
+        function updateSubtotal(input)
         {
             var quantity = parseFloat(input.closest('tr').find('input[name="quantity_product[]"]').val().replace(/\./g, '').replace(',', '.')) || 0;
             var amount = parseFloat(input.closest('tr').find('input[name="detail_product_amount[]"]').val().replace(/\./g, '').replace(',', '.')) || 0;
@@ -504,7 +502,6 @@
                 var subtotal = parseFloat(subtotalText) || 0;
                 total += subtotal;
             });
-            console.log(total);
             $('#total').val($.number(total, 0, ',', '.'));
         }
         function loadProductsSelect()

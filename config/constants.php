@@ -21,7 +21,7 @@ return [
         1 => 'success',
         2 => 'danger'
     ],
-    
+
     'presentation' =>[
         1 => 'Unidad',
         2 => 'Caja'
@@ -76,6 +76,19 @@ return [
         1 => 'Casado/a',
         2 => 'Soltero/a'
     ],
-    
+    'budget_purchase_status' =>[
+        1 => 'Pendiente',
+        2 => 'Aprobado',
+        2 => 'Cargado'
+    ],
+    'purchase_order_status' =>[
+        1 => 'Pendiente de Recepcion',
+        2 => 'Recepcionado'
+    ],
+    'purchase_order_status_label' =>[
+        1 => 'warning',
+        2 => 'success'
+    ],
+
 ]
 ?>

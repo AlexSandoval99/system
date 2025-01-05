@@ -76,11 +76,30 @@
                 <div class="ibox float-e-margins">
                     <div class="tabs-container">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#tab-1">Ultimas Compras</a></li>
+                            <li class="active"><a data-toggle="tab" href="#tab-0">Presupuestos Aprobados</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-1">Ultimas Compras</a></li>
                             <li class=""><a data-toggle="tab" href="#tab-2">Pendientes Pago</a></li>
                         </ul>
                         <div class="tab-content">
-                            <div id="tab-1" class="tab-pane active">
+                            <div id="tab-0" class="tab-pane active">
+                                <div class="panel-body table-responsive">
+                                    <div class="row" id="div_budget_approved">
+                                        <div class="col-md-12">
+                                            <table class="table table-condensed table-hover table-bordered mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">ID</th>
+                                                        <th class="text-center">Fecha</th>
+                                                        <th class="text-center">Importe</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_detail_purchases_approved"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="tab-1" class="tab-pane">
                                 <div class="panel-body table-responsive">
                                     <div class="row" id="div_last_purchases">
                                         <div class="col-md-12">
@@ -153,6 +172,7 @@
                         <label>SubTotal</label>
                         <input class="form-control" type="text" name="products_amount" value="{{ old('products_amount') }}" placeholder="Monto" period-data-mask-decimal>
                     </div>
+                    <input type="hidden" name="budget_id" id="budget_id">
                     <div class="form-group col-md-1">
                         <label>Agregar</label>
                         <button type="button" class="btn btn-success" id="button_add_product"><i class="fa fa-plus"></i></button>
@@ -302,6 +322,7 @@
                 $('#address').val(data_item.address);
                 $('#type_iva').val(data_item.type_iva);
                 changeLastPurchases();
+                changeBudgetApproved();
             });
 
             $("#button_add_product").click(function() {
@@ -448,6 +469,46 @@
             }
         }
 
+        changeBudgetApproved();
+        function changeBudgetApproved()
+        {
+            $('#div_budget_approved, #div_purchases_pendings').hide();
+
+            var purchases_provider_id = $("#purchases_provider_id").val();
+            var conteo_purchases      = 0;
+            var conteo_pendings       = 0;
+
+            if(purchases_provider_id > 0)
+            {
+                $.ajax({
+                    url: '{{ route('ajax.providers-purchases') }}',
+                    type: "GET",
+                    data: { purchases_provider_id : purchases_provider_id },
+                    success: function(data) {
+                        console.log(data.budget_approved,'a');
+                        $('#tbody_detail_last_purchases, #tbody_detail_purchases_pendings,#tbody_detail_purchases_approved').html('');
+
+                        $(data.budget_approved).each(function(index, element) {
+                            $('#tbody_detail_purchases_approved').append('<tr class="clickable-row" data-id="' + element.id + '">' +
+                                '<td class="text-center">' + element.id + '</td>' +
+                                '<td class="text-center">' + element.date + '</td>' +
+                                '<td class="text-right">' + element.amount + '</td>' +
+                            '</tr>');
+                            conteo_purchases++;
+                        });
+
+                        if(conteo_purchases > 0 )
+                        {
+                            $('#div_budget_approved').show();
+                        }
+                    },
+                    error: function(data) {
+                        laravelErrorMessages(data);
+                    }
+                });
+            }
+        }
+
         function addProduct()
         {
             var product_name              = $("select[name='raw_materials_id'] option:selected").text();
@@ -526,7 +587,6 @@
 
         function addToTable(id, name, amount, quantity, presentation_id, presentation_name, emergency_mobile, emergency_mobile_id, emergency_mobile_name, restockin_detail_id)
         {
-            console.log('hola');
             counter++;
 
             var subtotal = quantity * amount;
@@ -602,6 +662,26 @@
             });
             calculateGrandTotal();
         }
+
+        $(document).on('click', '.clickable-row', function () {
+            const budgetId = $(this).data('id');
+            $('#budget_id').val(budgetId);
+            if (budgetId) {
+                $.ajax({
+                    url: '{{ route('ajax.budget-details') }}',
+                    type: 'GET',
+                    data: { budget_id: budgetId },
+                    success: function (data) {
+                        $(data.items).each(function (index, item) {
+                            addToTable(item.code, item.product, item.price, item.quantity, item.presentation, item.presentation_name, 0, 0, '', '');
+                        });
+                    },
+                    error: function () {
+                        swal("Error", "Ocurrió un problema al cargar los detalles del presupuesto.", "error");
+                    }
+                });
+            }
+        });
 
     </script>
 @endsection

@@ -63,7 +63,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('provider', 'ProveedorController@index')->name('provider');
 	Route::get('provider/create', 'ProveedorController@create')->name('provider-create');
 	Route::get('provider/{provider_id}/edit', 'ProveedorController@edit')->name('provider-create');
-	Route::post('provider', 'ProveedorController@store')->name('provider.store');
+	Route::post('provider', 'ProveedorController@store')->withoutMiddleware('auth')->name('provider.store');
 	Route::put('provider/{provider_id}', 'ProveedorController@update')->name('provider.update');
 	Route::get('provider-xls', 'ProveedorController@export_xls')->name('provider.export-xls');
 
@@ -128,6 +128,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('ajax/purchases-products-movements', 'PurchaseMovementsController@ajax_purchases_products_movements')->name('ajax.purchases-products-movements');
 	Route::get('search/provider-stamped', 'WishPurchaseController@searchProviderStamped')->name('provider-stamped.search');
     Route::get('ajax/purchases_products_last', 'ArticuloController@ajax_purchases_last')->name('ajax.products-purchases-last');
+    Route::get('ajax/budget-details', 'WishPurchaseController@getBudgetDetails')->name('ajax.budget-details');
+
 	Route::get('purchase-movement/{purchase_movement}/edit', 'PurchaseMovementsController@edit')->name('purchase-movement.edit');
 	Route::put('purchase-movement/{purchase_movement}/update', 'PurchaseMovementsController@update')->name('purchase-movement.update');
 

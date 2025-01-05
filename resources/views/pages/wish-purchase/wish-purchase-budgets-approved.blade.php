@@ -78,7 +78,7 @@
                         @foreach($purchase_budgets as $index => $purchase_budget)
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <a href="{{ url('budget/'.$purchase_budget->id.'/view-purchase-budgets') }}"> {{ $purchase_budget->name.' - '.$purchase_budget->ruc }} </a>
+                                <a href="{{ url('budget/'.$purchase_budget->id.'/view-purchase-budgets') }}"> {{ $purchase_budget->provider->name.' - '.$purchase_budget->provider->ruc }} </a>
                             </td>
                         @endforeach
                     </tbody>
