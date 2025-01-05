@@ -416,6 +416,7 @@ a:focus {
   min-height: 100%;
   width: 230px;
   z-index: 810;
+  overflow-y: auto;
   -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
   -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -432,6 +433,8 @@ a:focus {
     -ms-transform: translate(-230px, 0);
     -o-transform: translate(-230px, 0);
     transform: translate(-230px, 0);
+    overflow-y: auto;
+
   }
 }
 @media (min-width: 768px) {
@@ -440,6 +443,8 @@ a:focus {
     -ms-transform: translate(-230px, 0);
     -o-transform: translate(-230px, 0);
     transform: translate(-230px, 0);
+    overflow-y: auto;
+
   }
 }
 @media (max-width: 767px) {
@@ -448,6 +453,8 @@ a:focus {
     -ms-transform: translate(0, 0);
     -o-transform: translate(0, 0);
     transform: translate(0, 0);
+    overflow-y: auto;
+
   }
 }
 .sidebar {
