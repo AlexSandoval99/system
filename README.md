@@ -18,9 +18,6 @@ Start a new Laravel 8 project with the AdminLTE template installed.
 
 - Windows example:
 
- ```php
- mklink /d "C:\laragon\www\system\public\assets\adminlte" "C:\laragon\www\system\vendor\almasaeed2010\adminlte"
- ```
 
 7) Run
 ```php
