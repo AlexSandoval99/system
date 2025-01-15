@@ -17,10 +17,7 @@ Start a new Laravel 8 project with the AdminLTE template installed.
 6) Create symbolic link for AdminLTE (Run the commands as an administrator)
 
 - Windows example:
-
- ```php
- mklink /d "C:\laragon\www\system\public\assets\adminlte" "C:\laragon\www\system\vendor\almasaeed2010\adminlte"
- ```
+`
 
 7) Run
 ```php
