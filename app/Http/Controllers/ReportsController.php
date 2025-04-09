@@ -18,7 +18,7 @@ use App\Models\PurchasesOrderDetail;
 use App\Models\PurchasesProduct;
 use App\Models\PurchasesProductBrand;
 use App\Models\RawMaterial;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -50,14 +50,14 @@ class ReportsController extends Controller
                 $purchases_product_inventories = $purchases_product_inventories->where('date', '<=', $until_date);
             }
         }
-        
+
         $purchases_product_inventories = $purchases_product_inventories->paginate(20);
         return view('pages.purchases-product-inventories.index', compact('purchases_product_inventories', 'deposits'));
     }
 
     public function stock_product_purchases_report()
     {
-       
+
         // $deposits = Deposit::whereHas('users', function($query){ $query->where('user_id', auth()->user()->id); })->Filter();
         $deposits = Deposit::where('status',true)->pluck('name','id');
 
@@ -74,29 +74,26 @@ class ReportsController extends Controller
     private function getStockProductPurchases()
     {
         $purchases_existences = PurchasesExistence::with('deposit')
-                                                  ->select("purchases_existences.*", DB::raw("SUM(purchases_existences.residue) as existence"))
-                                                  ->whereHas('raw_material', function ($query) 
-                                                    {
-                                                        $query->where('status', true);
-                                                    });
+                                                  ->select("purchases_existences.*", DB::raw("SUM(purchases_existences.residue) as existence"));
 
-        if(request()->deposit_id) 
+        if(request()->deposit_id)
         {
             $purchases_existences = $purchases_existences->where('deposit_id', request()->deposit_id);
         }
 
-        if(request()->product_id)
-        {
-            $purchases_existences = $purchases_existences->where('type', request()->product_id);
-        }   
-
         if(request()->product_id == 1)
         {
-            return $purchases_existences->groupBy('raw_material_id')->groupBy('price_cost');
+            return $purchases_existences->whereHas('raw_material', function ($query)
+            {
+                $query->where('status', true);
+            })->where('type', request()->product_id)->groupBy('raw_material_id')->groupBy('price_cost');
         }
         else
         {
-            return $purchases_existences->groupBy('raw_material_id');
+            return $purchases_existences->whereHas('articulo', function ($query)
+            {
+                $query->where('status', true);
+            })->where('type', request()->product_id)->groupBy('articulo_id');
         }
     }
 
@@ -220,8 +217,7 @@ class ReportsController extends Controller
         $credit_notes           = $this->getPurchasesReportSum()->where('type', 4)->first();
 
 
-        $pdf = PDF::loadView('pages.reports.book_purchase_pdf', compact('purchases', 'purchase_counted', 'purchase_counted_total', 'purchase_credit', 'purchase_credit_total','credit_notes', 'purchases_sum'))->setPaper('A4','portrait');
+        $pdf = Pdf::loadView('pages.reports.book_purchase_pdf', compact('purchases', 'purchase_counted', 'purchase_counted_total', 'purchase_credit', 'purchase_credit_total','credit_notes', 'purchases_sum'))->setPaper('A4','portrait');
         return $pdf->stream();
-        // return view('pages.reports.purchases_reports_pdf', compact('purchases'));
     }
 }

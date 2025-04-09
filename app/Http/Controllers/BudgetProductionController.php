@@ -48,30 +48,32 @@ class BudgetProductionController extends Controller
         return view('pages.budget-production.create', compact('branches','articulos'));
     }
 
-    public function store(CreateBudgetProductionRequest $request) 
+    public function store(CreateBudgetProductionRequest $request)
     {
         if(request()->ajax())
         {
             DB::transaction(function() use ($request)
-            { 
-                $budget_production = BudgetProduction::create([ 'client_id'          => $request->client_id,   
-                                                                 'total_amount'       => $request->total_amount, 
+            {
+                $budget_production = BudgetProduction::create([ 'client_id'          => $request->client_id,
+                                                                 'total_amount'       => $request->total_amount,
                                                                  'status'             => true,
                                                                  'date'               => $request->date,
                                                                  'branch_id'          => $request->branch_id,
                                                                  'user_id'            => auth()->user()->id,
+                                                                 'wish_production_id'    => $request->wish_production_id,
+
                                                                 ]);
                 foreach($request->detail_product_id as $key => $product_id)
                 {
-                    $budget_proction_details        = $budget_production->budget_production_details()->create([ 
+                    $budget_proction_details        = $budget_production->budget_production_details()->create([
                             'quantity'              => $request->quantity_product[$key],
                             'amount'                => $request->detail_product_amount[$key],
-                            'budget_production_id'  => $budget_production->id,                      
-                            'wish_production_id'    => $request->wish_production_id,                      
+                            'budget_production_id'  => $budget_production->id,
+                            'wish_production_id'    => null,
     						'articulo_id'           => $product_id
                     ]);
                 }
-                
+
                 toastr()->success('Agregado exitosamente');
             });
 
@@ -97,23 +99,23 @@ class BudgetProductionController extends Controller
             DB::transaction(function() use ($request, $id)
             {
                 $detail = BudgetProductionDetail::findOrFail($id);
-    
+
                 $detail->update([
                                   'articulo_id'              => $request->detail_product_id,
                                   'quantity'                 => $request->detail_product_quantity,
                                   'quantity'                 => $request->quantity_product,
                                   'amount'                   => $request->detail_product_amount,
-                                  'wish_production_id'       => $request->wish_production_id,                      
+                                  'wish_production_id'       => $request->wish_production_id,
                                   'articulo_id'              => $request->product_id,
                 ]);
             });
-    
+
             return response()->json(['success' => true]);
         }
     }
     public function show(BudgetProduction $budget_production)
     {
-        
+
         return view('pages.budget-production.show', compact('budget_production'));
     }
 
@@ -131,14 +133,14 @@ class BudgetProductionController extends Controller
                                           'reason_deleted' => $request->motive,
                                           'user_deleted'   => auth()->user()->id ]);
 
-            foreach($purchases_movement->purchases_movement_details as $details) 
-            {            
+            foreach($purchases_movement->purchases_movement_details as $details)
+            {
                 if($details->purchases_order_detail)
                 {
                     $details->purchases_order_detail->decrement('quantity_received', $details->quantity);
                     $details->purchases_order_detail->decrement('residue', $details->quantity);
-                }   
-                
+                }
+
                 if($details->affects_stock)
                 {
                     $purchases_existence = PurchasesExistence::where([ 'id' => $details->purchases_existence_id ])->first();
@@ -150,7 +152,7 @@ class BudgetProductionController extends Controller
                     //ACTUALIZACION DE COSTO PROMEDIO 31/08/2021
                     $existences = PurchasesExistence::where('purchases_product_id',  $details->purchases_product_id)
                                         ->where('social_reason_id', $details->purchases_existence->social_reason_id)
-                                        ->where('residue', '>', 0)  
+                                        ->where('residue', '>', 0)
                                         ->get();
                     $product_quantity = 0;
                     $total_product_cost  = 0;
@@ -196,7 +198,7 @@ class BudgetProductionController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $wish_productions = WishProductionDetail::with('wish_production', 'articulo')
                                                             ->select("wish_production_details.*")
                                                             ->join('wish_productions', 'wish_production_details.wish_production_id', '=', 'wish_productions.id')
@@ -225,7 +227,7 @@ class BudgetProductionController extends Controller
                 // $results['social_reason']       = $order_detail->purchase_order->razon_social;
                 // $results['address']             = $order_detail->purchase_order->address;
                 $results['branch_id']                   = $order_detail->wish_production->branch_id;
-            }         
+            }
             return response()->json($results);
         }
         abort(404);
@@ -235,8 +237,8 @@ class BudgetProductionController extends Controller
     {
         if(request()->ajax())
         {
-            $results = []; 
-            $count   = 0;       
+            $results = [];
+            $count   = 0;
             $purchases_order_details = PurchaseOrderDetail::with('purchases_order', 'purchases_product', 'purchases_product_presentation')
                                                             ->select("purchases_order_details.*")
                                                             ->join('purchases_order', 'purchases_order_details.purchase_order_id', '=', 'purchases_order.id')
@@ -247,7 +249,7 @@ class BudgetProductionController extends Controller
             {
                 if($order_detail->quantity_received > 0)
                 {
-                    $existence         = 0;                    
+                    $existence         = 0;
                     $product_existence = PurchasesExistence::where('residue', '>', 0)
                                                             ->where('deposit_id', request()->deposit_id)
                                                             ->where('raw_material_id', $order_detail->raw_material_id);
@@ -257,17 +259,17 @@ class BudgetProductionController extends Controller
                     }
 
                     if($existence > 0)
-                    { 
-                        $results['items'][$key]['id']                    = $order_detail->purchases_product_id;                        
-                        $results['items'][$key]['name']                  = $order_detail->purchases_product->name;                        
+                    {
+                        $results['items'][$key]['id']                    = $order_detail->purchases_product_id;
+                        $results['items'][$key]['name']                  = $order_detail->purchases_product->name;
                         $results['items'][$key]['quantity']              = $order_detail->quantity_received > $existence ? $existence : $order_detail->quantity_received;
                         $count++;
                     }
-                }                
+                }
             }
 
             $results['total_count'][0] = $count ;
-            
+
             return response()->json($results);
         }
         abort(404);
@@ -291,7 +293,7 @@ class BudgetProductionController extends Controller
                     if($purchases_existence->purchases_product)
                     {
 
-                        $results['items'][$purchases_existence->id] = 
+                        $results['items'][$purchases_existence->id] =
                         [
                             'id' => $purchases_existence->id,
                             'product_id' => $purchases_existence->purchases_product_id,
@@ -319,7 +321,7 @@ class BudgetProductionController extends Controller
                     $results['items'][0]['existence']  = 0;
                 }
             }
-                                   
+
             return response()->json($results);
         }
         abort(404);
@@ -367,7 +369,7 @@ class BudgetProductionController extends Controller
     {
         // if(request()->ajax())
         // {
-        //     $results = [];       
+        //     $results = [];
         //     $purchases = Purchase::where('purchases_provider_id', request()->provider_id)
         //                                             ->where('social_reason_id', request()->social_reason_id)
         //                                             ->where('amount', request()->amount)
@@ -382,8 +384,8 @@ class BudgetProductionController extends Controller
         //         $results['items'][$key]['stamped']   = $purchase->stamped;
         //         $results['items'][$key]['stamped_validity']   = $purchase->stamped_validity->format('d-m-Y');
         //         $results['items'][$key]['date']   = $purchase->date->format('d-m-Y');
-        //     }         
-    
+        //     }
+
         //     return response()->json($results);
         // }
         // abort(404);

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BudgetProduction extends Model 
+class BudgetProduction extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,8 @@ class BudgetProduction extends Model
                             'total_amount',
                             'branch_id',
             	            'user_id',
-                            'client_id'
+                            'client_id',
+                            'wish_production_id'
                           ];
 
     protected $dates = ['date'];
@@ -29,7 +30,7 @@ class BudgetProduction extends Model
         }else
         {
             $this->attributes['date'] = NULL;
-        }        
+        }
     }
 
     public function budget_production_details()
@@ -37,7 +38,7 @@ class BudgetProduction extends Model
         return $this->hasMany('App\Models\BudgetProductionDetail');
     }
 
-    
+
 
     public function user()
     {
@@ -47,8 +48,8 @@ class BudgetProduction extends Model
     public function deposit()
     {
         return $this->belongsTo('App\Models\Deposit', 'deposit_id');
-    } 
-    
+    }
+
     public function client()
     {
         return $this->belongsTo('App\Models\Client');
@@ -63,5 +64,6 @@ class BudgetProduction extends Model
         return $query->where('status', 1);
     }
 
- 
+
 }
+

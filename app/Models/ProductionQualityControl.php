@@ -14,7 +14,8 @@ class ProductionQualityControl extends Model
                             'status',
                             'client_id',
                             'branch_id',
-                            'user_id'
+                            'user_id',
+                            'production_control_id'
                         ];
     public function setDateAttribute($value)
     {

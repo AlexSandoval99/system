@@ -18,7 +18,7 @@ class ProductionQualityController extends Controller
         return view('pages.production-quality.index',compact('qualitys'));
     }
 
-    public function create()    
+    public function create()
     {
         return view('pages.production-quality.create');
     }
@@ -46,10 +46,6 @@ class ProductionQualityController extends Controller
                                 'name'       => request()->name,
                                 'number'       => request()->number ,
                             ]);
-                            
-                                
-                                
-
         return redirect('production-quality');
 }
 }

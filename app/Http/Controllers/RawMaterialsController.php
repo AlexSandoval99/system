@@ -14,13 +14,28 @@ class RawMaterialsController extends Controller
 {
     public function index()
     {
-        $materiap = RawMaterial::where('status',1)->get();
+        $materiap = RawMaterial::get();
         return view('pages.raw-materials.index',compact('materiap'));
     }
 
     public function create()
     {
         return view('pages.raw-materials.create');
+    }
+
+    public function edit(RawMaterial $materials)
+    {
+        return view('pages.raw-materials.edit',compact('materials'));
+    }
+
+    public function update(RawMaterial $materials ,CreateRawMaterialsRequest $request)
+    {
+            $materials->update([
+                                'description'       => request()->description,
+                                'status'        => request()->status,
+                            ]);
+
+        return redirect('raw-materials');
     }
 
     public function store(CreateRawMaterialsRequest $request)

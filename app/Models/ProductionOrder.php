@@ -15,7 +15,8 @@ class ProductionOrder extends Model
                             'client_id',
                             'team_work_id',
                             'branch_id',
-                            'user_id'
+                            'user_id',
+                            'budget_production_id'
                         ];
     public function setDateAttribute($value)
     {

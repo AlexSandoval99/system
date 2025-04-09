@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-2"><b>ID:</b></div>
                     <div class="col-md-10">{{ $purchases_product_inventory->id }}</div>
-                </div>  
+                </div>
                 <div class="row">
                     <div class="col-md-2"><b>Fecha:</b></div>
                     <div class="col-md-10">{{ $purchases_product_inventory->date->format('d/m/Y') }}</div>
@@ -26,11 +26,11 @@
                 <div class="row">
                     <div class="col-md-2"><b>Deposito:</b></div>
                     <div class="col-md-10">{{ $purchases_product_inventory->deposit->name }}</div>
-                </div>                        
+                </div>
                 <div class="row">
                     <div class="col-md-2"><b>Observacion:</b></div>
                     <div class="col-md-10">{{ $purchases_product_inventory->observation }}</div>
-                </div>                        
+                </div>
                 <div class="row mt-2">
                     <div class="col-md-2"><b>Usuario Creación:</b></div>
                     <div class="col-md-10">{{ $purchases_product_inventory->user->fullname }}</div>
@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-<div class="row">                
+<div class="row">
     <div class="col-md-12">
         <div class="ibox-content table-responsive no-padding">
             <table class="table table-hover table-striped mb-0">
@@ -60,15 +60,15 @@
                     @foreach($purchases_product_inventory->purchases_product_inventory_details as $details)
                         <tr>
                             <td>{{ $details->product_id }}</td>
-                            <td>{{ $details->purchases_product->name }}</td>
+                            <td>{{ $details->material->description }}</td>
                             <td class="text-right">{{ number_format($details->quantity, 0, ',', '.') }}</td>
                             <td class="text-right">{{ number_format($details->existence, 0, ',', '.') }}</td>
-                            <td><span class="label label-{{ $details->quantity > $details->existence ? 'primary' : ($details->quantity == $details->existence ? '' : 'danger') }}">{{ $details->quantity > $details->existence ? 'Entrada' : ($details->quantity == $details->existence ? 'Sin Movimiento' : 'Salida') }}</span></td>
+                            <td><span class="label label-{{ $details->quantity > $details->existence ? 'primary' : ($details->quantity == $details->existence ? 'default' : 'danger') }}">{{ $details->quantity > $details->existence ? 'Entrada' : ($details->quantity == $details->existence ? 'Sin Movimiento' : 'Salida') }}</span></td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-</div> 
+</div>
 @endsection

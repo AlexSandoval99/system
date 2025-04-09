@@ -44,13 +44,13 @@
                                     @if(request()->deposit_id)
                                         <a href="{{ url('reports/stock-product-purchases') }}" class="btn btn-warning"><i class="fa fa-times"></i></a>
                                     @endif
-                                </div>                              
+                                </div>
                             </div>
                         </form>
                     </div>
                     @if(request()->deposit_id)
                         <div class="ibox-content no-padding">
-                            @if($purchases_existences->count() > 0)                                
+                            @if($purchases_existences->count() > 0)
                                 <table class="table table-hover table-bordered table-striped mb-0">
                                     <thead>
                                         <tr>
@@ -58,19 +58,19 @@
                                             <th class="text-center">Nombre de Producto</th>
                                             <th class="text-center">Existencia</th>
                                             <th class="text-center">Costo</th>
-                                        </tr>                                        
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($purchases_existences as $existence)
-                                            <tr>
-                                                <td class="text-center">{{ $existence->raw_material_id }}</td>
-                                                <td class="text-center">{{ $existence->raw_material->description }}</td>
+                                        <tr>
+                                                <td class="text-center">{{ $existence->articulo_id }}</td>
+                                                <td class="text-center">{{ request()->product_id == 1 ? $existence->raw_material->description : $existence->articulo->name }}</td>
                                                 <td class="text-center">{{ number_format($existence->existence, 0, ',', '.') }}</td>
                                                 <td class="text-center">Gs. {{ $existence->price_cost ? number_format($existence->price_cost, 0, ',', '.') : 0 }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                </table>                                
+                                </table>
                                 {{ $purchases_existences->appends(request()->query())->links() }}
                             @else
                                 <div class="alert alert-danger" role="alert">

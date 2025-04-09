@@ -60,7 +60,7 @@
                                     <th>Parametro de Calidad</th>
                                     <th>Articulo</th>
                                     <th>Cantidad Total</th>
-                                    <th>Cantidad Aprovada</th>
+                                    <th>Cantidad Aprobada</th>
                                     <th>Observacion</th>
                                 </tr>
                             </thead>

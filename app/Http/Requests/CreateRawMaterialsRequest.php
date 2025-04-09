@@ -37,8 +37,8 @@ class CreateRawMaterialsRequest extends FormRequest
         {
             if(request()->description)
             {
-                $material = RawMaterial::where('description',request()->description)->first();
-                if($material)
+                $material = RawMaterial::where('description',request()->description)->where('status',1)->first();
+                if($material && request()->status == true)
                 {
                     $validator->errors()->add('description', 'El la materia prima ya fue registrado');
                 }

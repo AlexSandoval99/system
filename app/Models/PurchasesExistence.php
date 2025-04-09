@@ -9,16 +9,22 @@ use Illuminate\Database\Eloquent\Model;
 class PurchasesExistence extends Model
 {
     protected $fillable = [	'raw_material_id',
+                            'articulo_id',
                             'type',
                             'deposit_id',
                             'quantity',
                             'residue',
                             'price_cost',
                             'price_cost_iva'];
-                            
+
     public function raw_material()
     {
         return $this->belongsTo('App\Models\RawMaterial');
+    }
+
+    public function articulo()
+    {
+        return $this->belongsTo('App\Models\Articulo');
     }
 
     public function deposit()

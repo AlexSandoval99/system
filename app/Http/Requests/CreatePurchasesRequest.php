@@ -23,6 +23,7 @@ class CreatePurchasesRequest extends FormRequest
             'type'                  => 'required',
             'branch_id'             => 'required',
             'stamped'               => 'required_if:type, 1|required_if:type, 4',
+            'expiration.*'          => 'required_if:type, 1|required_if:condition, 2',
             'payment_amount.*'      => 'required_if:type, 2|required_if:condition, 2',
             'condition'             => 'required',
             'date'                  => 'required|date_format:d/m/Y',
@@ -73,7 +74,7 @@ class CreatePurchasesRequest extends FormRequest
                                 if(check_date(request()->stamped_validity))
                                 {
                                     $stamped_validity = Carbon::createFromFormat('d/m/Y', request()->stamped_validity)->format('Y-m-d');
-                                    
+
                                     if($stamped_validity < $date)
                                     {
                                         $validator->errors()->add('total_payment_method', 'La Fecha vigencia de timbrado no puede ser menor a la Fecha compra.');
@@ -108,8 +109,8 @@ class CreatePurchasesRequest extends FormRequest
                         if($count_purchases > 0)
                         {
                             $validator->errors()->add('voucher_number', 'El número ya existe en la base de datos.');
-                        }                  
-                                        
+                        }
+
                         if(request()->type_payment == 2)
                         {
                             if(sum_array(request()->amount_treasury) == 0)
@@ -145,7 +146,7 @@ class CreatePurchasesRequest extends FormRequest
                             }
                         }
 
-                        if(isset(request()->receipts) && cleartStringNumber(request()->total_product) != sum_array(request()->receipts)) 
+                        if(isset(request()->receipts) && cleartStringNumber(request()->total_product) != sum_array(request()->receipts))
                         {
                             $validator->errors()->add('receipts', 'Diferencias en Total de Recibos y Total de Compra.');
                         }

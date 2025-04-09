@@ -9,6 +9,7 @@ use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\BudgetProductionDetail;
 use App\Models\Client;
+use App\Models\Deposit;
 use App\Models\Losse;
 use App\Models\LosseDetail;
 use App\Models\Presentation;
@@ -70,12 +71,12 @@ class ProductionControlQualityController extends Controller
                 ]);
 
                 // Grabar los Productos
-                foreach($request->detail_stage_id as $key => $value)      
+                foreach($request->detail_stage_id as $key => $value)
                 {
                     $articulo = explode("_", strval($value));
 
                     $control->production_quality_control_details()->create([
-                        
+
                         'articulo_id'           => $articulo[0],
                         'quantity'              => $request->{"total$value"} ?? 0,
                         'residue'               => $request->{"cantidad_controlada$value"} ?? 0,
@@ -102,15 +103,14 @@ class ProductionControlQualityController extends Controller
                                     'control_quality_id' => $control->id
                                 ]);
                             }
-        
+
                             $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
-                            Log::info($materials);
-                            foreach ($materials as $key => $material) 
+                            foreach ($materials as $key => $material)
                             {
                                 $losse->losse_detail()->create([
                                     'articulo_id'   => $product->articulo_id,
                                     'reason'        => $request->input("observacion{$product->articulo_id}_{$product->quality_id}"),
-                                    'material_id'   => $material->raw_material->id, 
+                                    'material_id'   => $material->raw_material->id,
                                     'quantity'      => $request->input("total{$product->articulo_id}_{$product->quality_id}")  - $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
                                     'losse_id'      => $losse->id
                                 ]);
@@ -129,7 +129,7 @@ class ProductionControlQualityController extends Controller
                         }
 
                     $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
-                    foreach ($materials as $key => $material) 
+                    foreach ($materials as $key => $material)
                     {
                         $cost_product->production_cost_detail()->create([
                             'articulo_id'           => $product->articulo_id,
@@ -139,6 +139,17 @@ class ProductionControlQualityController extends Controller
                             'price_cost'            => $request->input("total{$product->articulo_id}_{$product->quality_id}") * $material->raw_material->average_cost
                         ]);
                     }
+                    $deposit = Deposit::where('branch_id',$request->branch_id)->first();
+                    PurchasesExistence::create([
+                        'type'            => 2,
+                        'raw_material_id' => null,
+                        'articulo_id'     => $product->articulo_id,
+                        'deposit_id'      => $deposit->id,
+                        'quantity'        => $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
+                        'residue'         => $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
+                        'price_cost'      => $product->articulo->price,
+                        'price_cost_iva'  => $product->articulo->price * 1.1
+                    ]);
                 }
             });
 
@@ -160,7 +171,7 @@ class ProductionControlQualityController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             foreach (request()->sesion as $key => $session) {
                 $order_productions = ProductionControlDetail::with('production_control', 'articulo')
                                                                 ->select("production_control_details.*")
@@ -189,11 +200,11 @@ class ProductionControlQualityController extends Controller
                         $results['items'][$session][$key]['qualities_name']         = $control->name;
                     }
 
-                }         
-            }         
+                }
+            }
             return response()->json($results);
         }
         abort(404);
     }
-    
+
 }

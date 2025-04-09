@@ -59,10 +59,10 @@ class LossesController extends Controller
                 ]);
 
                 // Grabar los Productos
-                foreach($request->detail_product_id as $key => $value)      
+                foreach($request->detail_product_id as $key => $value)
                 {
                     $control->losse_detail()->create([
-                        
+
                         'articulo_id'           => $value,
                         'quantity'              => $request->{"total$key"} ?? 0,
                         'residue'               => $request->{"cantidad_controlada$key"} ?? 0,
@@ -71,7 +71,7 @@ class LossesController extends Controller
                         'production_quality_id' => $control->id,
                         'quality_id'              => $request->{"quality_id$key"}
                     ]);
-                   
+
                 }
             });
 
@@ -92,7 +92,7 @@ class LossesController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $order_productions = ProductionControlDetail::with('production_control', 'articulo')
                                                             ->select("production_control_details.*")
                                                             ->join('production_controls', 'production_control_details.production_control_id', '=', 'production_controls.id')
@@ -120,10 +120,10 @@ class LossesController extends Controller
                     $results['items'][$key]['qualities_name']         = $control->name;
                 }
 
-            }         
+            }
             return response()->json($results);
         }
         abort(404);
     }
-    
+
 }

@@ -29,7 +29,7 @@
                                 <button type="submit" class="btn btn-primary" name="filter" value="1"><i class="fa fa-search"></i></button>
                                 @if(request()->filter)
                                 <a href="{{ url('budget-production') }}" class="btn btn-warning"><i class="fa fa-times"></i></a>
-                                @endif   
+                                @endif
                             </div>
                         </div>
                     </form>
@@ -40,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th class="text-center">Numero Pedido</th>
+                            {{-- <th class="text-center">Numero Pedido</th> --}}
                             <th class="text-center">Fecha</th>
                             <th class="text-center">Sucursal</th>
                             <th class="text-center">Acciones</th>
@@ -50,7 +50,7 @@
                         @foreach($budget_productions as $budget_production)
                             <tr>
                                 <td>{{ $budget_production->id }}</td>
-                                <td class="text-center">{{ $budget_production->budget_production_details()->first() ? $budget_production->budget_production_details()->first()->wish_production->id : ''}}</td>
+                                {{-- <td class="text-center">{{ $budget_production->budget_production_details()->first() ? $budget_production->budget_production_details()->first()->wish_production->id : ''}}</td> --}}
                                 <td class="text-center">{{ $budget_production->created_at->format('d/m/Y') }}</td>
                                 <td class="text-center">{{ $budget_production->branch->name }}</td>
                                 <td class="text-center">

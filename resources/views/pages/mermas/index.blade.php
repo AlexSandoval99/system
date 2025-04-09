@@ -4,11 +4,11 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
-            <div class="ibox-title">
+            {{-- <div class="ibox-title">
                 <div class="btn-group pull-right">
                     <a href="{{ url('losses/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
                 </div>
-            </div>
+            </div> --}}
             <div class="ibox-content pb-0">
                 <div class="row">
                     <form method="GET">
@@ -23,7 +23,7 @@
                     <thead>
                         <tr>
                             <th>Nro°</th>
-                            <th>Cliente</th>
+                            <th>Control nro°</th>
                             <th>Sucursal</th>
                             <th>Fecha</th>
                             <th>Estado</th>

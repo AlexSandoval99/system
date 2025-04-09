@@ -71,6 +71,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('raw-materials/create', 'RawMaterialsController@create')->name('raw-materials-create');
 	Route::get('raw-materials/{materiap}', 'RawMaterialsController@show')->name('raw-materials-show');
 	Route::post('raw-materials', 'RawMaterialsController@store')->name('raw-materials.store');
+    Route::get('raw-materials/{materials}/edit', 'RawMaterialsController@edit')->name('raw-materials.edit');
+	Route::put('raw-materials/{materials}/update', 'RawMaterialsController@update')->name('raw-materials.update');
 
     Route::get('brand', 'BrandController@index')->name('brand');
 	Route::get('brand/create', 'BrandController@create')->name('brand-create');

@@ -70,9 +70,9 @@
                                 <i class="fa fa-user"></i> <span> Usuarios</span>
                             </a>
                         </li>
-                        <li class="user">
-                            <a href="{{ route('user') }}" title="Users">
-                                <i class="fa fa-user"></i> <span> Usuarios</span>
+                        <li class="provider">
+                            <a href="{{ route('nationalities') }}" title="Marca">
+                                <i class="fa fa-flag"></i> <span>Nacionalidad</span>
                             </a>
                         </li>
                     </ul>
@@ -118,16 +118,6 @@
                         <li class="cliente">
                             <a href="{{ route('cliente') }}" title="Cliente">
                                 <span> Cliente</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-tag"></i><span>Nacionalidad</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="provider">
-                            <a href="{{ route('nationalities') }}" title="Marca">
-                                <span>Nacionalidad</span>
                             </a>
                         </li>
                     </ul>

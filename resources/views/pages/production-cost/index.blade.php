@@ -18,7 +18,7 @@
                     <thead>
                         <tr>
                             <th>Nro°</th>
-                            {{-- <th>Cliente</th> --}}
+                            <th>Control nro°</th>
                             <th>Sucursal</th>
                             <th>Fecha</th>
                             <th>Estado</th>
@@ -29,7 +29,7 @@
                         @foreach($costs as $cost)
                             <tr>
                                 <td>{{ $cost->id }}</td>
-                                {{-- <td>{{ $cost->quality_control->id }}</td> --}}
+                                <td>{{ $cost->quality_control->id }}</td>
                                 <td>{{ $cost->branch->name }}</td>
                                 <td>{{ $cost->date }}</td>
                                 <td>

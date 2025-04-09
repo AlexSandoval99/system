@@ -116,9 +116,9 @@ class PurchasesProductInventoriesController extends Controller
         return redirect('inventories');
     }
 
-    public function show(PurchasesProductInventory $purchases_product_inventory)
+    public function show(Inventory $purchases_product_inventory)
     {
-        $purchases_product_inventory->load(['purchases_product_inventory_details.purchases_product']);
+        $purchases_product_inventory->load(['purchases_product_inventory_details.material']);
         return view('pages.purchases-product-inventories.show', compact('purchases_product_inventory'));
     }
 

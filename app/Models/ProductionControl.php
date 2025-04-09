@@ -14,7 +14,8 @@ class ProductionControl extends Model
                             'status',
                             'client_id',
                             'branch_id',
-                            'user_id'
+                            'user_id',
+                            'production_order_id'
                         ];
     public function setDateAttribute($value)
     {

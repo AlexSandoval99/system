@@ -11,7 +11,7 @@ use App\Models\Purchase;
 use App\Models\RawMaterial;
 use App\Models\SettingProduct;
 use App\Models\WishPurchase;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +42,7 @@ class ArticuloController extends Controller
                                         'price'        => $request->price,
                                         'brand_id'        => $request->brand_id,
                                         'status'         => 1 ]);
-            foreach ($request->materiales as $key => $value) 
+            foreach ($request->materiales as $key => $value)
             {
                 SettingProduct::create([
                     'articulo_id'       => $articulo->id,
@@ -50,14 +50,14 @@ class ArticuloController extends Controller
                     'quantity'          => $request->cantidades[$key],
                 ]);
             }
-            foreach ($request->stages as $key1 => $value1) 
+            foreach ($request->stages as $key1 => $value1)
             {
                 SettingProduct::create([
                     'articulo_id'       => $articulo->id,
                     'stage_id'       => $value1,
                 ]);
             }
-            foreach ($request->qualitys as $key2 => $value2) 
+            foreach ($request->qualitys as $key2 => $value2)
             {
                 SettingProduct::create([
                     'articulo_id'       => $articulo->id,
@@ -77,9 +77,8 @@ class ArticuloController extends Controller
 
     public function pdf(Articulo $articulo)
     {
-        return PDF::loadView('pages.articulo.pdf', compact('articulo'))
+        return Pdf::loadView('pages.articulo.pdf', compact('articulo'))
                     ->setPaper([0, 0, 250, 100], 'portrait')
-                    // ->setPaper([0,0,300,300], 'portrait')
                     ->stream();
     }
 
@@ -103,7 +102,7 @@ class ArticuloController extends Controller
             $articulo->setting_product()->delete();
             if(isset($request->materiales))
             {
-                foreach ($request->materiales as $key => $value) 
+                foreach ($request->materiales as $key => $value)
                 {
                     SettingProduct::create([
                         'articulo_id'       => $articulo->id,
@@ -114,7 +113,7 @@ class ArticuloController extends Controller
             }
             if(isset($request->stages))
             {
-                foreach ($request->stages as $key1 => $value1) 
+                foreach ($request->stages as $key1 => $value1)
                 {
                     SettingProduct::create([
                         'articulo_id'       => $articulo->id,
@@ -124,7 +123,7 @@ class ArticuloController extends Controller
             }
             if(isset($request->qualitys))
             {
-                foreach ($request->qualitys as $key2 => $value2) 
+                foreach ($request->qualitys as $key2 => $value2)
                 {
                     SettingProduct::create([
                         'articulo_id'       => $articulo->id,
@@ -136,7 +135,7 @@ class ArticuloController extends Controller
     }
 
 
-    
+
 
     public function ajax_purchases_last()
     {
