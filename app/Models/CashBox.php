@@ -5,36 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Stamped extends Model
+class CashBox extends Model
 {
     use HasFactory;
 
-    protected $table = 'stampeds';
+    protected $table = 'cash_boxes';
 
     protected $fillable = [
-        'number',
-        'from_date',
-        'until_date',
+        'name',
         'observation',
-        'user_id',
         'status',
+        'user_id',
+        'voucher_box_id',
     ];
 
     protected $casts = [
-        'from_date' => 'date',
-        'until_date' => 'date',
         'status' => 'boolean',
     ];
-
-    // Relaciones
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function voucherBoxes()
+    public function voucher_box()
     {
-        return $this->hasMany(VoucherBox::class);
+        return $this->belongsTo(VoucherBox::class);
     }
 }

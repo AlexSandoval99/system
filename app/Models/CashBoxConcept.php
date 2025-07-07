@@ -5,36 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Stamped extends Model
+class CashBoxConcept extends Model
 {
     use HasFactory;
 
-    protected $table = 'stampeds';
+    protected $table = 'cash_box_concepts';
 
     protected $fillable = [
-        'number',
-        'from_date',
-        'until_date',
-        'observation',
-        'user_id',
+        'name',
         'status',
+        'user_id',
     ];
 
     protected $casts = [
-        'from_date' => 'date',
-        'until_date' => 'date',
         'status' => 'boolean',
     ];
 
-    // Relaciones
-
+    // Relación con el usuario que creó o administra el concepto
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function voucherBoxes()
-    {
-        return $this->hasMany(VoucherBox::class);
     }
 }

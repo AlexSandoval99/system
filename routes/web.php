@@ -96,6 +96,31 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('nationalities/create', 'NationalitiesController@create')->name('nationalities-create');
 	Route::post('nationalities', 'NationalitiesController@store')->name('nationalities.store');
 
+    Route::get('cash_boxes', 'CashBoxesController@index')->name('cash_boxes.index');
+    Route::get('cash_boxes/{id}', 'CashBoxesController@show')->name('cash_boxes.show');
+    Route::get('cash_boxes/{id}/edit', 'CashBoxesController@edit')->name('cash_boxes.edit');
+	Route::get('cash_boxes/create', 'CashBoxesController@create')->name('cash_boxes.create');
+	Route::post('cash_boxes', 'CashBoxesController@store')->name('cash_boxes.store');
+
+    Route::get('voucher_boxes', 'VoucherBoxController@index')->name('voucher_boxes.index');
+	Route::get('voucher_boxes/create', 'VoucherBoxController@create')->name('voucher_boxes.create');
+	Route::post('voucher_boxes', 'VoucherBoxController@store')->name('voucher_boxes.store');
+    Route::get('voucher_boxes/{id}/edit', 'VoucherBoxController@edit')->name('voucher_boxes.edit');
+    Route::get('voucher_boxes/{id}', 'VoucherBoxController@show')->name('voucher_boxes.show');
+
+    Route::get('stampeds', 'StampedController@index')->name('stampeds.index');
+	Route::get('stampeds/create', 'StampedController@create')->name('stampeds.create');
+    Route::get('stampeds/{id}/edit', 'StampedController@edit')->name('stampeds.edit');
+    Route::get('stampeds/{id}', 'StampedController@show')->name('stampeds.show');
+	Route::post('stampeds', 'StampedController@store')->name('stampeds.store');
+
+    Route::get('cash_box_balances', 'CashBoxBalancesController@index')->name('cash_box_balances.index');
+	Route::get('cash_box_balances/create', 'CashBoxBalancesController@create')->name('cash_box_balances.create');
+	Route::post('cash_box_balances', 'CashBoxBalancesController@store')->name('cash_box_balances.store');
+    Route::get('cash_box_balances/{id}/edit', 'CashBoxBalancesController@edit')->name('cash_box_balances.edit');
+    Route::get('cash_box_balances/{id}', 'CashBoxBalancesController@show')->name('cash_box_balances.show');
+    Route::get('ajax/last-cash-balance', 'CashBoxBalancesController@ajax_last_cash_balance')->name('ajax.last-cash-balance');
+
 	Route::get('budget/{purchase_budget}/view-purchase-budgets', 'WishPurchaseController@view_purchase_budgets')->name('wish-purchases.view-purchase-budgets');
 
     Route::get('wish-purchase', 'WishPurchaseController@index')->name('wish-purchase');

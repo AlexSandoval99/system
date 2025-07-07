@@ -75,6 +75,46 @@
                                 <i class="fa fa-flag"></i> <span>Nacionalidad</span>
                             </a>
                         </li>
+                        <li class="provider">
+                            <a href="{{ route('cash_boxes.index') }}" title="Marca">
+                                <i class="fa fa-money"></i> <span>Caja</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('voucher_boxes.index') }}" title="Marca">
+                                <i class="fa fa-circle"></i> <span>Punto Expedicion</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('stampeds.index') }}" title="Marca">
+                                <i class="fa fa-circle"></i> <span>Timbrado</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-gear"></i><span>Caja</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="provider">
+                            <a href="{{ route('cash_boxes.index') }}" title="Marca">
+                                <i class="fa fa-money"></i> <span>Caja</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('voucher_boxes.index') }}" title="Marca">
+                                <i class="fa fa-circle"></i> <span>Punto Expedicion</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('stampeds.index') }}" title="Marca">
+                                <i class="fa fa-circle"></i> <span>Timbrado</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('cash_box_balances.index') }}" title="Marca">
+                                <i class="fa fa-circle"></i> <span>Apertura de Caja</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">
