@@ -82,7 +82,7 @@ class WishProductionController extends Controller
                     $wish_production->wish_production_details()->create([
                         'articulo_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
-                        'wish_production_id'       => $wish_production->id,
+                        'wish_sale_id'       => $wish_production->id,
                     ]);
                 }
             });

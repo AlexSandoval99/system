@@ -219,14 +219,6 @@ class PurchasesProductInventoriesController extends Controller
                     $quantity_final = $detail->quantity - $detail->existence;
                     $dividendo =  11;
                     $price_cost_iva = $detail->old_cost - ($detail->old_cost / $dividendo);
-                    $purchases_movement = PurchaseMovement::create([ 'deposits_id'                  => $purchases_product_inventory->deposit_id,
-                                                                    'observation'                    => $purchases_product_inventory->observation  ? $purchases_product_inventory->observation : 'no tiene',
-                                                                    'type_operation'                 => 8,
-                                                                    'type_movement'                  => 1,
-                                                                    'status'                         => true,
-                                                                    'inventory_id'                   => $purchases_product_inventory->id,
-                                                                    'user_id'                        => auth()->user()->id
-                                                                ]);
 
                     $purchases_existence = PurchasesExistence::create([ 'deposit_id'           => $purchases_product_inventory->deposit_id,
                                                                         'raw_material_id' => $detail->material_id,
@@ -235,11 +227,6 @@ class PurchasesProductInventoriesController extends Controller
                                                                         'price_cost'           => $price_cost_iva,
                                                                         'price_cost_iva'       => $detail->old_cost
                                                                     ]);
-
-                    $purchases_movement->purchases_movement_details()->create([ 'raw_material_id'   => $detail->material_id,
-                                                                                'quantity'               => $quantity_final,
-                                                                                'purchases_existence_id' => $purchases_existence->id,
-                                                                                'affects_stock'          => true ]);
                 }
 
                 // Salida de Producto
@@ -254,26 +241,11 @@ class PurchasesProductInventoriesController extends Controller
                                                             ->orderBy('id')
                                                             ->get();
 
-                        $purchases_movement = PurchaseMovement::create(['deposits_id'    => $purchases_product_inventory->deposit_id,
-                                                                        'observation'    => $purchases_product_inventory->observation  ? $purchases_product_inventory->observation : 'no tiene',
-                                                                        'type_operation' => 8,
-                                                                        'type_movement'  => 2,
-                                                                        'status'         => true,
-                                                                        'branch_id'      => 1,
-                                                                        'user_id'        => auth()->user()->id
-                                                                    ]);
-
                         foreach($product_existences as $product_existence)
                         {
                             if($quantity_process > 0)
                             {
                                 $quantity_residue = $quantity_process > $product_existence->residue ? $product_existence->residue : $quantity_process;
-                                $movement_detail = $purchases_movement->purchases_movement_details()->create([
-                                                                                            'raw_material_id'   => $detail->material_id,
-                                                                                            'quantity'               => $quantity_residue,
-                                                                                            'price_cost'             =>  0,
-                                                                                            'purchases_existence_id' => $product_existence->id,
-                                                                                            'affects_stock'          => true ]);
 
                                 $product_existence->update(['residue' => $product_existence->residue - $quantity_residue]);
 

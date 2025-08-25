@@ -35,7 +35,7 @@
                             <label>Cliente</label>
                             <input type="text" name="client" value="" id="client" class="form-control" readonly>
                             <input type="hidden" name="client_id" value="" id="client_id">
-                            <input type="hidden" name="wish_production_id" value="" id="wish_production_id">
+                            <input type="hidden" name="wish_sale_id" value="" id="wish_sale_id">
                         </div>
                         <div class="form-group col-md-4">
                             <label>Sucursal</label>
@@ -444,7 +444,7 @@
                             $('#branch').val(element.branch);
                             $('#date_ped').val(element.date);
                             $('#client_id').val(element.client_id);
-                            $('#wish_production_id').val(element.wish_production_id);
+                            $('#wish_sale_id').val(element.wish_sale_id);
                             $('#client').val(element.client);
                         });
                         if(conteo>0)

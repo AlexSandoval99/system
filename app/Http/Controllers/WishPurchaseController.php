@@ -253,7 +253,7 @@ class WishPurchaseController extends Controller
 
     public function confirm_purchase_budgets(WishPurchase $wish_purchase)
     {
-        $wish_purchases = $wish_purchase->purchase_budgets()->get();
+        $wish_purchases = $wish_purchase->budget_purchases()->get();
 
         return view('pages.wish-purchase.confirm-purchase-budgets',compact('wish_purchase'));
     }

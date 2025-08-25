@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class WishProductionDetail extends Model
 {
+    protected $table = "wish_sale_details";
     use HasFactory;
-    protected $fillable = [ 
-                            'wish_production_id',
+    protected $fillable = [
+                            'wish_sale_id',
                             'articulo_id',
                             'quantity'
                         ];
@@ -19,6 +20,6 @@ class WishProductionDetail extends Model
     }
     public function wish_production()
     {
-        return $this->belongsTo('App\Models\WishProduction', 'wish_production_id');
+        return $this->belongsTo('App\Models\WishProduction', 'wish_sale_id');
     }
 }

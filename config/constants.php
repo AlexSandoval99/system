@@ -29,11 +29,8 @@ return [
 
     'type_purchases' => [
         1 => 'Factura',
-        2 => 'Boleta',
-        3 => 'Auto Factura',
+        2 => 'Nota de Remision',
         4 => 'Nota Credito',
-        5 => 'Orden de Pago',
-        6 => 'Comprobante de Ingreso'
     ],
 
     'type_purchases_label' => [
@@ -50,11 +47,8 @@ return [
     ],
     'purchases_type' => [
         1 => 'Factura',
-        2 => 'Boleta',
-        3 => 'Auto Factura',
+        2 => 'Nota de Remision',
         4 => 'Nota Credito',
-        5 => 'Orden de Pago',
-        6 => 'Comprobante de Ingreso'
     ],
 
     'wish-purchase-status' =>[

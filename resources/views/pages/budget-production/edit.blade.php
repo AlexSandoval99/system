@@ -12,7 +12,7 @@
                         <label>Cliente</label>
                         <input type="text" name="client" value="" id="client" class="form-control" readonly>
                         <input type="hidden" name="client_id" value="" id="client_id">
-                        <input type="hidden" name="wish_production_id" value="" id="wish_production_id">
+                        <input type="hidden" name="wish_sale_id" value="" id="wish_sale_id">
                     </div>
                     <div class="form-group col-md-4">
                         <label>Sucursal</label>
@@ -33,7 +33,7 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Producto</label>
-                            {{ Form::select('articulo_id', $articulos, old('articulo_id'), ['id' => 'articulo_id', 'placeholder' => 'Seleccione Articulo', 'class' => 'form-control', 'select2']) }} 
+                            {{ Form::select('articulo_id', $articulos, old('articulo_id'), ['id' => 'articulo_id', 'placeholder' => 'Seleccione Articulo', 'class' => 'form-control', 'select2']) }}
                             <input type="hidden" id="price">
                             <span class="red" id="text_last_purchases"></span>
                         </div>
@@ -96,8 +96,8 @@
             @foreach($budget_production->budget_production_details as $budget)
 
             addToTable(
-                        {{$budget->articulo_id}}, 
-                        '{{config('constants.description.' . $budget->description)}}', 
+                        {{$budget->articulo_id}},
+                        '{{config('constants.description.' . $budget->description)}}',
                         {{$budget->quantity}},
                         '{{$budget->description}}',
                         '{{$budget->articulo->name}}',
@@ -348,12 +348,12 @@
                             $('#branch').val(element.branch);
                             $('#date_ped').val(element.date);
                             $('#client_id').val(element.client_id);
-                            $('#wish_production_id').val(element.wish_production_id);
+                            $('#wish_sale_id').val(element.wish_sale_id);
                             $('#client').val(element.client);
                         });
                         if(conteo>0)
                         {
-                            
+
                             $("#div_details, #div_footer").show();
                             calculateTotal();
                             $("#number_ped").prop("readonly", true);
@@ -391,7 +391,7 @@
             }
         }
 
-        function updateSubtotal(input) 
+        function updateSubtotal(input)
         {
             var quantity = parseFloat(input.closest('tr').find('input[name="quantity_product[]"]').val().replace(/\./g, '').replace(',', '.')) || 0;
             var amount = parseFloat(input.closest('tr').find('input[name="detail_product_amount[]"]').val().replace(/\./g, '').replace(',', '.')) || 0;

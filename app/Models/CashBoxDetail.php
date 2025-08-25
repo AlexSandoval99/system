@@ -25,7 +25,6 @@ class CashBoxDetail extends Model
 
     protected $casts = [
         'type' => 'boolean',
-        'status' => 'boolean',
         'amount' => 'decimal:2',
     ];
 

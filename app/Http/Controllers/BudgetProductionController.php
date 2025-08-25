@@ -28,7 +28,7 @@ class BudgetProductionController extends Controller
         if (request()->wish_production_number)
         {
             $budget_productions = $budget_productions->whereHas('budget_production_details', function($query){
-                $query->where('wish_production_id', request()->wish_production_number);
+                $query->where('wish_sale_id', request()->wish_production_number);
             });
         }
 
@@ -60,7 +60,7 @@ class BudgetProductionController extends Controller
                                                                  'date'               => $request->date,
                                                                  'branch_id'          => $request->branch_id,
                                                                  'user_id'            => auth()->user()->id,
-                                                                 'wish_production_id'    => $request->wish_production_id,
+                                                                 'wish_sale_id'    => $request->wish_sale_id,
 
                                                                 ]);
                 foreach($request->detail_product_id as $key => $product_id)
@@ -69,7 +69,7 @@ class BudgetProductionController extends Controller
                             'quantity'              => $request->quantity_product[$key],
                             'amount'                => $request->detail_product_amount[$key],
                             'budget_production_id'  => $budget_production->id,
-                            'wish_production_id'    => null,
+                            'wish_sale_id'    => null,
     						'articulo_id'           => $product_id
                     ]);
                 }
@@ -105,7 +105,7 @@ class BudgetProductionController extends Controller
                                   'quantity'                 => $request->detail_product_quantity,
                                   'quantity'                 => $request->quantity_product,
                                   'amount'                   => $request->detail_product_amount,
-                                  'wish_production_id'       => $request->wish_production_id,
+                                  'wish_sale_id'       => $request->wish_sale_id,
                                   'articulo_id'              => $request->product_id,
                 ]);
             });
@@ -200,10 +200,10 @@ class BudgetProductionController extends Controller
         {
             $results = [];
             $wish_productions = WishProductionDetail::with('wish_production', 'articulo')
-                                                            ->select("wish_production_details.*")
-                                                            ->join('wish_productions', 'wish_production_details.wish_production_id', '=', 'wish_productions.id')
-                                                            ->where('wish_productions.status', true)
-                                                            ->where('wish_productions.id', request()->number_ped)
+                                                            ->select("wish_sale_details.*")
+                                                            ->join('wish_sales', 'wish_sale_details.wish_sale_id', '=', 'wish_sales.id')
+                                                            ->where('wish_sales.status', true)
+                                                            ->where('wish_sales.id', request()->number_ped)
                                                             ->get();
             foreach ($wish_productions as $key => $order_detail)
             {
@@ -218,7 +218,7 @@ class BudgetProductionController extends Controller
                 $results['items'][$key]['branch_id']                    = $order_detail->wish_production->branch_id;
                 $results['items'][$key]['branch']                       = $order_detail->wish_production->branch->name;
                 $results['items'][$key]['date']                         = Carbon::createFromFormat('Y-m-d',$order_detail->wish_production->date)->format('d/m/Y');
-                $results['items'][$key]['wish_production_id']           = $order_detail->wish_production->id;
+                $results['items'][$key]['wish_sale_id']                 = $order_detail->wish_production->id;
 
                 // $results['ruc']                 = $order_detail->purchase_order->ruc;
                 // $results['provider_id']         = $order_detail->purchase_order->provider_id;

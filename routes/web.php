@@ -234,4 +234,16 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('production-cost', 'ProductionCostController@index')->name('production-cost');
 	Route::get('production-cost/{production_cost}', 'ProductionCostController@show')->name('production-cost-show');
 
+    Route::get('vouchers','VoucherController@index')->name('vouchers');
+	Route::post('vouchers', 'VoucherController@store')->name('vouchers.store');
+    Route::get('vouchers/previous-create', 'VoucherController@previous_create')->name('vouchers.previous-create');
+    Route::post('vouchers/post-create', 'VoucherController@post_create')->name('vouchers.post-create');
+    Route::get('vouchers/{voucher}', 'VoucherController@show')->name('vouchers.show');
+    Route::get('vouchers/{voucher}/edit', 'VoucherController@edit')->name('vouchers.edit');
+    Route::get('vouchers/new-create', 'VoucherController@new_create')->name('vouchers.new-create');
+    Route::get('vouchers/{voucher}/pdf', 'VoucherController@pdf')->name('vouchers.pdf');
+    Route::put('vouchers/{voucher}', 'VoucherController@update')->name('vouchers.update');
+    Route::get('vouchers/{voucher}/delete', 'VoucherController@delete')->name('vouchers.delete');
+    Route::post('vouchers/{voucher}/delete', 'VoucherController@delete_submit')->name('vouchers.delete-submit');
+
 });

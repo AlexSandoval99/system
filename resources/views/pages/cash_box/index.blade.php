@@ -49,7 +49,7 @@
                         <td>{{ $box->voucher_box->branch->name ?? '-' }}</td>
                         <td>{{ $box->observation ?? '-' }}</td>
                         <td>
-                            @if ($box->status)
+                            @if ($box->status == 1)
                                 <span class="badge badge-success">Activo</span>
                             @else
                                 <span class="badge badge-secondary">Inactivo</span>

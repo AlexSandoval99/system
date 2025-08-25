@@ -116,7 +116,6 @@ class PurchaseOrderController extends Controller
                     'date'                      => $request->date,
                     'ruc'                       => $request->ruc,
                     'branch_id'                 => $request->branch_id,
-                    'condition'                 => $request->condition,
                     'provider_id'               => $request->purchases_provider_id,
                     'razon_social'              => $request->razon_social,
                     'phone'                     => $request->phone,

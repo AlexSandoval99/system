@@ -1,12 +1,12 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Pedido de Produccion')
+@section('title', 'Pedido de Ventas')
 @section('content')
 {{ Form::open(['id' => 'form', 'files' => true]) }}
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Agregar Pedido de Produccion</h5>
+                    <h5>Agregar Pedido de Ventas</h5>
                 </div>
                 <div class="ibox-content pb-0">
                     <div class="row">
@@ -47,7 +47,7 @@
     </div>
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h3>Items a Producir</h3>
+            <h3>Items</h3>
         </div>
         <div class="ibox-content pb-0">
             <div class="row">

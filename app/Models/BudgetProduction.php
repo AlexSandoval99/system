@@ -17,7 +17,7 @@ class BudgetProduction extends Model
                             'branch_id',
             	            'user_id',
                             'client_id',
-                            'wish_production_id'
+                            'wish_sale_id'
                           ];
 
     protected $dates = ['date'];

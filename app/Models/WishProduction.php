@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WishProduction extends Model
 {
+    protected $table = "wish_sales";
     use HasFactory;
     protected $fillable = [
                             'date',
@@ -37,5 +38,5 @@ class WishProduction extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
-  
+
 }

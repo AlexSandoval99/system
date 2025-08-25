@@ -204,11 +204,6 @@
                     <a href="#"><i class="fa fa-group"></i><span>Produccion</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         <li class="provider">
-                            <a href="{{ route('wish-production') }}" title="Pedido de Compras">
-                                <span>Pedido de Produccion</span>
-                            </a>
-                        </li>
-                        <li class="provider">
                             <a href="{{ route('budget-production') }}" title="Presupuesto">
                                 <span>Presupuesto</span>
                             </a>
@@ -236,6 +231,21 @@
                         <li class="provider">
                             <a href="{{ route('production-cost') }}" title="Costo Produccion">
                                 <span>Costo Produccion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-group"></i><span>Ventas</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="provider">
+                            <a href="{{ route('wish-production') }}" title="Pedido Ventas">
+                                <span>Pedidos</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('vouchers') }}" title="Factura Ventas">
+                                <span>Factura Ventas</span>
                             </a>
                         </li>
                     </ul>
