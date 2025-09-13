@@ -264,7 +264,12 @@ class WishPurchaseController extends Controller
         // APROBAR EL PRESUPUESTO
         if(request()->type == 1)
         {
-            $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>2]);
+            $purchase_budget->update([
+                'confirmation_user_id'  => auth()->user()->id,
+                'confirmation_date'     => now(),
+                'status'                => 2
+            ]);
+
             $purchase_budget->wish_purchase->update(['status' => 2]);
         }
         //BORRAR EL PRESUPUESTO

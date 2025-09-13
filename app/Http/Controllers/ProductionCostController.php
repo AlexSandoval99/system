@@ -29,7 +29,7 @@ class ProductionCostController extends Controller
 {
     public function index()
     {
-        $costs = ProductionCost::with('branch','quality_control')->orderBy('id', 'desc');
+        $costs = ProductionCost::with('branch','order_production')->orderBy('id', 'desc');
 
          $costs = $costs->paginate(20);
          return view('pages.production-cost.index', compact('costs'));
@@ -45,7 +45,7 @@ class ProductionCostController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             $order_productions = ProductionControlDetail::with('production_control', 'articulo')
                                                             ->select("production_control_details.*")
                                                             ->join('production_controls', 'production_control_details.production_control_id', '=', 'production_controls.id')
@@ -73,10 +73,10 @@ class ProductionCostController extends Controller
                     $results['items'][$key]['qualities_name']         = $control->name;
                 }
 
-            }         
+            }
             return response()->json($results);
         }
         abort(404);
     }
-    
+
 }

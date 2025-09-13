@@ -50,23 +50,16 @@
                         @endif
                     </div>
                     <div class="row">
-                        <!--<div class="col-xs-8">
-                          <div class="checkbox icheck">
-                            <label>
-                              <input name="remember" type="checkbox" {{ old('remember') ? 'checked' : '' }}> Remember me
-                            </label>
-                          </div>
-                        </div>-->
                         <div class="col-xs-12">
                           <button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar Sesión</button>
                         </div>
                         <br/><br/><br/>
-                        <!--<div class="col-xs-12">
+                        <div class="col-xs-12">
                             <center>
-                                <a href="{{ route('password.request') }}">Forgot password?</a>
-                                <br/>
-                                <a href="{{ route('register') }}">Sign up</a>
-                            </center> -->
+                                <a href="{{ route('password.request') }}">Recuperar Contraseña</a>
+                            </center>
+                            {{-- <br/>
+                            <a href="{{ route('register') }}">Sign up</a> --}}
                         </div>
                     </div>
                 </form>

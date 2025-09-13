@@ -28,8 +28,7 @@ class CashBoxBalancesController extends Controller
 
     public function create()
     {
-        $cash_boxes = CashBoxUser::Filter()
-                                    ->pluck('cash_boxes.name AS name', 'cash_box_users.cash_box_id AS id');
+        $cash_boxes = CashBoxUser::Filter()->pluck('cash_boxes.name AS name', 'cash_box_users.cash_box_id AS id');
         return view('pages.cash_box_balances.create', compact('cash_boxes'));
     }
 
@@ -52,9 +51,7 @@ class CashBoxBalancesController extends Controller
                     // {
 
                     $cash_box_details = CashBoxDetail::where([ 'status'      => true,
-                        'cash_box_id' => $request->cash_box_id,
-                        'currency_id' => $request->currency_id,
-                        'fund'        => 1 ])
+                        'cash_box_id' => $request->cash_box_id])
                         ->whereDate('created_at', $date->created_at->format('Y-m-d'))
                         ->get();
 
@@ -73,12 +70,6 @@ class CashBoxBalancesController extends Controller
                                 }
                             }
                         }
-                    // }
-                    // elseif($cash_box->small_box == 1)
-                    // {
-                    //     $cash_box_residue = $request->amount;
-                    // }
-
                 }
 
                 CashBoxDetail::create([

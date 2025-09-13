@@ -14,7 +14,7 @@ class ProductionCost extends Model
                             'status',
                             'branch_id',
                             'user_id',
-                            'control_quality_id'
+                            'order_production_id'
                         ];
     public function setDateAttribute($value)
     {
@@ -32,9 +32,9 @@ class ProductionCost extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
-    public function quality_control()
+    public function order_production()
     {
-        return $this->belongsTo('App\Models\ProductionQualityControl', 'control_quality_id');
+        return $this->belongsTo('App\Models\ProductionOrder', 'order_production_id');
     }
 
 }

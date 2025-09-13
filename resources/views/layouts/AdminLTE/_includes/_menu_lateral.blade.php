@@ -61,110 +61,25 @@
                         {{-- @if (Auth::user()->can('root-dev', '')) --}}
                             <li class="{{ Request::segment(1) === 'config' && Request::segment(2) === null ? 'active' : null }}">
                                 <a href="{{ route('config') }}" title="App Config">
-                                    <i class="fa fa-gear"></i> <span> Configuracion</span>
+                                 <span> Configuracion</span>
                                 </a>
                             </li>
                         {{-- @endif --}}
                         <li class="user">
                             <a href="{{ route('user') }}" title="Users">
-                                <i class="fa fa-user"></i> <span> Usuarios</span>
+                             <span> Usuarios</span>
                             </a>
                         </li>
                         <li class="provider">
                             <a href="{{ route('nationalities') }}" title="Marca">
-                                <i class="fa fa-flag"></i> <span>Nacionalidad</span>
+                             <span>Nacionalidad</span>
                             </a>
                         </li>
-                        <li class="provider">
-                            <a href="{{ route('cash_boxes.index') }}" title="Marca">
-                                <i class="fa fa-money"></i> <span>Caja</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('voucher_boxes.index') }}" title="Marca">
-                                <i class="fa fa-circle"></i> <span>Punto Expedicion</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('stampeds.index') }}" title="Marca">
-                                <i class="fa fa-circle"></i> <span>Timbrado</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-gear"></i><span>Caja</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="provider">
-                            <a href="{{ route('cash_boxes.index') }}" title="Marca">
-                                <i class="fa fa-money"></i> <span>Caja</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('voucher_boxes.index') }}" title="Marca">
-                                <i class="fa fa-circle"></i> <span>Punto Expedicion</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('stampeds.index') }}" title="Marca">
-                                <i class="fa fa-circle"></i> <span>Timbrado</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('cash_box_balances.index') }}" title="Marca">
-                                <i class="fa fa-circle"></i> <span>Apertura de Caja</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Materia Prima</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="Materia Prima">
-                            <a href="{{ route('raw-materials') }}" title="Materia Prima">
-                                <span>Materia Prima</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa fa-shopping-basket"></i><span>Producto</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
-                        <li class="articulo">
-                            <a href="{{ route('articulo') }}" title="Articulo">
-                                <i class="fa-solid fa-cart-shopping"></i> <span> Articulo</span>
-                            </a>
-                        </li>
-                        <li class="provider">
-                            <a href="{{ route('brand') }}" title="Marca">
-                                <span>Marca</span>
-                            </a>
-                        </li>
-                        <li class="stage">
-                            <a href="{{ route('production-stage') }}" title="Etapa">
-                                <i class="fa-solid fa-cart-shopping"></i> <span> Etapa Produccion</span>
-                            </a>
-                        </li>
-                        <li class="stage">
-                            <a href="{{ route('production-quality') }}" title="Etapa">
-                                <i class="fa-solid fa-cart-shopping"></i> <span> Calidad Produccion</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Clientes</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
                         <li class="cliente">
                             <a href="{{ route('cliente') }}" title="Cliente">
                                 <span> Cliente</span>
                             </a>
                         </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Proveedor</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
-                    <ul class="treeview-menu">
                         <li class="provider">
                             <a href="{{ route('provider') }}" title="Proveedor">
                                 <span> Proveedor</span>
@@ -173,7 +88,62 @@
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Compras</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <a href="#"><i class="fa fa-box"></i><span>Caja</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="provider">
+                            <a href="{{ route('cash_boxes.index') }}" title="Marca">
+                                <span>Caja</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('voucher_boxes.index') }}" title="Marca">
+                                <span>Punto Expedicion</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('stampeds.index') }}" title="Marca">
+                                <span>Timbrado</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('cash_box_balances.index') }}" title="Marca">
+                                <span>Apertura de Caja</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-product-hunt"></i><span>Producto</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="articulo">
+                            <a href="{{ route('articulo') }}" title="Articulo">
+                                <span> Articulo</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('brand') }}" title="Marca">
+                                <span>Marca</span>
+                            </a>
+                        </li>
+                        <li class="Materia Prima">
+                            <a href="{{ route('raw-materials') }}" title="Materia Prima">
+                                <span>Materia Prima</span>
+                            </a>
+                        </li>
+                        <li class="stage">
+                            <a href="{{ route('production-stage') }}" title="Etapa">
+                                <span> Etapa Produccion</span>
+                            </a>
+                        </li>
+                        <li class="stage">
+                            <a href="{{ route('production-quality') }}" title="Etapa">
+                                <span> Calidad Produccion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-shopping-cart"></i><span>Compras</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         <li class="provider">
                             <a href="{{ route('wish-purchase') }}" title="Pedido de Compras">
@@ -181,9 +151,6 @@
                             </a>
                             <a href="{{ route('purchase-order') }}" title="Orden de Compras">
                                 <span>Orden de Compras</span>
-                            </a>
-                            <a href="{{ route('purchase-movement') }}" title="Recepcion de Compras">
-                                <span>Recepcion de Compras</span>
                             </a>
                             <a href="{{ route('purchase') }}" title="Factura Compras">
                                 <span>Factura Compras</span>
@@ -201,7 +168,7 @@
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Produccion</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <a href="#"><i class="fa fa-wrench"></i><span>Produccion</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         <li class="provider">
                             <a href="{{ route('budget-production') }}" title="Presupuesto">
@@ -236,7 +203,7 @@
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-group"></i><span>Ventas</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <a href="#"><i class="fa fa fa-shopping-basket"></i><span>Ventas</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         <li class="provider">
                             <a href="{{ route('wish-production') }}" title="Pedido Ventas">

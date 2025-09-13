@@ -36,12 +36,7 @@ class CashBoxesController extends Controller
 
     public function create()
     {
-        $users                  = User::filter();
-        $branches               = Branch::where('status', true)->pluck('name', 'id');
-        $articulos                = Articulo::Filter();
-        $product_presentations  = Presentation::Filter();
-        $provider_suggesteds    = NULL;
-        return view('pages.mermas.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds'));
+        return view('pages.cash_box.create');
     }
 
     public function store(CreateMermaRequest $request)
@@ -82,9 +77,9 @@ class CashBoxesController extends Controller
         abort(404);
     }
 
-    public function show(Losse $losses)
+    public function show()
     {
-        return view('pages.mermas.show', compact('losses'));
+            return view('pages.cash_box.create');
     }
 
 

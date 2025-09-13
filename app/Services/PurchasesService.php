@@ -123,69 +123,22 @@ class PurchasesService
                 $purchases_order_detail = PurchaseOrderDetail::find($request->detail_product_orders_id[$key]);
                 $purchases_order_detail->decrement('residue', $request->detail_product_quantity[$key]);
             }
-
-            //SI PUEDE EDITAR MALLA CONTABLE DE PRODUCTOS
-            // if (auth()->user()->can('purchases-products.accounting-entries'))
-            // {
-            //     $accounting_plan_union = AccountingPlanUnion::where('social_reason_id', $request->social_reason_id)
-            //                                                 ->where('accountable_type', 'App\\Models\\PurchasesProduct')
-            //                                                 ->where('accountable_id', $request->detail_product_id[$key])
-            //                                                 ->first();
-            //     if (!$accounting_plan_union)
-            //     {
-            //         AccountingPlanUnion::create([
-            //                                         'accountable_id'     => $request->detail_product_id[$key],
-            //                                         'accountable_type'   => 'App\Models\PurchasesProduct',
-            //                                         'social_reason_id'   => $request->social_reason_id,
-            //                                         'accounting_plan_id' => $request->detail_accounting_plan[$key]
-            //                                     ]);
-            //     }
-            //     //SI EL PRODUCTO ES STOCKEABLE
-            //     if ($purchase_detail->purchases_product->purchases_category->stockeable)
-            //     {
-            //         $accounting_plan_union = AccountingPlanUnion::where('social_reason_id', $request->social_reason_id)
-            //                                                     ->where('accountable_type', 'App\\Models\\PurchasesProduct_Stock')
-            //                                                     ->where('accountable_id', $request->detail_product_id[$key])
-            //                                                     ->first();
-            //         if (!$accounting_plan_union)
-            //         {
-            //             AccountingPlanUnion::create([
-            //                                             'accountable_id'     => $request->detail_product_id[$key],
-            //                                             'accountable_type'   => 'App\Models\PurchasesProduct_Stock',
-            //                                             'social_reason_id'   => $request->social_reason_id,
-            //                                             'accounting_plan_id' => $request->detail_baccounting_plan[$key]
-            //                                         ]);
-            //         }
-            //     }
-            // }
         }
         if(sum_array($request->amount_treasury) > 0)
         {
-            foreach ($request->expiration as $expiration_key => $expiration) 
+            $monto = $request->amount_treasury[0] / $request->quota;
+            for ($i=0; $i < $request->quota ; $i++)
             {
+                 $expiration = Carbon::createFromFormat('d/m/Y', $request->expiration[0])->addMonths($i);
                  $purchases_collect = PurchasesCollect::create([
                                          'purchase_id' => $purchase->id,
-                                         'number'     => $expiration_key + 1,
-                                         'expiration' => $expiration,
-                                         'amount'     => cleartStringNumber($request->amount_treasury[$expiration_key]),
-                                         'residue'    => cleartStringNumber($request->amount_treasury[$expiration_key])
+                                         'number'     => $i + 1,
+                                         'expiration' => $expiration->format('d/m/Y'),
+                                         'amount'     => cleartStringNumber($this->parse($monto)),
+                                         'residue'    => cleartStringNumber($this->parse($monto))
                                      ]);
-                //SI ES PROVEEDORE
-                CalendarPayment::create([
-                    'date'                  =>  Carbon::createFromFormat('d/m/Y', $expiration)->format('Y-m-d'),
-                    'purchase_id'           => $purchase->id,
-                    'provider_id'           => $request->purchases_provider_id,
-                    'description'           => $purchase->observation,
-                    'amount'                => $request->amount_treasury[$expiration_key],
-                    'user_id'               => auth()->user()->id,
-                    'status'                => 1,
-                    'purchase_collect_id'   => $purchases_collect->id
-                ]);                
             }
         }
-
-        // GENERAR ASIENTOS CONTABLES
-        // AccountingMovementsJob::dispatch(4, $purchase->id, $purchase->user_id);
 
         return $purchase;
 	}

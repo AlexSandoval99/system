@@ -29,7 +29,7 @@
                         @foreach($costs as $cost)
                             <tr>
                                 <td>{{ $cost->id }}</td>
-                                <td>{{ $cost->quality_control->id }}</td>
+                                <td>{{ $cost->order_production->id }}</td>
                                 <td>{{ $cost->branch->name }}</td>
                                 <td>{{ $cost->date }}</td>
                                 <td>

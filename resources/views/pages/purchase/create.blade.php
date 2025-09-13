@@ -6,9 +6,6 @@
     <div class="col-lg-7">
         <div class="ibox float-e-margins">
             <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="my-0">Datos del Proveedor</h4>
-                </div>
                 <div class="panel-body pb-0">
                     <div class="row">
                         <div class="col-lg-12">
@@ -90,7 +87,6 @@
                                             <tr>
                                                 <th class="text-center">Fecha</th>
                                                 <th class="text-center">Numero</th>
-                                                <th class="text-center">Condición</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -105,7 +101,6 @@
                                             <tr>
                                                 <th class="text-center">Fecha</th>
                                                 <th class="text-center">Numero</th>
-                                                <th class="text-center">Condición</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -233,12 +228,12 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label>Condición</label>
-                        {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'condition', "onChange" => "changeCondition();"]) }}
+                        {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'id' => 'condition']) }}
                     </div>
-                    {{-- <div class="form-group col-md-3" id="div_quota">
+                    <div class="form-group col-md-3" id="div_quota" style="display: none;">
                         <label>Cant. Cuota</label>
-                        <input class="form-control" type="text" name="number" id="quota" value="{{ old('quota') }}">
-                    </div> --}}
+                        <input class="form-control" type="text" name="quota" id="quota" value="{{ old('quota') }}">
+                    </div>
                 </div>
             </div>
         </div>
@@ -372,22 +367,14 @@
         </div>
     </div>
     <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h3>Pagos</h3>
+        </div>
         <div class="ibox-content pb-0">
             <div class="row">
                 <div class="col-md-7">
-                    {{-- <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Caja Chica</label>
-                            {{ Form::select('cash_box_id', $cash_boxes, old('cash_box_id'), ['data-live-search'=>'true', 'class' => 'form-control selectpicker', 'placeholder' => 'Seleccione Caja Chica', 'id' => 'cash_box_id']) }}
-                        </div>
-                    </div> --}}
-                    <div class="col-md-12">
+                    <div class="col-md-12" id="div_pagos">
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label>Seleccione el Pago</label><br>
-                                <input type="radio" name="type_payment" value="1" {{ 'checked' }} onClick="changeOtherAccounting(1);" id="type_payment_1"> NO PAGO
-                                <input type="radio" name="type_payment" value="2" {{ 'checked' }} onClick="changeOtherAccounting(0);" id="type_payment_2"> PAGO
-                            </div>
                             <div class="form-group col-md-3 text-center">
                                 <label>Fecha Pago</label>
                                 <input class="form-control text-center date" type="text" name="expiration[]" value="" autocomplete="off">
@@ -396,11 +383,6 @@
                             <div class="form-group col-md-5 text-center">
                                 <label>Monto a Pagar en Tesoreria</label>
                                 <input class="form-control  text-right" type="text" name="amount_treasury[]" value="" period-data-mask-decimal autocomplete="off">
-                            </div>
-                            <div class="row" id="row_btn_payment_date" >
-                                <div class="col-md-12">
-                                    <button type="button" class="btn btn-block btn-outline btn-primary" id="btn_payment_date"><i class="fa fa-plus"></i> Fecha de Pago</button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -464,31 +446,12 @@
                 daysOfWeekDisabled: [0]
             });
 
-            // $("[period-data-mask]").inputmask({
-            //     alias: 'decimal',
-            //     groupSeparator: '.',
-            //     radixPoint: ',',
-            //     autoGroup: true,
-            //     allowMinus: false,
-            //     rightAlign: false,
-            //     digits: 0,
-            //     removeMaskOnSubmit: true,
-            // });
-
-            // $("[date-mask]").inputmask({
-            //     alias: 'date'
-            // });
-
             $(".date").datepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'es',
                 autoclose: true,
                 todayBtn: true,
             });
-
-            // $("[date-mask]").inputmask({
-            //     alias: 'date'
-            // });
 
             $("#purchases_provider_id").select2({
                 language: 'es',
@@ -525,14 +488,11 @@
                 $('#ruc').val(data_item.ruc);
                 $('#phone').val(data_item.phone);
                 $('#address').val(data_item.address);
-                // $('#stamped').val(data_item.stamped);
-                // $('#stamped_validity').val(data_item.stamped_validity);
                 dv = data_item.dv;
 
                 if(data_item.days_of_grace) $('#text_days_of_grace').html(data_item.days_of_grace + ' Días de gracia.');
                 $('#div_purchase_order_spinner').show();
                 changeLastPurchases();
-                // load_payment_services_authorizations();
             });
 
             $("#invoice_number").select2({
@@ -658,6 +618,23 @@
                 todayBtn: "linked"
             });
 
+            $("#type").on('change', function(){
+                let typeVoucher = $(this).val();
+                let condition = $('#condition').val();
+                if(typeVoucher == 1)
+                {
+                    condicion();
+                }
+                else
+                {
+                    $('#div_quota').hide();
+                }
+            });
+
+            $('#condition').on('change', function(){
+                condicion();
+            });
+
             $('#btn_payment_date').click(function(){
                 $('<div class="row" >'+
                     '<div class="form-group col-md-3 text-center" style="margin-left: 66mm">'+
@@ -677,6 +654,20 @@
             });
         });
 
+        function condicion()
+        {
+            let condition = $('#condition').val();
+            if(condition == 2)
+            {
+                $('#div_quota').show();
+            }
+            else
+            {
+                $('#div_quota').hide();
+                $('#quota').val(1);
+            }
+        }
+
         function loadDate()
         {
             $(".date").datepicker({
@@ -688,31 +679,12 @@
                 daysOfWeekDisabled: [0]
             });
 
-            // $("[period-data-mask]").inputmask({
-            //     alias: 'decimal',
-            //     groupSeparator: '.',
-            //     radixPoint: ',',
-            //     autoGroup: true,
-            //     allowMinus: false,
-            //     rightAlign: false,
-            //     digits: 0,
-            //     removeMaskOnSubmit: true,
-            // });
-
-            // $("[date-mask]").inputmask({
-            //     alias: 'date'
-            // });
-
             $(".date").datepicker({
                 format: 'dd/mm/yyyy hh:ii',
                 language: 'es',
                 autoclose: true,
                 todayBtn: true,
             });
-
-            // $("[date-mask]").inputmask({
-            //     alias: 'date'
-            // });
         }
 
         function loadStamped()
@@ -737,33 +709,6 @@
                 });
             }
         }
-        // changeCondition()
-        // function changeCondition()
-        // {
-        //     var condition = $("#condition option:selected").val();
-        //     if(condition == 1)
-        //     {
-        //         $("#div_quota").hide();
-        //     }
-        //     else
-        //     {
-        //         $("#div_quota").show();
-        //     }
-        // }
-
-        // function loadPeriodDataMaskDecimal()
-        // {
-        //     $("[period-data-mask-decimal]").inputmask({
-        //         alias: 'decimal',
-        //         groupSeparator: '.',
-        //         radixPoint: ',',
-        //         autoGroup: true,
-        //         allowMinus: false,
-        //         rightAlign: true,
-        //         digits: 2,
-        //         removeMaskOnSubmit: true,
-        //     });
-        // }
 
         function ChangeTypePurchase()
         {
@@ -1037,8 +982,7 @@
                             $('#tbody_detail_orders_purchases').append('<tr>' +
                                 '<td class="text-center">' + element.date + '</td>' +
                                 '<td class="text-center">' + element.number +'</td>' +
-                                '<td class="text-center">' + element.condition +'</td>' +
-                                '<td class="text-center"><a href="javascript:;" onClick="changeOrdersDetailProducts('+ element.id +');"><i class="fa fa-info-circle"> Productos</i></a></td>' +
+                                '<td class="text-center"><a href="javascript:;" onClick="changeOrdersDetailProducts('+ element.id +');"><i class="fa fa-info-circle"></i></a></td>' +
                                 '<input type="text" name="detail_order_id[]" value=s"' + element.id + '">' +
                                 '<input type="text" name="detail_invoice_number[]" value="' + element.invoice_number + '">' +
                                 '<input type="text" name="detail_invoice_date[]" value="' + element.invoice_date + '">' +

@@ -32,7 +32,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3"><b>Fecha Creación:</b></div>
-                                <div class="col-md-9">{{ $production_cost->created_at->format('d/m/Y H:m:s') }}</div>
+                                <div class="col-md-9">{{ $production_cost->created_at }}</div>
                             </div>
                         </div>
                     </div>

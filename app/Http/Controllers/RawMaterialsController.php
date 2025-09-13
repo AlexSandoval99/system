@@ -72,35 +72,35 @@ class RawMaterialsController extends Controller
             }
 
             // Buscar la fecha de Recepcion
-            $purchases_movements = PurchaseOrder::select("purchase_movements.invoice_number", "purchase_movements.invoice_date", "purchase_movements.date_payment", "purchase_movements.branch_id", "purchase_movements.invoice_condition", "purchase_movements.invoice_stamped", "purchase_movements.stamp_validity")
-                                                ->join('purchase_order_details', 'purchase_order_details.purchases_order_id', '=', 'purchase_orders.id')
-                                                ->join('purchase_movements_details', 'purchase_movements_details.purchases_order_detail_id', '=', 'purchase_order_details.id')
-                                                ->join('purchase_movements', 'purchase_movements_details.purchase_movement_id', '=', 'purchase_movements.id')
-                                                ->where('purchase_orders.id', request()->id)
-                                                ->whereNotNull('purchase_movements.date_payment')
-                                                ->orderBy('purchase_movements.id', 'DESC')
-                                                ->groupBy('purchase_movements.id')
-                                                ->limit(1)
-                                                ->get();
-            if($purchases_movements)
-            {
-                foreach ($purchases_movements as $movement)
-                {
-                    $results['invoice_branch_id'] = $movement->branch_id;
-                    $results['invoice_currency_id'] = $movement->currency_id;
-                    $results['invoice_condition'] = $movement->invoice_condition;
-                    $results['invoice_stamped'] = $movement->invoice_stamped ?  $movement->invoice_stamped : null;
-                    $results['invoice_stamp_validity']   = $movement->stamp_validity ?  Carbon::createFromFormat('Y-m-d', $movement->stamp_validity)->format('d/m/Y') : null;
-                    $results['invoice_number'] = $movement->invoice_number;
-                    $results['invoice_date']   = Carbon::createFromFormat('Y-m-d', $movement->invoice_date)->format('d/m/Y');
-                    $results['date_payment']   = Carbon::createFromFormat('Y-m-d', $movement->date_payment)->format('d/m/Y');
-                }
-            }else
-            {
-                $results['orders'][0]['invoice_number'] = '';
-                $results['orders'][0]['invoice_date']   = '';
-                $results['orders'][0]['date_payment']   = '';
-            }
+            // $purchases_movements = PurchaseOrder::select("purchase_movements.invoice_number", "purchase_movements.invoice_date", "purchase_movements.date_payment", "purchase_movements.branch_id", "purchase_movements.invoice_condition", "purchase_movements.invoice_stamped", "purchase_movements.stamp_validity")
+            //                                     ->join('purchase_order_details', 'purchase_order_details.purchases_order_id', '=', 'purchase_orders.id')
+            //                                     ->join('purchase_movements_details', 'purchase_movements_details.purchases_order_detail_id', '=', 'purchase_order_details.id')
+            //                                     ->join('purchase_movements', 'purchase_movements_details.purchase_movement_id', '=', 'purchase_movements.id')
+            //                                     ->where('purchase_orders.id', request()->id)
+            //                                     ->whereNotNull('purchase_movements.date_payment')
+            //                                     ->orderBy('purchase_movements.id', 'DESC')
+            //                                     ->groupBy('purchase_movements.id')
+            //                                     ->limit(1)
+            //                                     ->get();
+            // if($purchases_movements)
+            // {
+            //     foreach ($purchases_movements as $movement)
+            //     {
+            //         $results['invoice_branch_id'] = $movement->branch_id;
+            //         $results['invoice_currency_id'] = $movement->currency_id;
+            //         $results['invoice_condition'] = $movement->invoice_condition;
+            //         $results['invoice_stamped'] = $movement->invoice_stamped ?  $movement->invoice_stamped : null;
+            //         $results['invoice_stamp_validity']   = $movement->stamp_validity ?  Carbon::createFromFormat('Y-m-d', $movement->stamp_validity)->format('d/m/Y') : null;
+            //         $results['invoice_number'] = $movement->invoice_number;
+            //         $results['invoice_date']   = Carbon::createFromFormat('Y-m-d', $movement->invoice_date)->format('d/m/Y');
+            //         $results['date_payment']   = Carbon::createFromFormat('Y-m-d', $movement->date_payment)->format('d/m/Y');
+            //     }
+            // }else
+            // {
+            //     $results['orders'][0]['invoice_number'] = '';
+            //     $results['orders'][0]['invoice_date']   = '';
+            //     $results['orders'][0]['date_payment']   = '';
+            // }
 
             return response()->json($results);
         }

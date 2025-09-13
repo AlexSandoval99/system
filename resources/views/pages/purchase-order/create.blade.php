@@ -16,12 +16,12 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label>Solicitado por</label>
-                                <input class="form-control" type="text" name="requested_by" value="{{ old('requested_by') }}">
+                                <input class="form-control" type="text" name="requested_by" value="{{auth()->user()->name}}" disabled>
                             </div>
-                            <div class="form-group col-md-2">
+                            {{-- <div class="form-group col-md-2">
                                 <label>Condición</label>
                                 {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['class' => 'form-control', 'select2']) }}
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-2">
                                 <label>Sucursal</label>
                                 {{ Form::select('branch_id', $branches, old('branch_id'), ['class' => 'form-control', 'select2', 'id' => 'branch_id']) }}
@@ -30,10 +30,10 @@
                                 <label>Fecha</label>
                                 <input class="form-control" type="text" name="date" value="{{ old('date', date('d/m/Y')) }}"  readonly>
                             </div>
-                            <div class="form-group col-md-2">
+                            {{-- <div class="form-group col-md-2">
                                 <label>Cambio</label>
                                 <input class="form-control" type="text" name="change" id="change" value="1">
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -211,38 +211,7 @@
             <div class="row">
                 <div class="form-group col-md-7">
                     <label>Observación</label>
-                    <textarea class="form-control" name="observation" rows="18">{{ old('observation') }}</textarea>
-                </div>
-                <div class="form-group col-md-5" id="div_detail_cost_centers">
-                    <label>Centro de Costos</label>
-                    <table class="table table-condensed table-hover table-bordered mb-0">
-                        <thead>
-                            <tr>
-                                <th width="10%" class="text-center">#</th>
-                                <th width="60%" class="text-center">Centro de Costos</th>
-                                <th width="30%" class="text-center">%</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_detail_cost_centers"></tbody>
-                        <tfoot class="bold">
-                            <tr>
-                                <td colspan="2" class="text-right">Totales</td>
-                                <td class="text-right"><input class="form-control col-md-1" type="text" id="total_cost_centers" name="total_cost_centers" value="0" readonly></td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                    <br>
-                    <div class="form-group col-sm-4">
-                        <label><input type="checkbox" name="select_all_cost_centers" id="select_all_cost_centers" onClick="ChangeSelectAllCostCenters(this);" {{ old('select_all_cost_centers') ? 'checked' : '' }}> Seleccionar todo</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-7">
-                    <label>Imagen de la OC</label>
-                    <input type="file" class="form-control" name="signature_image">
+                    <textarea class="form-control" name="observation" rows="2">{{ old('observation') }}</textarea>
                 </div>
             </div>
         </div>
@@ -333,9 +302,6 @@
                 checkLastPurchasesProducts();
             });
 
-            $("#social_reason_id").on('change', function(){
-                ChangeListAccountingAccounts();
-            });
         });
 
 
@@ -401,16 +367,6 @@
                 });
             }
         }
-
-        ChangeListAccountingAccounts();
-        function ChangeListAccountingAccounts()
-        {
-            var social_reason_id = $("#social_reason_id").val();
-            var counter_cost     = 1;
-            $("#tbody_detail_cost_centers").html('');
-            $("#div_detail_cost_centers").hide();
-        }
-
 
         changeLastPurchases();
         function changeLastPurchases()
@@ -556,8 +512,6 @@
                 $("input[name='products_amount']").val('');
                 $("input[name='products_quantity']").val('');
                 $("#text_last_purchases").html('');
-
-                // $('#raw_materials_id').focus();
             }
             else
             {
