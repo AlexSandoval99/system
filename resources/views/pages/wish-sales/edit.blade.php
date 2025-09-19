@@ -1,5 +1,5 @@
 @extends('layouts.AdminLTE.index')
-@section('title', 'Editar Pedido de Produccion')
+@section('title', 'Editar Pedido de Venta')
 @section('content')
 <div class="row">
     <div class="col-lg-12">
