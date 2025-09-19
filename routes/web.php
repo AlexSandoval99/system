@@ -183,13 +183,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function (){
 	Route::get('reports/purchases_report', 'ReportsController@purchases_report')->name('reports.purchases_report');
 	Route::get('reports/purchases_report/pdf', 'ReportsController@purchases_report_pdf')->name('reports.purchases_report.pdf');
 
-	Route::get('wish-production', 'WishProductionController@index')->name('wish-production');
-	Route::get('wish-production/create', 'WishProductionController@create')->name('wish-production.create');
-	Route::get('wish-production/{wish_production}', 'WishProductionController@show')->name('wish-production-show');
-	Route::post('wish-production', 'WishProductionController@store')->name('wish-production.store');
+	Route::get('wish-sales', 'WishSaleController@index')->name('wish-sales');
+	Route::get('wish-sales/create', 'WishSaleController@create')->name('wish-sales.create');
+	Route::get('wish-sales/{wish_sale}', 'WishSaleController@show')->name('wish-sales-show');
+	Route::post('wish-sales', 'WishSaleController@store')->name('wish-sales.store');
     Route::get('ajax/clients', 'ClienteController@ajax_clients')->name('ajax.clients');
-	Route::get('wish-production/{wish_production}/edit', 'WishProductionController@edit')->name('wish-production.edit');
-	Route::put('wish-production/{wish_production}/update', 'WishProductionController@update')->name('wish-production.update');
+    Route::put('wish-sales/{wish_sale}', 'WishSaleController@update')->name('wish-sales.update');
+	Route::get('wish-sales/{wish_sale}/edit', 'WishSaleController@edit')->name('wish-sales.edit');
 
 	Route::get('budget-production', 'BudgetProductionController@index')->name('budget-production');
 	Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');

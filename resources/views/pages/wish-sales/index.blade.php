@@ -6,7 +6,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <div class="btn-group pull-right">
-                    <a href="{{ url('wish-production/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    <a href="{{ url('wish-sales/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
                 </div>
             </div>
             <div class="ibox-content pb-0">
@@ -30,24 +30,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($productions as $production)
+                        @foreach($sales as $sale)
                             <tr>
-                                <td>{{ $production->id }}</td>
-                                <td>{{ $production->date }}</td>
-                                <td>{{ $production->client->razon_social }}</td>
+                                <td>{{ $sale->id }}</td>
+                                <td>{{ $sale->date }}</td>
+                                <td>{{ $sale->client->razon_social }}</td>
                                 <td>
-                                    <span class="label label-{{ config('constants.purchase-status-label.' . $production->status) }}">{{ config('constants.purchase-status.'. $production->status) }}</span>
+                                    <span class="label label-{{ config('constants.purchase-status-label.' . $sale->status) }}">{{ config('constants.purchase-status.'. $sale->status) }}</span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ url('wish-production/' . $production->id) }}"><i class="fa fa-info-circle"></i></a>
-                                    <a href="{{ url('wish-production/' . $production->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                                    <a href="{{ url('wish-sales/' . $sale->id) }}"><i class="fa fa-info-circle"></i></a>
+                                    <a href="{{ url('wish-sales/' . $sale->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
                 </div>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            {{ $productions->appends(request()->query())->links() }}
+            {{ $sales->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
