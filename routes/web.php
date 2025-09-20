@@ -33,29 +33,38 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::put('/profile/update/password/{id}', 'ProfileController@updatePassword')->name('profile.update.password');
         Route::put('/profile/update/avatar/{id}', 'ProfileController@updateAvatar')->name('profile.update.avatar');
     });
-    Route::view('/request-materials', 'pages.request-materials.index');
-    Route::view('/request-materials/create', 'pages.request-materials.create');
-    Route::view('/payments', 'pages.payments.index');
-    Route::view('/payments/create', 'pages.payments.create');
-    Route::view('/stampe', 'pages.stampe.index');
-    Route::view('/stampe/create', 'pages.stampe.create');
-    Route::view('/team_works', 'pages.team_works.index');
-    Route::view('/team_works/create', 'pages.team_works.create');
-    Route::view('/voucher', 'pages.vouchers.index');
-    Route::view('/voucher/create', 'pages.vouchers.create');
-    Route::view('/remission-note', 'pages.remission-note.index');
-    Route::view('/remission-note/create', 'pages.remission-note.create');
-
-    Route::view('/deposits', 'pages.deposits.index');
-    Route::view('/deposits/create', 'pages.deposits.create');
-    Route::view('/usuarios', 'pages.usuarios.index');
-    Route::view('/usuarios/create', 'pages.usuarios.create');
-    Route::view('/informe-compra', 'pages.informe-compra.index');
-    Route::view('/informe-produccion', 'pages.informe-produccion.index');
-    Route::view('/informe-ventas', 'pages.informe-ventas.index');
 
 
-    Route::group(['namespace' => 'App\Http\Controllers'], function (){
+    Route::group(['namespace' => 'App\Http\Controllers'], function ()
+    {
+        Route::get('/request-materials', 'RequestMaterialsController@index')->name('request-materials');
+        Route::get('/request-materials/create','RequestMaterialsController@create')->name('request-materials.create');
+        Route::get('/payments', 'PaymentsController@index')->name('payments');
+        Route::get('/payments/create', 'PaymentsController@create')->name('payments.create');
+        Route::get('/stampe', 'StampedController@index')->name('stampe');
+        Route::get('/stampe/create', 'StampedController@create')->name('stampe.create');
+        Route::get('/team_works', 'TeamWorksController@index')->name('team_works');
+        Route::get('/team_works/create', 'TeamWorksController@create')->name('team_works.create');
+
+        Route::get('/voucher', 'VouchersController@index')->name('voucher');
+        Route::get('/voucher/create', 'VouchersController@create')->name('voucher.create');
+        Route::post('voucher/store', 'VouchersController@store')->name('voucher.store');
+        Route::get('/remission-note', 'RemissionNotesController@index')->name('remission-note');
+        Route::get('/remission-note/create','RemissionNotesController@create')->name('remission-note.create');
+        Route::get('ajax/production-orders/{client_id}', 'ProductionOrderController@ajaxByClient');
+        Route::get('ajax/production-order-detail/{id}', 'ProductionOrderController@ajaxDetalle');
+        Route::get('ajax/expedition', 'VouchersController@ajaxExpedicion');
+        Route::get('ajax/timbrado', 'VouchersController@ajaxTimbrado');
+
+
+
+        Route::view('/deposits', 'pages.deposits.index');
+        Route::view('/deposits/create', 'pages.deposits.create');
+        Route::view('/usuarios', 'pages.usuarios.index');
+        Route::view('/usuarios/create', 'pages.usuarios.create');
+        Route::view('/informe-compra', 'pages.informe-compra.index');
+        Route::view('/informe-produccion', 'pages.informe-produccion.index');
+        Route::view('/informe-ventas', 'pages.informe-ventas.index');
 
         Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
         // Route::get('budgets/create/{id}/{token}', 'WishPurchaseController@budget')->withoutMiddleware('auth')->name('budget.create');
@@ -218,13 +227,13 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('reports/purchases_report', 'ReportsController@purchases_report')->name('reports.purchases_report');
         Route::get('reports/purchases_report/pdf', 'ReportsController@purchases_report_pdf')->name('reports.purchases_report.pdf');
 
-        Route::get('wish-production', 'WishProductionController@index')->name('wish-production');
-        Route::get('wish-production/create', 'WishProductionController@create')->name('wish-production.create');
-        Route::get('wish-production/{wish_production}', 'WishProductionController@show')->name('wish-production-show');
-        Route::post('wish-production', 'WishProductionController@store')->name('wish-production.store');
+        Route::get('wish-sales', 'WishSaleController@index')->name('wish-sales');
+        Route::get('wish-sales/create', 'WishSaleController@create')->name('wish-sales.create');
+        Route::get('wish-sales/{wish_sale}', 'WishSaleController@show')->name('wish-sales-show');
+        Route::post('wish-sales', 'WishSaleController@store')->name('wish-sales.store');
         Route::get('ajax/clients', 'ClienteController@ajax_clients')->name('ajax.clients');
-        Route::get('wish-production/{wish_production}/edit', 'WishProductionController@edit')->name('wish-production.edit');
-        Route::put('wish-production/{wish_production}/update', 'WishProductionController@update')->name('wish-production.update');
+        Route::put('wish-sales/{wish_sale}', 'WishSaleController@update')->name('wish-sales.update');
+        Route::get('wish-sales/{wish_sale}/edit', 'WishSaleController@edit')->name('wish-sales.edit');
 
         Route::get('budget-production', 'BudgetProductionController@index')->name('budget-production');
         Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');
@@ -270,7 +279,7 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('production-cost/{production_cost}', 'ProductionCostController@show')->name('production-cost-show');
 
         Route::get('vouchers','VoucherController@index')->name('vouchers');
-        Route::post('vouchers', 'VoucherController@store')->name('vouchers.store');
+        // Route::post('vouchers', 'VoucherController@store')->name('vouchers.store');
         Route::get('vouchers/previous-create', 'VoucherController@previous_create')->name('vouchers.previous-create');
         Route::post('vouchers/post-create', 'VoucherController@post_create')->name('vouchers.post-create');
         Route::get('vouchers/{voucher}', 'VoucherController@show')->name('vouchers.show');

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WishProduction extends Model
+class WishSale extends Model
 {
     protected $table = "wish_sales";
     use HasFactory;
@@ -22,9 +22,9 @@ class WishProduction extends Model
     {
         $this->attributes['date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
-    public function wish_production_details()
+    public function wish_sale_details()
     {
-        return $this->hasMany('App\Models\WishProductionDetail');
+        return $this->hasMany('App\Models\WishSaleDetail');
     }
     public function branch()
     {

@@ -54,13 +54,13 @@ class BudgetProductionController extends Controller
         {
             DB::transaction(function() use ($request)
             {
-                $budget_production = BudgetProduction::create([ 'client_id'          => $request->client_id,
+                $budget_production = BudgetProduction::create([  'client_id'          => $request->client_id,
                                                                  'total_amount'       => $request->total_amount,
                                                                  'status'             => true,
                                                                  'date'               => $request->date,
                                                                  'branch_id'          => $request->branch_id,
                                                                  'user_id'            => auth()->user()->id,
-                                                                 'wish_sale_id'    => $request->wish_sale_id,
+                                                                 'wish_sale_id'       => $request->wish_sale_id,
 
                                                                 ]);
                 foreach($request->detail_product_id as $key => $product_id)
@@ -69,7 +69,6 @@ class BudgetProductionController extends Controller
                             'quantity'              => $request->quantity_product[$key],
                             'amount'                => $request->detail_product_amount[$key],
                             'budget_production_id'  => $budget_production->id,
-                            'wish_sale_id'    => null,
     						'articulo_id'           => $product_id
                     ]);
                 }

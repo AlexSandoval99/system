@@ -206,13 +206,22 @@
                     <a href="#"><i class="fa fa fa-shopping-basket"></i><span>Ventas</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
                     <ul class="treeview-menu">
                         <li class="provider">
-                            <a href="{{ route('wish-production') }}" title="Pedido Ventas">
+                            <a href="{{ route('wish-sales') }}" title="Pedido Ventas">
                                 <span>Pedidos</span>
                             </a>
                         </li>
                         <li class="provider">
                             <a href="{{ route('vouchers') }}" title="Factura Ventas">
                                 <span>Factura Ventas</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('payments') }}" title="Cobros">
+                                <span>Cobros</span>
+                            </a>
+                        <li class="provider">
+                            <a href="{{ route('remission-note') }}" title="Nota de Remision">
+                                <span>Nota de Remision</span>
                             </a>
                         </li>
                     </ul>

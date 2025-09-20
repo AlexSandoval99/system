@@ -80,7 +80,7 @@ class VoucherController extends Controller
         }
 
         $vouchers = $vouchers->paginate(20);
-        return view('pages.voucher.index', compact('vouchers', 'branches', 'voucher_boxes'));
+        return view('pages.vouchers.index', compact('vouchers', 'branches', 'voucher_boxes'));
     }
 
     public function create()

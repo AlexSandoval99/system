@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WishProductionDetail extends Model
+class WishSaleDetail extends Model
 {
     protected $table = "wish_sale_details";
     use HasFactory;
@@ -18,8 +18,8 @@ class WishProductionDetail extends Model
     {
         return $this->belongsTo('App\Models\Articulo');
     }
-    public function wish_production()
+    public function wish_sales()
     {
-        return $this->belongsTo('App\Models\WishProduction', 'wish_sale_id');
+        return $this->belongsTo('App\Models\WishSale', 'wish_sale_id');
     }
 }

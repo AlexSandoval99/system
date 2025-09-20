@@ -5,45 +5,36 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePurchaseImageRequest;
 use App\Http\Requests\CreateWishProductionRequest;
-use App\Http\Requests\CreateWishPurchaseRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\Client;
 use App\Models\Presentation;
-use App\Models\Provider;
 use App\Models\Purchase;
 use App\Models\PurchaseBudget;
-use App\Models\RawMaterial;
 use App\Models\User;
-use App\Models\WishProduction;
-use App\Models\WishProductionDetail;
-use Carbon\Carbon;
 use App\Models\WishPurchase;
+use App\Models\WishSale;
+use App\Models\WishSaleDetail;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 
-class WishProductionController extends Controller
+class WishSaleController extends Controller
 {
     public function index()
     {
-        $productions_client = Client::Filter();
-        $productions           = WishProduction::with('branch', 'client')
+        $client = Client::Filter();
+        $sales           = WishSale::with('branch', 'client')
             ->orderBy('id');
 
         if (request()->p)
         {
-            $productions = $productions->where('id', 'LIKE', '%' . request()->p . '%');
+            $sales = $sales->where('id', 'LIKE', '%' . request()->p . '%');
         }
-
-        // if (request()->invoice_copy)
-        // {
-        //     $productions = $productions->where('invoice_copy', request()->invoice_copy);
-        // }
-
-        $productions = $productions->paginate(20);
-        return view('pages.wish-production.index', compact('productions', 'productions_client'));
+        $sales = $sales->paginate(20);
+        return view('pages.wish-sales.index', compact('sales', 'client'));
     }
 
     public function create()
@@ -53,20 +44,20 @@ class WishProductionController extends Controller
         $articulos              = Articulo::Filter();
         $product_presentations  = Presentation::Filter();
 
-        return view('pages.wish-production.create', compact('users' , 'branches', 'articulos', 'product_presentations'));
+        return view('pages.wish-sales.create', compact('users' , 'branches', 'articulos', 'product_presentations'));
     }
 
     public function store(CreateWishProductionRequest $request)
     {
         if(request()->ajax())
         {
-            DB::transaction(function() use ($request, & $wish_production)
+            DB::transaction(function() use ($request, & $wish_sale)
             {
-                $last_number = WishProduction::orderBy('date')->limit(1)->first();
+                $last_number = WishSale::orderBy('date')->limit(1)->first();
                 $last_number = $last_number ? $last_number->number : 0;
                 $last_number = $last_number + 1;
 
-                $wish_production = WishProduction::create([
+                $wish_sale = WishSale::create([
                     'date'                      => $request->date,
                     'branch_id'                 => $request->branch_id,
                     'observation'               => $request->observation,
@@ -79,10 +70,10 @@ class WishProductionController extends Controller
                 foreach($request->detail_product_id as $key => $value)
                 {
 
-                    $wish_production->wish_production_details()->create([
+                    $wish_sale->wish_sale_details()->create([
                         'articulo_id'              => $request->detail_product_id[$key],
                         'quantity'                 => $request->detail_product_quantity[$key],
-                        'wish_sale_id'       => $wish_production->id,
+                        'wish_sale_id'       => $wish_sale->id,
                     ]);
                 }
             });
@@ -94,37 +85,38 @@ class WishProductionController extends Controller
         abort(404);
     }
 
-    public function show(WishProduction $wish_production)
+    public function show(WishSale $wish_sale)
     {
-
-        return view('pages.wish-production.show', compact('wish_production'));
+        return view('pages.wish-sales.show', compact('wish_sale'));
     }
-    public function edit(WishProduction $wish_production)
+    public function edit(WishSale $wish_sale)
     {
-        $productions_client = Client::Filter();
+        $client = Client::Filter();
         $articulos          = Articulo::Filter();
         $branches           = Branch::where('status', true)->pluck('name', 'id');
 
-        return view('pages.wish-production.edit',compact('wish_production','articulos','productions_client','branches'));
+        return view('pages.wish-sales.edit',compact('wish_sale','articulos','client','branches'));
     }
 
-    public function update(WishProduction $request, $id)
+    public function update(Request $request, WishSale $wish_sale)
     {
-        if($request->ajax())
+        DB::transaction(function() use ($request, $wish_sale)
         {
-            DB::transaction(function() use ($request, $id)
+            WishSaleDetail::where('wish_sale_id', $wish_sale->id)->delete();
+
+            foreach ($request->detail_product_id as $key => $value)
             {
-                $detail = WishProductionDetail::findOrFail($id);
-
-                $detail->update([
-                                  'articulo_id'              => $request->detail_product_id,
-                                  'quantity'                 => $request->detail_product_quantity,
+                WishSaleDetail::create([
+                    'articulo_id'  => $request->detail_product_id[$key],
+                    'quantity'     => $request->detail_product_quantity[$key],
+                    'wish_sale_id' => $wish_sale->id,
                 ]);
-            });
+            }
+        });
 
-            return response()->json(['success' => true]);
-        }
+        return redirect()->route('wish-sales')->with('success', 'Pedido de Venta Actualizado');
     }
+
 
     public function charge_purchase_budgets(WishPurchase $wish_purchase)
     {

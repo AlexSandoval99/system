@@ -8,7 +8,9 @@
             <div class="card border-primary">
                 <div class="card-header d-flex justify-content-between">
                     <h5>Ventas</h5>
-                    <button class="btn btn-success">Agregar</button>
+                    <div class="ibox-content pull-right">
+                        <a href="{{ url('voucher/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">

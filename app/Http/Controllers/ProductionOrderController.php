@@ -201,5 +201,35 @@ class ProductionOrderController extends Controller
         }
         abort(404);
     }
+    public function ajaxByClient($client_id)
+    {
+        $orders = ProductionOrder::where('client_id', $client_id)->where('status', 5)->get();
+        $results = [];
+        foreach ($orders as $key => $order)
+        {
+            $results[$key]['id'] = $order->id;
+            $results[$key]['date'] = $order->date;
+            $results[$key]['branch'] = $order->branch->name;
+        }
+        return response()->json($results);
+    }
 
+    public function ajaxDetalle($id)
+    {
+        $orders = ProductionOrderDetail::where('production_order_id', $id)->groupBy('articulo_id')->get();
+
+        $results = [];
+        foreach ($orders as $key => $detail)
+        {
+            $orden = ProductionOrder::where('id', $detail->production_order_id)->first();
+            $budget = BudgetProductionDetail::where('budget_production_id', $orden->budget_production_id)->where('articulo_id', $detail->articulo_id)->first();
+            $results[$key]['id'] = $detail->id;
+            $results[$key]['articulo_id'] = $detail->articulo->id;
+            $results[$key]['articulo'] = $detail->articulo->name;
+            $results[$key]['quantity'] = $detail->quantity;
+            $results[$key]['precio'] = $budget->amount;
+            $results[$key]['total_precio'] = $detail->quantity * $budget->amount;
+        }
+        return response()->json($results);
+    }
 }
