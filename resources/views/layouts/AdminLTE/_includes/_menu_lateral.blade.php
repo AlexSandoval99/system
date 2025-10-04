@@ -211,7 +211,7 @@
                             </a>
                         </li>
                         <li class="provider">
-                            <a href="{{ route('vouchers') }}" title="Factura Ventas">
+                            <a href="{{ route('voucher') }}" title="Factura Ventas">
                                 <span>Factura Ventas</span>
                             </a>
                         </li>
@@ -222,6 +222,26 @@
                         <li class="provider">
                             <a href="{{ route('remission-note') }}" title="Nota de Remision">
                                 <span>Nota de Remision</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa fa-table"></i><span>Reportes</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="provider">
+                            <a href="{{ route('reportes.compras') }}" title="Pedido Ventas">
+                                <span>Compras</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('reportes.produccion') }}" title="Factura Ventas">
+                                <span>Produccion</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('reportes.ventas') }}" title="Cobros">
+                                <span>Ventas</span>
                             </a>
                         </li>
                     </ul>

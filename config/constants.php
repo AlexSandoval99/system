@@ -29,15 +29,15 @@ return [
 
     'type_purchases' => [
         1 => 'Factura',
-        2 => 'Nota de Remision',
-        4 => 'Nota Credito',
+        2 => 'Nota Credito',
+        4 => 'Nota de Remision',
     ],
 
     'type_purchases_label' => [
         1 => 'primary',
-        2 => 'info',
+        2 => 'warning',
         3 => 'danger',
-        4 => 'warning',
+        4 => 'info',
         6 => 'info'
     ],
 
@@ -82,6 +82,14 @@ return [
     'purchase_order_status_label' =>[
         1 => 'warning',
         2 => 'success'
+    ],
+    'invoice_status' =>[
+        1 => 'Activo',
+        2 => 'Anulado'
+    ],
+    'invoice_status_label' =>[
+        1 => 'success',
+        2 => 'danger'
     ],
 
 ]

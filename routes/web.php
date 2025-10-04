@@ -39,8 +39,15 @@ Route::middleware(['auth', '2fa'])->group(function () {
     {
         Route::get('/request-materials', 'RequestMaterialsController@index')->name('request-materials');
         Route::get('/request-materials/create','RequestMaterialsController@create')->name('request-materials.create');
+
         Route::get('/payments', 'PaymentsController@index')->name('payments');
         Route::get('/payments/create', 'PaymentsController@create')->name('payments.create');
+        Route::post('payments/store', 'PaymentsController@store')->name('payments.store');
+        Route::get('ajax/voucher-collects/{factura}', 'PaymentsController@getCuotas')->name('ajax.voucher-collects');
+        Route::get('ajax/invoices-by-client/{cliente}', 'PaymentsController@getFacturas')->name('ajax.invoices-by-client');
+
+
+
         Route::get('/stampe', 'StampedController@index')->name('stampe');
         Route::get('/stampe/create', 'StampedController@create')->name('stampe.create');
         Route::get('/team_works', 'TeamWorksController@index')->name('team_works');
@@ -55,6 +62,8 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('ajax/production-order-detail/{id}', 'ProductionOrderController@ajaxDetalle');
         Route::get('ajax/expedition', 'VouchersController@ajaxExpedicion');
         Route::get('ajax/timbrado', 'VouchersController@ajaxTimbrado');
+        Route::get('ajax/invoices', 'VouchersController@facturasCliente')->name('ajax.invoices');
+
 
 
 
@@ -290,5 +299,13 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('vouchers/{voucher}/delete', 'VoucherController@delete')->name('vouchers.delete');
         Route::post('vouchers/{voucher}/delete', 'VoucherController@delete_submit')->name('vouchers.delete-submit');
 
+        Route::prefix('reportes')->group(function () {
+            Route::get('/compras', 'ReportController@compras')->name('reportes.compras');
+            Route::get('/produccion', 'ReportController@produccion')->name('reportes.produccion');
+            Route::get('/ventas', 'ReportController@ventas')->name('reportes.ventas');
+
+            Route::post('reportes/compras/{submodulo}/excel', 'ReportController@exportComprasExcel')->name('reportes.compras.excel');
+
+        });
     });
 });

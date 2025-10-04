@@ -17,6 +17,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
+                                <th>Tipo</th>
                                 <th>Sucursal</th>
                                 <th>Fecha</th>
                                 <th>Condición</th>
@@ -28,20 +29,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($vouchers as $voucher)
                             <tr>
-                                <td>1</td>
-                                <td>Central</td>
-                                <td>02/09/2025</td>
-                                <td>Contado</td>
-                                <td>1234567-8</td>
-                                <td>Cliente Ejemplo</td>
-                                <td><span class="badge bg-info">Pendiente</span></td>
-                                <td>1.200.000</td>
+                                <td>{{$voucher->id}}</td>
+                                <td><span class="label label-{{ config('constants.type_purchases_label.' . $voucher->voucher_type) }}">{{ config('constants.type_purchases.'. $voucher->voucher_type) }}</span></td>
+                                <td>{{$voucher->branch_id ? $voucher->branch->name : ''}}</td>
+                                <td>{{$voucher->date->format('d/m/Y')}}</td>
+                                <td>{{ config('constants.invoice_condition.'. $voucher->voucher_condition) }}</td>
+                                <td>{{$voucher->ruc}}</td>
+                                <td>{{$voucher->razon_social}}</td>
+                                <td><span class="label label-{{ config('constants.invoice_status_label.' . $voucher->status) }}">{{ config('constants.invoice_status.'. $voucher->status) }}</span></td>
+                                <td>{{ number_format($voucher->amount, 0, ',', '.') }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary">PDF</button>
-                                    <button class="btn btn-sm btn-danger">Anular</button>
+                                    <a href="#"><i class="fa fa-info-circle"></i></a>
+                                    <a href="#"><i class="fa fa-file"></i></a>
+                                    <a href="#"><i class="fa fa-times"></i></a>
                                 </td>
                             </tr>
+                            @endforeach
                             {{-- <tr>
                                 <td colspan="9" class="text-center">No hay ventas registradas</td>
                             </tr> --}}

@@ -85,4 +85,14 @@ class Voucher extends Model
     {
         return $this->belongsTo(Stamped::class);
     }
+
+    public function voucher_details()
+    {
+        return $this->hasMany(VoucherDetail::class);
+    }
+
+    public function voucherCollects()
+    {
+        return $this->hasMany(VoucherCollect::class);
+    }
 }

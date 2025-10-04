@@ -8,13 +8,17 @@ use App\Models\CashBoxUser;
 use App\Models\Stamped;
 use App\Models\Voucher;
 use App\Models\VoucherBox;
+use App\Models\VoucherCollect;
+use App\Models\VoucherDetail;
+use App\Models\VoucherNoteCredit;
 use Illuminate\Http\Request;
 
 class VouchersController extends Controller
 {
     public function index()
     {
-        return view('pages.vouchers.index');
+        $vouchers = Voucher::with('branch')->get();
+        return view('pages.vouchers.index', compact('vouchers'));
     }
 
     public function create(Request $request)
@@ -26,11 +30,102 @@ class VouchersController extends Controller
 
     public function store(Request $request)
     {
-        dd(request()->all());
-        Voucher::create([
+        if(request()->tipoDocumento == 1)
+        {
+            $factura = Voucher::create([
+                'date' => $request->date,
+                'branch_id' => $request->branch_id,
+                'voucher_box_id' => $request->expedicion,
+                'voucher_number' => $request->voucher_number,
+                'voucher_condition' => $request->condicion,
+                'expiration' => $request->vig_timbrado,
+                'client_id' => $request->client_id,
+                'razon_social' => $request->razon_social,
+                'ruc' => $request->ruc,
+                'phone' => null,
+                'address' => null,
+                'voucher_type' =>1,
+                'observation' => $request->observacion,
+                'amount' => 0,
+                'total_excenta' => 0,
+                'total_iva5' => 0,
+                'total_iva10' => 0,
+                'status' => 1,
+                'user_id' => auth()->user()->id,
+                'stamped_id' => $request->id_timb
+            ]);
+        }
+        else if(request()->tipoDocumento == 2)
+        {
+            $factura = Voucher::create([
+                'date' => $request->date,
+                'branch_id' => $request->branch_id,
+                'voucher_box_id' => $request->expedicion,
+                'voucher_number' => $request->voucher_number,
+                'voucher_condition' => $request->condicion,
+                'expiration' => $request->vig_timbrado,
+                'client_id' => $request->client_id,
+                'razon_social' => $request->razon_social,
+                'ruc' => $request->ruc,
+                'phone' => null,
+                'address' => null,
+                'voucher_type' => 2,
+                'observation' => $request->observacion,
+                'amount' => 0,
+                'total_excenta' => 0,
+                'total_iva5' => 0,
+                'total_iva10' => 0,
+                'status' => 1,
+                'user_id' => auth()->user()->id,
+                'stamped_id' => $request->id_timb
+            ]);
 
+            $nota = VoucherNoteCredit::create([
+                'voucher_id' => $factura->id,
+                'invoice_id' => $request->invoice_id,
+            ]);
+        }
+
+        foreach ($request->articulo as $key => $value)
+        {
+            VoucherDetail::create([
+                'voucher_id' => $factura->id,
+                'articulo_id' => $value,
+                'description' => $request->observacion,
+                'quantity' => $request->quantity[$key],
+                'amount' => $request->precio[$key],
+                'iva5'  => 0,
+                'iva10' => round($request->precio[$key] * 10 / 110, 0)
+            ]);
+            $factura->update([
+                'amount' => $factura->amount += ($request->precio[$key] * $request->quantity[$key])
+            ]);
+        }
+
+        $iva10 = $factura->amount / 11;
+        $factura->update([
+            'total_iva10' => $iva10
         ]);
-        return redirect()->route('voucher')->with('success', 'Comprobante registrado correctamente');
+
+        if($request->condicion == 2)
+        {
+            for ($i=0; $i < $request->intervalo ; $i++)
+            {
+                VoucherCollect::create([
+                    'voucher_id' => $factura->id,
+                    'number' => $i + 1,
+                    'expiration' => now()->addMonths($i + 1),
+                    'amount' => round($factura->amount / $request->intervalo, 0),
+                    'residue' => round($factura->amount / $request->intervalo, 0)
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'redirect' => route('voucher'),
+            'message' => 'Comprobante registrado correctamente'
+        ]);
     }
 
     public function ajaxExpedicion()
@@ -60,13 +155,43 @@ class VouchersController extends Controller
         {
             $timbrado = VoucherBox::find(request()->expedicion);
             $stampeds = Stamped::where('id',$timbrado->stamped_id)->first();
-            $number = Voucher::where('voucher_box_id',$timbrado->id)->orderBy('id','desc')->first();
+            $number = Voucher::where('voucher_box_id',$timbrado->id)->where('voucher_type',request()->voucher_type)->orderBy('id','desc')->first();
 
             $results['numero'] = $number ? str_pad(($number->voucher_number + 1), 7, "0", STR_PAD_LEFT) : str_pad(1, 7, "0", STR_PAD_LEFT);
             $results['timbrado'] = $stampeds->number;
             $results['vig_timbrado'] = $stampeds->until_date->format('d/m/Y');
+            $results['id_timbrado'] = $stampeds->id;
             return response()->json($results);
 
         }
+    }
+
+    public function facturasCliente()
+    {
+        $facturas = Voucher::where('client_id', request()->client_id)
+        ->where('voucher_fullnumber', request()->q)
+        ->where('status', 1)
+        ->get();
+        foreach ($facturas as $key => $factura)
+        {
+            $results['items'][$key]['id']        = $factura->id;
+            $results['items'][$key]['text']      = $factura->voucher_fullnumber;
+            $results['items'][$key]['total']     = $factura->amount;
+            $results['items'][$key]['date']      = $factura->date->format('d/m/Y');
+            $results['items'][$key]['condition'] = config('constants.invoice_condition.' . $factura->voucher_condition);
+
+            foreach ($factura->voucher_details as $key2 => $detail_products)
+            {
+                $results['items'][$key]['products'][$key2]['id']              = $detail_products->articulo_id;
+                $results['items'][$key]['products'][$key2]['name']            = $detail_products->articulo->name;
+                $results['items'][$key]['products'][$key2]['quantity']        = number_format($detail_products->quantity, 0, ',', '.');
+                $results['items'][$key]['products'][$key2]['amount']          = number_format($detail_products->amount, 0, ',', '.');
+                $results['items'][$key]['products'][$key2]['subtotal']        = intVal($detail_products->amount * $detail_products->quantity);
+                $results['items'][$key]['products'][$key2]['excenta']         = number_format($detail_products->excenta, 0, ',', '.');
+                $results['items'][$key]['products'][$key2]['iva5']            = number_format($detail_products->iva5, 0, ',', '.');
+                $results['items'][$key]['products'][$key2]['iva10']           = number_format($detail_products->iva10, 0, ',', '.');
+            }
+        }
+        return response()->json($results);
     }
 }
