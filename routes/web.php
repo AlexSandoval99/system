@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\PurchaseReportController;
+use App\Http\Controllers\SalesReportController;
+use App\Http\Controllers\SalessReportController;
 use App\Http\Controllers\TwoFactorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -157,6 +160,14 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('stampeds/{id}/edit', 'StampedController@edit')->name('stampeds.edit');
         Route::get('stampeds/{id}', 'StampedController@show')->name('stampeds.show');
         Route::post('stampeds', 'StampedController@store')->name('stampeds.store');
+
+        Route::get('producction-report', 'ReportController@index')->name('producction-report.index');
+        Route::get('sales-report', 'ReportController@index')->name('sales-report.index');
+        Route::get('sales-report', [SalessReportController::class, 'index'])->name('sales-report.index');
+        Route::get('purchase-report', 'PurchaseReportController@index')->name('purchase-report.index');
+        Route::get('purchase-report/excel', [PurchaseReportController::class, 'exportExcel'])->name('purchase-report.excel');
+        
+        
 
         Route::get('cash_box_balances', 'CashBoxBalancesController@index')->name('cash_box_balances.index');
         Route::get('cash_box_balances/create', 'CashBoxBalancesController@create')->name('cash_box_balances.create');

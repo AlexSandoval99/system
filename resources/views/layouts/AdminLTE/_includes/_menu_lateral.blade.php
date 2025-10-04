@@ -226,6 +226,26 @@
                         </li>
                     </ul>
                 </li>
+                 <li class="treeview">
+                    <a href="#"><i class="fa fa fa-shopping-basket"></i><span>Reportes</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li class="provider">
+                            <a href="{{ route('purchase-report.index') }}" title="Reporte de Compras">
+                                <span>Compras</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('producction-report.index') }}" title="Reporte de Prouccion">
+                                <span>Produccion</span>
+                            </a>
+                        </li>
+                        <li class="provider">
+                            <a href="{{ route('sales-report.index') }}" title="Reporte de Ventas">
+                                <span>Ventas</span>
+                            </a>
+                            </li>
+                    </ul>
+                </li>
             @endauth
 
 	</section>

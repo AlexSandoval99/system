@@ -6,7 +6,7 @@
         <div class="card border-primary">
             <div class="card-header d-flex justify-content-between">
                 <h5>Timbrados</h5>
-                <a href="/timbrado/create" class="btn btn-success">Agregar</a>
+                <a href="/stampeds/create" class="btn btn-success">Agregar</a>
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped">

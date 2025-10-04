@@ -26,9 +26,30 @@ class VouchersController extends Controller
 
     public function store(Request $request)
     {
-        dd(request()->all());
         Voucher::create([
-
+            'date' => $request->date,
+            'branch_id' => $request->branch_id,
+            'voucher_box_id' => $request->voucher_box_id,
+            'voucher_condition' => $request->voucher_condition,
+            'voucher_number' => $request->voucher_number,
+            'expiration' => $request->expiration,
+            'client_id' => $request->client_id,
+            'razon_social' => $request->razon_social,
+            'ruc' => $request->ruc,
+            'phone' => $request->phone,
+            'address'   => $request->address,
+            'voucher_type' => $request->voucher_type,
+            'observation'   => $request->observation,
+            'amount' => $request->amount,
+            'total_excenta' => $request->total_excenta,
+            'total_iva5'    => $request->total_iva5,
+            'total_iva10'  => $request->total_iva10,
+            'amount_iva5'  => $request->amount_iva5,
+            'amount_iva10' => $request->amount_iva10,
+            'status' => 1,
+            'user_id' => auth()->user()->id,
+            'voucher_fullnumber' => $request->voucher_number,
+            'stamped_id' => $request->stamped_id,
         ]);
         return redirect()->route('voucher')->with('success', 'Comprobante registrado correctamente');
     }

@@ -9,20 +9,28 @@ use Illuminate\Database\Eloquent\Model;
 class WishPurchase extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-                            'date',
-                            'branch_id',
-                            'number',
-                            'provider_id',
-                            'status',
-                            'user_id',
-                            'observation',
-                            'token'
-                        ];
+        'date',
+        'branch_id',
+        'number',
+        'provider_id',
+        'status',
+        'user_id',
+        'observation',
+        'token'
+    ];
+
+    protected $casts = [
+        'date' => 'date', // 👈 Esto hace que se lea siempre como Carbon
+    ];
+
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
     }
+
+    // Relaciones...
     public function wish_purchase_details()
     {
         return $this->hasMany('App\Models\WishPurchaseDetail');

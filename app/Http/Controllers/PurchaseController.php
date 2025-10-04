@@ -506,6 +506,7 @@ class PurchaseController extends Controller
 
         return  response()->json($purchase);
     }
+    
 
     public function ajax_purchases_invoice()
     {
