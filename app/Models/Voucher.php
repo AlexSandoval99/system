@@ -48,6 +48,54 @@ class Voucher extends Model
         'amount_iva10' => 'decimal:2',
         'status' => 'boolean',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if ($model->voucher_type == 1) {
+                $voucher_box = VoucherBox::find($model->voucher_box_id);
+                $branch = Branch::find($voucher_box->branch_id);
+
+                $branch_voucher_number = $branch->id;
+
+                $model->voucher_fullnumber =
+                    str_pad($branch_voucher_number, 3, '0', STR_PAD_LEFT) . '-' .
+                    str_pad($voucher_box->voucher_number, 3, '0', STR_PAD_LEFT) . '-' .
+                    str_pad($model->voucher_number, 7, '0', STR_PAD_LEFT);
+            }
+
+            if ($model->voucher_type == 2) {
+                $voucher_box = VoucherBox::find($model->voucher_box_id);
+                $note_credit = Voucher::find($model->invoice_id);
+                $branch = Branch::find($voucher_box->branch_id);
+
+                $branch_voucher_number = $branch->id;
+
+                $model->voucher_fullnumber =
+                    str_pad($branch_voucher_number, 3, '0', STR_PAD_LEFT) . '-' .
+                    str_pad($voucher_box->voucher_number, 3, '0', STR_PAD_LEFT) . '-' .
+                    str_pad($model->voucher_number, 7, '0', STR_PAD_LEFT);
+
+                $model->invoice_fullnumber = $note_credit->voucher_fullnumber ?? null;
+            }
+
+            if ($model->voucher_type == 3) {
+                $voucher_box = VoucherBox::find($model->voucher_box_id);
+
+                if ($voucher_box) {
+                    $model->voucher_fullnumber =
+                        str_pad($voucher_box->branch->id, 3, '0', STR_PAD_LEFT) . '-' .
+                        str_pad($voucher_box->voucher_number, 3, '0', STR_PAD_LEFT) . '-' .
+                        str_pad($model->voucher_number, 7, '0', STR_PAD_LEFT);
+                } else {
+                    $model->voucher_fullnumber =
+                        str_pad($model->voucher_number, 7, '0', STR_PAD_LEFT);
+                }
+            }
+        });
+    }
+
 
     // Relaciones
 

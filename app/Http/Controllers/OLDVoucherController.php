@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePurchasesRequest;
+use App\Http\Requests\CreateVoucherRequest;
 use App\Http\Requests\DeletePurchasesRequest;
 use App\Http\Requests\UpdatePurchasesRequest;
 use App\Jobs\AccountingMovementsJob;
@@ -154,7 +155,7 @@ class VoucherController extends Controller
         return view('pages.invoices.previous-create', compact('clients', 'vouchers'));
     }
 
-    public function store(CreatePurchasesRequest $request)
+    public function store(CreateVoucherRequest $request)
     {
         if (request()->ajax())
         {

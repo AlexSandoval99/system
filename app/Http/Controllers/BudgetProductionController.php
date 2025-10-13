@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\BudgetProduction;
 use App\Models\BudgetProductionDetail;
 use App\Models\WishProductionDetail;
+use App\Models\WishSaleDetail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -198,7 +199,7 @@ class BudgetProductionController extends Controller
         if(request()->ajax())
         {
             $results = [];
-            $wish_productions = WishProductionDetail::with('wish_production', 'articulo')
+            $wish_productions = WishSaleDetail::with('wish_sales', 'articulo')
                                                             ->select("wish_sale_details.*")
                                                             ->join('wish_sales', 'wish_sale_details.wish_sale_id', '=', 'wish_sales.id')
                                                             ->where('wish_sales.status', true)
@@ -212,12 +213,12 @@ class BudgetProductionController extends Controller
                 $results['items'][$key]['quantity']                     = $order_detail->quantity;
                 $results['items'][$key]['amount']                       = $order_detail->articulo->price;
                 $results['items'][$key]['subtotal']                     = $order_detail->articulo->price * $order_detail->quantity;
-                $results['items'][$key]['client_id']                    = $order_detail->wish_production->client_id;
-                $results['items'][$key]['client']                       = $order_detail->wish_production->client->first_name.' '.$order_detail->wish_production->client->last_name;
-                $results['items'][$key]['branch_id']                    = $order_detail->wish_production->branch_id;
-                $results['items'][$key]['branch']                       = $order_detail->wish_production->branch->name;
-                $results['items'][$key]['date']                         = Carbon::createFromFormat('Y-m-d',$order_detail->wish_production->date)->format('d/m/Y');
-                $results['items'][$key]['wish_sale_id']                 = $order_detail->wish_production->id;
+                $results['items'][$key]['client_id']                    = $order_detail->wish_sales->client_id;
+                $results['items'][$key]['client']                       = $order_detail->wish_sales->client->first_name.' '.$order_detail->wish_sales->client->last_name;
+                $results['items'][$key]['branch_id']                    = $order_detail->wish_sales->branch_id;
+                $results['items'][$key]['branch']                       = $order_detail->wish_sales->branch->name;
+                $results['items'][$key]['date']                         = Carbon::createFromFormat('Y-m-d',$order_detail->wish_sales->date)->format('d/m/Y');
+                $results['items'][$key]['wish_sale_id']                 = $order_detail->wish_sales->id;
 
                 // $results['ruc']                 = $order_detail->purchase_order->ruc;
                 // $results['provider_id']         = $order_detail->purchase_order->provider_id;
@@ -225,7 +226,7 @@ class BudgetProductionController extends Controller
                 // $results['phone']               = $order_detail->purchase_order->phone;
                 // $results['social_reason']       = $order_detail->purchase_order->razon_social;
                 // $results['address']             = $order_detail->purchase_order->address;
-                $results['branch_id']                   = $order_detail->wish_production->branch_id;
+                $results['branch_id']                   = $order_detail->wish_sales->branch_id;
             }
             return response()->json($results);
         }

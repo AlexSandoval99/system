@@ -54,4 +54,9 @@ class CashBoxDetail extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function cash_count()
+    {
+        return $this->hasMany(CashCount::class, 'cash_box_detail_id');
+    }
 }

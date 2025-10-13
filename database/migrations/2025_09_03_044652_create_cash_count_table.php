@@ -18,7 +18,7 @@ class CreateCashCountTable extends Migration
                   ->on('cash_box_details');
 
             // Billete (ej: 10.000, 20.000)
-            $table->decimal('billet', 11, 2);
+            $table->decimal('denominacion', 11, 2);
 
             // Cantidad de billetes
             $table->integer('quantity');

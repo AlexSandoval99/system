@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateVoucherRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\CashBoxUser;
@@ -28,7 +29,7 @@ class VouchersController extends Controller
         return view('pages.vouchers.create', compact('branches','articulos'));
     }
 
-    public function store(Request $request)
+    public function store(CreateVoucherRequest $request)
     {
         if(request()->tipoDocumento == 1)
         {

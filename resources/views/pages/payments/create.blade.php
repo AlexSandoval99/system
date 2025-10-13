@@ -101,12 +101,7 @@
                 <div class="row mb-2">
                     <div class="col-md-3">
                         <label>Forma de Pago</label>
-                        <select class="form-control" id="forma_pago">
-                            <option value="Efectivo">Efectivo</option>
-                            <option value="Cheque">Cheque</option>
-                            <option value="Transferencia">Transferencia</option>
-                            <option value="Tarjeta">Tarjeta</option>
-                        </select>
+                        {{ Form::select('forma_pago', $payment_methods, null, ['class' => 'form-control', 'placeholder' => 'Seleccione metodo de pago', 'id' => 'forma_pago']) }}
                     </div>
                     <div class="col-md-3">
                         <label>N° Comprobante</label>
@@ -218,7 +213,6 @@
             })
         });
 
-        // Cliente con select2 y AJAX
         $("#cliente_id").select2({
             language: 'es',
             minimumInputLength: 2,
@@ -262,43 +256,65 @@
                     .then(()=>{ window.location.href = data.redirect; });
                 },
                 error: function(xhr){
-                    swal("Error", "Ocurrió un error al guardar el cobro", "error");
+                    swal("Error", "Ocurrió un error al guardar el cobro"+xhr, "error");
                 }
             });
         });
 
     });
 
-    // 🚀 Nueva función: cargar facturas de un cliente
     function cargarFacturas(clienteId){
-        $.get('/ajax/invoices-by-client/'+clienteId, function(data){
-            let facturaSelect = $("#factura_id");
-            facturaSelect.empty();
-            facturaSelect.append('<option value="">Seleccione una factura</option>');
+        $.ajax({
+            url: '{{ route('ajax.invoices-by-client')}}',
+            type: 'GET',
+            data: { client_id: clienteId },
+            success: function(data) {
+                let facturaSelect = $("#factura_id");
+                facturaSelect.empty();
+                facturaSelect.append('<option value="">Seleccione una factura</option>');
 
-            if(data.length === 0){
-                facturaSelect.append('<option value="">Sin facturas disponibles</option>');
-            } else {
-                $.each(data, function(i, factura){
-                    facturaSelect.append(`<option value="${factura.id}">${factura.fecha}' - '${factura.numero}</option>`);
-                });
+                if(data.length === 0){
+                    facturaSelect.append('<option value="">Sin facturas disponibles</option>');
+                } else {
+                    $.each(data, function(i, factura){
+                        facturaSelect.append(`<option value="${factura.id}">${factura.fecha} - ${factura.numero}</option>`);
+                    });
+                }
+            },
+            error: function(){
+                swal("Error", "No se pudieron cargar las facturas del cliente", "error");
             }
-        });
+        })
     }
 
-    // 🚀 Cargar cuotas vía AJAX (igual que ya tienes)
-    function cargarCuotas(facturaId){
+    function cargarCuotas(facturaId)
+    {
+        $.ajax({
+            url: '{{ route('ajax.voucher-collects') }}',
+            type: 'GET',
+            dataType: 'json',
+            data: { factura_id: facturaId },
+            success: function(data) {
+                let tbody = $("#tabla_cuotas tbody");
+                tbody.empty();
 
-        $.get('/ajax/voucher-collects/'+facturaId, function(data){
-            let tbody = $("#tabla_cuotas tbody");
-            tbody.empty();
-            if(data.length === 0){
-                tbody.append('<tr><td colspan="4" class="text-center">No hay cuotas pendientes</td></tr>');
-            } else {
+                if (data.length === 0) {
+                    tbody.append('<tr><td colspan="5" class="text-center">No hay cuotas pendientes</td></tr>');
+                    return;
+                }
+
                 $.each(data, function(i, cuota){
+                    // ⚠️ Guardamos todo lo que necesitamos en el TR
                     tbody.append(`
-                        <tr>
-                            <td>${i+1}</td>
+                        <tr
+                            data-cuota-id="${cuota.id}"
+                            data-cuota-nro="${cuota.cuota}"
+                            data-factura="${cuota.factura}"
+                            data-vencimiento="${cuota.vencimiento}"
+                            data-monto="${cuota.monto}"
+                            data-saldo="${cuota.residue}"
+                        >
+                            <td>${cuota.cuota}</td>
                             <td>${cuota.vencimiento}</td>
                             <td>${cuota.monto}</td>
                             <td>${cuota.residue}</td>
@@ -306,7 +322,7 @@
                                 ${
                                     cuota.residue > 0
                                     ? `<button type="button" class="btn btn-sm btn-primary"
-                                            onclick="agregarCobro(${cuota.id}, '${cuota.factura}', ${cuota.residue}, ${cuota.cuota})">
+                                            onclick="agregarCobro(${cuota.cuota})">
                                             Cobrar
                                     </button>`
                                     : `<span class="text-muted">Pagada</span>`
@@ -315,29 +331,64 @@
                         </tr>
                     `);
                 });
+            },
+            error: function(){
+                swal("Error", "No se pudieron cargar las cuotas de la factura", "error");
+            }
+        })
+    }
+
+    function agregarCobro(cuotaSeleccionada)
+    {
+        $("#tabla_cuotas tbody tr").each(function () {
+            const $tr = $(this);
+
+            const nroCuota  = parseInt($tr.data('cuota-nro'), 10);
+            const cuotaId   = parseInt($tr.data('cuota-id'), 10);
+            const factura   = $tr.data('factura');
+            const saldo     = parseFloat($tr.data('saldo'));
+
+            if (nroCuota <= cuotaSeleccionada)
+            {
+                if (saldo > 0 && !cuotaIdYaAgregada(cuotaId))
+                {
+                    $("#tabla_detalle tbody").append(`
+                        <tr data-cuota-id="${cuotaId}">
+                            <td>${nroCuota}</td>
+                            <td>${factura}</td>
+                            <td>
+                                <input type="hidden" name="cuota_nro[]" value="${nroCuota}">
+                                <input type="hidden" name="cuota_id[]" value="${cuotaId}">
+                                ${nroCuota}
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="monto_cuota[]" value="${saldo}">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="$(this).closest('tr').remove()">X</button>
+                            </td>
+                        </tr>
+                    `);
+                }
             }
         });
     }
 
-    // Agregar cuota seleccionada al detalle
-    function agregarCobro(id, factura, saldo,cuota){
-        $("#tabla_detalle tbody").append(`
-            <tr>
-                <td>${id}</td>
-                <td>${factura}</td>
-                <td>
-                    <input type="hidden" name="cuota_id[]" value="${id}">
-                    ${cuota}
-                </td>
-                <td><input type="number" class="form-control" name="monto_cuota[]" value="${saldo}"></td>
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="$(this).closest('tr').remove()">X</button></td>
-            </tr>
-        `);
+    function cuotaIdYaAgregada(cuotaId)
+    {
+        let existe = false;
+        $('#tabla_detalle tbody input[name="cuota_id[]"]').each(function(){
+            if (parseInt(this.value, 10) === cuotaId) {
+                existe = true;
+                return false;
+            }
+        });
+        return existe;
     }
 
-    // Agregar forma de pago
     function agregarFormaPago(){
         let forma = $("#forma_pago").val();
+        let formaText = $("#forma_pago option:selected").text();
         let nro = $("#nro_comprobante").val();
         let monto = $("#monto_pago").val();
 
@@ -349,7 +400,7 @@
         $("#tabla_pagos tbody").append(`
             <tr>
                 <td>
-                    ${forma}
+                    ${formaText}
                     <input type="hidden" name="forma_pago[]" value="${forma}">
                 </td>
                 <td>

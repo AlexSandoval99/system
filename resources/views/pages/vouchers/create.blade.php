@@ -506,13 +506,14 @@
         });
 
         $('#expedicion').on("change", function(){
+            let voucher_type = $('#tipoDocumento').val();
             let expedicion = $(this).val();
             $.ajax({
                 url: '{{url('ajax/timbrado')}}',
                 type: 'GET',
                 data: {
                     expedicion : expedicion,
-                    voucher_type :
+                    voucher_type : voucher_type
                 },
                 success: function(data)
                 {

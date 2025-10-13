@@ -43,8 +43,8 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('/payments', 'PaymentsController@index')->name('payments');
         Route::get('/payments/create', 'PaymentsController@create')->name('payments.create');
         Route::post('payments/store', 'PaymentsController@store')->name('payments.store');
-        Route::get('ajax/voucher-collects/{factura}', 'PaymentsController@getCuotas')->name('ajax.voucher-collects');
-        Route::get('ajax/invoices-by-client/{cliente}', 'PaymentsController@getFacturas')->name('ajax.invoices-by-client');
+        Route::get('ajax/voucher-collects', 'PaymentsController@getCuotas')->name('ajax.voucher-collects');
+        Route::get('ajax/invoices-by-client', 'PaymentsController@getFacturas')->name('ajax.invoices-by-client');
 
 
 
@@ -170,9 +170,12 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('cash_box_balances', 'CashBoxBalancesController@index')->name('cash_box_balances.index');
         Route::get('cash_box_balances/create', 'CashBoxBalancesController@create')->name('cash_box_balances.create');
         Route::post('cash_box_balances', 'CashBoxBalancesController@store')->name('cash_box_balances.store');
+        Route::get('cash_box_balances/{id}/close', 'CashBoxBalancesController@close')->name('cash_box_balances.close');
         Route::get('cash_box_balances/{id}/edit', 'CashBoxBalancesController@edit')->name('cash_box_balances.edit');
         Route::get('cash_box_balances/{id}', 'CashBoxBalancesController@show')->name('cash_box_balances.show');
         Route::get('ajax/last-cash-balance', 'CashBoxBalancesController@ajax_last_cash_balance')->name('ajax.last-cash-balance');
+        Route::post('cash_box_balances/{id}/arqueo', 'CashBoxBalancesController@storeArqueo')->name('cash_box_balances.store_arqueo');
+        Route::post('cash_box_balances/{id}/deposito', 'CashBoxBalancesController@storeDeposito')->name('cash_box_balances.store_deposito');
 
         Route::get('budget/{purchase_budget}/view-purchase-budgets', 'WishPurchaseController@view_purchase_budgets')->name('wish-purchases.view-purchase-budgets');
 

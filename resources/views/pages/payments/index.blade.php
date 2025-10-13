@@ -30,7 +30,7 @@
                                     <td>{{$payment->date->format('d/m/Y')}}</td>
                                     <td>{{$payment->voucher_fullnumber}}</td>
                                     <td>{{$payment->amount}}</td>
-                                    <td><span class="label label-{{ config('constants.invoice_status_label.' . $voucher->status) }}">{{ config('constants.invoice_status.'. $voucher->status) }}</span></td>
+                                    <td><span class="label label-{{ config('constants.invoice_status_label.' . $payment->status) }}">{{ config('constants.invoice_status.'. $payment->status) }}</span></td>
                                     <td>
                                         <a href="#"><i class="fa fa-info-circle"></i></a>
                                         <a href="#"><i class="fa fa-file"></i></a>
