@@ -35,7 +35,8 @@ class Purchase extends Model
                            'user_id',
                            'date_deleted',
                            'reason_deleted',
-                           'user_delete'
+                           'user_delete',
+                           'order_id',
                         ];
 
     protected $appends = ['fullnumber'];
@@ -91,7 +92,7 @@ class Purchase extends Model
     public function provider()
     {
         return $this->belongsTo('App\Models\Provider');
-    }    
+    }
 
     public function user()
     {

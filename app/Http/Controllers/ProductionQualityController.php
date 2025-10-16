@@ -4,11 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductionQualityRequest;
-use App\Models\Articulo;
-use App\Models\Brand;
 use App\Models\ProductionQuality;
-use App\Models\ProductionStage;
-use Illuminate\Http\Request;
 
 class ProductionQualityController extends Controller
 {
@@ -35,6 +31,7 @@ class ProductionQualityController extends Controller
 
         return redirect()->route('production-quality');
     }
+
     public function edit(ProductionQuality $qualitys)
     {
         return view('pages.production-quality.edit',compact('qualitys'));
@@ -46,6 +43,7 @@ class ProductionQualityController extends Controller
                                 'name'       => request()->name,
                                 'number'       => request()->number ,
                             ]);
+        $this->flashMessage('check', 'La Calidad fue actualizado correctamente', 'success');
         return redirect('production-quality');
-}
+    }
 }

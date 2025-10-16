@@ -8,6 +8,7 @@ use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\BudgetProductionDetail;
 use App\Models\Presentation;
+use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
 use App\Models\Provider;
@@ -15,6 +16,7 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\PurchaseOrder;
+use App\Models\SettingProduct;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -75,6 +77,32 @@ class ProductionOrderController extends Controller
                             'quantity_material'        => $request->{"selected_materials_quantity_$value"}[$key1],
                             'quantity'                 => $request->detail_product_quantity[$key],
                             'production_order_id'      => $production_order->id,
+                        ]);
+
+                    }
+
+                    $cost_product = ProductionCost::where('order_production_id',$production_order->id)->first();
+                    if(!$cost_product)
+                    {
+                        $cost_product = ProductionCost::create([
+                            'date'                  => $request->date,
+                            'status'                => 1,
+                            'branch_id'             => $request->branch_id,
+                            'user_id'               => auth()->user()->id,
+                            'order_production_id'   => $production_order->id
+                        ]);
+                    }
+
+                    $materials = SettingProduct::where('articulo_id',$value)->whereNotNull('raw_materials_id')->get();
+                    $cantidadOrden = $request->detail_product_quantity[$key];
+                    foreach ($materials as $key => $material)
+                    {
+                        $cost_product->production_cost_detail()->create([
+                            'articulo_id'           => $value,
+                            'material_id'           => $material->raw_material->id,
+                            'quantity'              => $material->quantity * $cantidadOrden,
+                            'production_cost_id'    => $cost_product->id,
+                            'price_cost'            => $cantidadOrden * $material->raw_material->average_cost
                         ]);
                     }
                 }
@@ -164,12 +192,6 @@ class ProductionOrderController extends Controller
                 $results['items'][$key]['branch_id']    = $order_detail->budget_production->branch_id;
                 $results['items'][$key]['branch']       = $order_detail->budget_production->branch->name;
                 $results['items'][$key]['date']         = $order_detail->budget_production->date->format('d/m/Y');
-                // $results['ruc']                 = $order_detail->purchase_order->ruc;
-                // $results['provider_id']         = $order_detail->purchase_order->provider_id;
-                // $results['provider_fullname']   = $order_detail->purchase_order->provider->name;
-                // $results['phone']               = $order_detail->purchase_order->phone;
-                // $results['social_reason']       = $order_detail->purchase_order->razon_social;
-                // $results['address']             = $order_detail->purchase_order->address;
                 $results['branch_id']           = $order_detail->budget_production->branch_id;
             }
             return response()->json($results);

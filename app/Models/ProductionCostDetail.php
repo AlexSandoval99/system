@@ -15,7 +15,8 @@ class ProductionCostDetail extends Model
                             'articulo_id',
                             'material_id',
                             'production_cost_id',
-
+                            'hour_worker',
+                            'hourly_rate',
                         ];
     public function setDateAttribute($value)
     {

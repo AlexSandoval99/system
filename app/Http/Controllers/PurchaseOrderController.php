@@ -242,68 +242,6 @@ public function update(PurchaseOrder $purchase_order)
         }
     }
 
-    // private function uploadSignature($file)
-    // {
-    //     $signature_name = Str::random(40) . '.' . $file->getClientOriginalExtension();
-
-    //     $destinationPath = 'storage/wish_purchases_budgets/' . $signature_name;
-
-    //     if ($file->move(public_path('storage/wish_purchases_budgets'), $signature_name)) {
-    //         Image::make($destinationPath)
-    //             ->orientate()
-    //             ->save($destinationPath);
-    //     }
-
-    //     return $signature_name;
-    // }
-    // public function confirm_purchase_budgets(PurchaseOrder $wish_purchase)
-    // {
-
-    //     $wish_purchases = $wish_purchase->purchase_budgets()->get();
-
-    //     return view('pages.wish-purchase.confirm-purchase-budgets',compact('wish_purchase'));
-    // }
-
-    // public function confirm_purchase_budgets_store(PurchaseBudget $purchase_budget)
-    // {
-    //     $text = 'Presupuesto Aprobado';
-    //     // APROBAR EL PRESUPUESTO
-    //     if(request()->type == 1)
-    //     {
-    //         $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>2]);
-    //         $purchase_budget->wish_purchase->update(['status' => 5]);
-    //     }
-    //     //BORRAR EL PRESUPUESTO
-    //     elseif(request()->type == 2)
-    //     {
-    //         $purchase_budget->update(['confirmation_user_id'=> auth()->user()->id,'confirmation_date'=> now(),'status'=>3]);
-    //         $text = 'Presupuesto Rechazado';
-
-    //     }
-    //     // RECHAZAR EL PRESUPUESTO
-    //     elseif(request()->type == 3)
-    //     {
-    //         $text = 'Presupuesto Borrado';
-    //         $purchase_budget->delete();
-    //     }
-
-    //     if(request()->url)
-    //     {
-    //         return redirect(request()->url);
-    //     }
-    //     else
-    //     {
-    //         return redirect('wish-purchase');
-    //     }
-    // }
-
-    // public function wish_purchase_budgets_approved(PurchaseOrder $wish_purchase)
-    // {
-    //     $purchase_budgets = $wish_purchase->purchase_budgets()->where('status',2)->get();
-
-    //     return view('pages.wish-purchase.wish-purchase-budgets-approved',compact('wish_purchase','purchase_budgets'));
-    // }
-
     private function parse($value)
     {
         return str_replace(',', '.',str_replace('.', '', $value));

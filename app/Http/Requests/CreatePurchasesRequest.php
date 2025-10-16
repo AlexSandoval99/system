@@ -52,7 +52,7 @@ class CreatePurchasesRequest extends FormRequest
                 {
                     $dat = Carbon::createFromFormat('d/m/Y',request()->date)->format('Y-m-d');
 
-                        if(request()->type == 4)
+                        if(request()->type == 2)
                         {
                             if(!request()->invoice_id)
                             {
@@ -95,7 +95,7 @@ class CreatePurchasesRequest extends FormRequest
                             }
                         }
 
-                        if(cleartStringNumber(request()->total_product) == 0)
+                        if(cleartStringNumber(request()->total_product) == 0 && request()->type != 2) // Nota de Credito puede ser 0
                         {
                             $validator->errors()->add('total_invoice', 'El Total de la Compra no puede ser 0.');
                         }
@@ -153,7 +153,7 @@ class CreatePurchasesRequest extends FormRequest
 
                         if(request()->type)
                         {
-                            if (in_array(request()->type, [1,4]))
+                            if (in_array(request()->type, [1,2]))
                             {
                                 if (strlen(request()->stamped) != 8)
                                 {

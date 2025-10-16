@@ -32,6 +32,7 @@
                             <div class="form-group col-md-12">
                                 <label>Razón Social Proveedor</label>
                                 <input type="text" name="razon_social" value="{{ old('razon_social') }}" id="razon_social" class="form-control">
+                                <input type="hidden" name="order_id" id="order_id">
                             </div>
                             <div class="form-group col-md-12" id="div_details_advances_providers">
                                 <div class="panel panel-danger">
@@ -296,7 +297,7 @@
 <div id="div_detail_products">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h3>Items a Comprar</h3>
+            <h3>Items</h3>
         </div>
         <div class="ibox-content pb-0">
             <div class="row">
@@ -366,40 +367,40 @@
             <input type="hidden" name="amount_iva10" id="amount_iva10" value="0">
         </div>
     </div>
-    <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h3>Pagos</h3>
-        </div>
-        <div class="ibox-content pb-0">
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="col-md-12" id="div_pagos">
-                        <div class="row">
-                            <div class="form-group col-md-3 text-center">
-                                <label>Fecha Pago</label>
-                                <input class="form-control text-center date" type="text" name="expiration[]" value="" autocomplete="off">
-                                <span class="red" id="text_days_of_grace"></span>
-                            </div>
-                            <div class="form-group col-md-5 text-center">
-                                <label>Monto a Pagar en Tesoreria</label>
-                                <input class="form-control  text-right" type="text" name="amount_treasury[]" value="" period-data-mask-decimal autocomplete="off">
-                            </div>
+</div>
+<div class="ibox float-e-margins" id="div_pagos_products">
+    <div class="ibox-title">
+        <h3>Pagos</h3>
+    </div>
+    <div class="ibox-content pb-0">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="col-md-12" id="div_pagos">
+                    <div class="row">
+                        <div class="form-group col-md-3 text-center">
+                            <label>Fecha Pago</label>
+                            <input class="form-control text-center date" type="text" name="expiration[]" value="" autocomplete="off">
+                            <span class="red" id="text_days_of_grace"></span>
+                        </div>
+                        <div class="form-group col-md-5 text-center">
+                            <label>Monto a Pagar en Tesoreria</label>
+                            <input class="form-control  text-right" type="text" name="amount_treasury[]" value="" period-data-mask-decimal autocomplete="off">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label>Observación</label>
-                            <textarea class="form-control" name="observation" >{{ old('observation') }}</textarea>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label>Observación</label>
+                        <textarea class="form-control" name="observation" >{{ old('observation') }}</textarea>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="ibox-footer">
-            <input type="submit" class="btn btn-sm btn-success" value="Guardar">
-            <a href="{{ url('purchase') }}" class="btn btn-sm btn-danger">Cancelar</a>
-        </div>
     </div>
+</div>
+<div class="ibox-footer">
+    <input type="submit" class="btn btn-sm btn-success" value="Guardar">
+    <a href="{{ url('purchase') }}" class="btn btn-sm btn-danger">Cancelar</a>
 </div>
 {{ Form::close() }}
 @endsection
@@ -536,18 +537,32 @@
                 // Buscar Productos de la Factura
                 $("#tbody_detail_invoice").html('');
                 $("#detail_product_invoice").show();
-                $.each(data_item.products, function(index, value)
-                {
-                    $('#tbody_detail_invoice').append('<tr>' +
-                        '<td class="text-right">' + value.id + '</td>' +
-                        '<td>' + value.name + '</td>' +
-                        '<td class="text-right">' + value.quantity + '</td>' +
-                        '<td class="text-right">' + value.amount + '</td>' +
-                        '<td class="text-right">' + value.subtotal + '</td>' +
-                        '<td class="text-right">' + value.excenta + '</td>' +
-                        '<td class="text-right">' + value.iva5 + '</td>' +
-                        '<td class="text-right">' + value.iva10 + '</td>' +
-                    '</tr>');
+                $.each(data_item.products, function(index, value) {
+                    let rowClass = value.quantity == 0 ? 'text-muted bg-light' : '';
+                    $('#tbody_detail_invoice').append(`
+                        <tr class="${rowClass}">
+                            <td class="text-right">${value.id}</td>
+                            <td>${value.name}</td>
+                            <td class="text-right">${value.quantity}</td>
+                            <td class="text-right">${value.amount}</td>
+                            <td class="text-right">${value.subtotal}</td>
+                            <td class="text-right">${value.excenta}</td>
+                            <td class="text-right">${value.iva5}</td>
+                            <td class="text-right">${value.iva10}</td>
+                        </tr>
+                    `);
+                });
+                $.each(data_item.products, function(index, value) {
+                    if (value.quantity > 0) {
+                        addToTable(
+                            value.id,                  // id del producto
+                            value.name,                // nombre del producto
+                            value.amount,              // precio unitario
+                            value.quantity,            // cantidad pendiente (o total)
+                            value.type_iva || 3,       // tipo de IVA (ajustá según tu modelo)
+                            '', '', '', '', '', '', '', ''
+                        );
+                    }
                 });
 
             });
@@ -713,10 +728,13 @@
         function ChangeTypePurchase()
         {
             $("#div_note_credits").hide();
-
-            if($('#type').val() == 4)
+            $("#div_detail_products").show();
+            $("#div_pagos").show();
+            if($('#type').val() == 2)
             {
                 $("#div_note_credits").show();
+                $("#div_pagos_products").hide();
+                $("#div_pagos").hide();
             }
         }
 
@@ -1061,6 +1079,7 @@
 
         function changeOrdersDetailProducts(id)
         {
+            $("#order_id").val(id);
             if (true)
             {
                 $.ajax({
@@ -1199,11 +1218,11 @@
             $('#tbody_detail').append('<tr>' +
                 '<td width="5%">' + counter + '</td>' +
                 '<td width="5%" class="text-right">' + id + '<input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
-                '<td width="20%">' + name + ( emergency_mobile==1 ? '<br><i><b><span class="red">'+ emergency_mobile_name +'</span></b></i>' : '' ) +
+                '<td width="20%">' + name +
                     '<input type="hidden" name="detail_product_name[]" value="' + name + '">'+
                 '</td>' +
                 '<td width="5%" class="text-center">' + number_orders + ' <input type="hidden" name="detail_product_orders_id[]" value="' + id_orders + '"></td>' +
-                '<td width="5%" class="text-center">' + $.number(quantity, 0, ',', '.') + '<input type="hidden" name="detail_product_quantity[]" onkeyup="changeReCalculo();" value="' + quantity + '"></td>' +
+                '<td width="5%" class="text-center"><input type="text" name="detail_product_quantity[]" onkeyup="changeReCalculo();" value="' + quantity + '"></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_product_amount[]" onkeyup="changeReCalculo();" value="' + amount + '" period-data-mask-decimal></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_total_excenta[]"  onkeyup="calculateGrandTotal();" value="' + total_excenta + '" period-data-mask-decimal></td>' +
                 '<td width="9%" class="text-right"><input type="text" name="detail_total_iva5[]" onkeyup="calculateGrandTotal();" value="' + total_iva5 + '" period-data-mask-decimal></td>' +

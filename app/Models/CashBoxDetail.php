@@ -24,7 +24,6 @@ class CashBoxDetail extends Model
     ];
 
     protected $casts = [
-        'type' => 'boolean',
         'amount' => 'decimal:2',
     ];
 
@@ -35,7 +34,7 @@ class CashBoxDetail extends Model
         return $this->belongsTo(CashBox::class);
     }
 
-    public function concept()
+    public function cash_box_concept()
     {
         return $this->belongsTo(CashBoxConcept::class, 'cash_box_concept_id');
     }

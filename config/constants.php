@@ -15,7 +15,9 @@ return [
     ],
     'purchase-status' =>[
         1 => 'Activo',
-        2 => 'Inactivo'
+        2 => 'Inactivo',
+        3 => 'NC Parcial',
+        4 => 'Anulado'
     ],
     'purchase-status-label' =>[
         1 => 'success',
@@ -111,6 +113,23 @@ return [
         8 => 'Tarjeta',
         9 => 'Cheque'
     ],
-
+    'cash_box_detail_type' => [
+        1 => 'Ingreso',
+        2 => 'Egreso'
+    ],
+    'cash_box_detail_type_label' => [
+        1 => 'success',
+        2 => 'danger'
+    ],
+    'budget_production_status' =>[
+        0 => 'Anulado',
+        1 => 'Pendiente',
+        2 => 'Aprobado'
+    ],
+    'budget_production_status_label' =>[
+        0 => 'danger',
+        1 => 'warning',
+        2 => 'success'
+    ]
 ]
 ?>

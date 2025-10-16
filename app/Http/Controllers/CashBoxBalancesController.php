@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateCashBoxConceptsRequest;
 use App\Models\Bank;
 use App\Models\CashBox;
 use App\Models\CashBoxDetail;
@@ -218,13 +217,65 @@ class CashBoxBalancesController extends Controller
                     'user_id'        => auth()->user()->id,
                     'cash_box_id'   => $cash_box_detail->cash_box_id,
                     'cash_box_detail_id' => $cash_box_detail->id,
-                    'observation'   => $request->observacion ?? null,
+                    'observations'   => $request->observacion ?? null,
                     'status'        => 1,
+                ]);
+
+                CashBoxDetail::create([
+                    'cash_box_id'          => $cash_box_detail->cash_box_id,
+                    'amount'               => $request->montoEfectivo + $request->montoCheque,
+                    'observation'          => 'Depósito a banco: ' . $bank->name,
+                    'cash_box_concept_id'  => 4, // Concepto de depósito
+                    'type'                 => 2, // Egreso
+                    'user_id'              => auth()->user()->id,
+                    'status'               => true
                 ]);
             });
 
             return response()->json(['success' => true, 'message' => 'Depósito guardado correctamente.']);
         }
         abort(404);
+    }
+
+    public function movements()
+    {
+        $cash_boxes = CashBoxUser::where('status', true)
+            ->with('cashBox')
+            ->where('user_id', auth()->id())
+            ->get()
+            ->pluck('cashBox.name', 'cashBox.id');
+
+        return view('pages.cash_box_balances.movements', compact('cash_boxes'));
+    }
+
+    public function filterMovements(Request $request)
+    {
+        $from = $request->input('from');
+        $to   = $request->input('to');
+        $cashBoxId = $request->input('cash_box_id');
+
+        $query = CashBoxDetail::with('user', 'cash_box', 'cash_box_concept')
+            ->whereBetween(DB::raw('DATE(cash_box_details.created_at)'), [$from, $to])
+            ->orderBy('created_at', 'asc');
+
+        if ($cashBoxId) {
+            $query->where('cash_box_id', $cashBoxId);
+        }
+
+        $movements = $query->get();
+
+        // Calcular totales
+        $totalIngresos = $movements->where('type', 1)->sum('amount');
+        $totalEgresos  = $movements->where('type', 2)->sum('amount');
+        $saldoFinal    = $totalIngresos - $totalEgresos;
+
+        return response()->json([
+            'movements' => $movements,
+            'totals' => [
+                'ingresos' => $totalIngresos,
+                'egresos' => $totalEgresos,
+                'saldo' => $saldoFinal
+            ]
+        ]);
     }
 }

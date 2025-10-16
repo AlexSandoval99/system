@@ -90,55 +90,33 @@ class ProductionControlQualityController extends Controller
                 $array_products = $control->production_quality_control_details()->orderBy('id','desc')->groupBy('articulo_id')->get();
                 foreach ($array_products as $key => $product)
                 {
-                        if($request->input("total{$product->articulo_id}_{$product->quality_id}") > $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"))
+                    if($request->input("total{$product->articulo_id}_{$product->quality_id}") > $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"))
+                    {
+                        $losse = Losse::where('control_quality_id',$control->id)->first();
+                        if(!$losse)
                         {
-                            $losse = Losse::where('control_quality_id',$control->id)->first();
-                            if(!$losse)
-                            {
-                                $losse = Losse::create([
-                                    'status'            => 1,
-                                    'date'               => $request->date,
-                                    'user_id'            => auth()->user()->id,
-                                    'branch_id'          => $request->branch_id,
-                                    'control_quality_id' => $control->id
-                                ]);
-                            }
-
-                            $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
-                            foreach ($materials as $key => $material)
-                            {
-                                $losse->losse_detail()->create([
-                                    'articulo_id'   => $product->articulo_id,
-                                    'reason'        => $request->input("observacion{$product->articulo_id}_{$product->quality_id}"),
-                                    'material_id'   => $material->raw_material->id,
-                                    'quantity'      => $request->input("total{$product->articulo_id}_{$product->quality_id}")  - $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
-                                    'losse_id'      => $losse->id
-                                ]);
-                            }
-                        }
-                        $cost_product = ProductionCost::where('control_quality_id',$control->id)->first();
-                        if(!$cost_product)
-                        {
-                            $cost_product = ProductionCost::create([
-                                'date'               => $request->date,
+                            $losse = Losse::create([
                                 'status'            => 1,
-                                'branch_id'          => $request->branch_id,
+                                'date'               => $request->date,
                                 'user_id'            => auth()->user()->id,
+                                'branch_id'          => $request->branch_id,
                                 'control_quality_id' => $control->id
                             ]);
                         }
 
-                    $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
-                    foreach ($materials as $key => $material)
-                    {
-                        $cost_product->production_cost_detail()->create([
-                            'articulo_id'           => $product->articulo_id,
-                            'material_id'           => $material->raw_material->id,
-                            'quantity'              => $request->input("total{$product->articulo_id}_{$product->quality_id}"),
-                            'production_cost_id'    => $cost_product->id,
-                            'price_cost'            => $request->input("total{$product->articulo_id}_{$product->quality_id}") * $material->raw_material->average_cost
-                        ]);
+                        $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
+                        foreach ($materials as $key => $material)
+                        {
+                            $losse->losse_detail()->create([
+                                'articulo_id'   => $product->articulo_id,
+                                'reason'        => $request->input("observacion{$product->articulo_id}_{$product->quality_id}"),
+                                'material_id'   => $material->raw_material->id,
+                                'quantity'      => $request->input("total{$product->articulo_id}_{$product->quality_id}")  - $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
+                                'losse_id'      => $losse->id
+                            ]);
+                        }
                     }
+
                     $deposit = Deposit::where('branch_id',$request->branch_id)->first();
                     PurchasesExistence::create([
                         'type'            => 2,

@@ -46,10 +46,7 @@ class ProductionStageController extends Controller
                                 'name'       => request()->name,
                                 'number'       => request()->number ,
                             ]);
-                            
-                                
-                                
-
+        $this->flashMessage('check', 'La Etapa fue actualizado correctamente', 'success');
         return redirect('production-stage');
 }
 }

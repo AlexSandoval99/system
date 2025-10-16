@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateBudgetRequest;
 use App\Http\Requests\CreatePurchaseImageRequest;
 use App\Http\Requests\CreateWishPurchaseRequest;
 use App\Http\Requests\Request;
@@ -355,7 +356,7 @@ class WishPurchaseController extends Controller
         }
     }
 
-    public function budget_store(HttpRequest $request, $id, $token)
+    public function budget_store(CreateBudgetRequest $request, $id, $token)
     {
         DB::transaction(function() use ($request, &$wish_purchase)
             {

@@ -43,7 +43,7 @@
 <aside class="main-sidebar">
 	<section class="sidebar">
 		<ul class="sidebar-menu" data-widget="tree">
-			<li class="header" style="color:#fff;"> MENU <i class="fa fa-level-down"></i></li>
+			<li class="header" style="color:#fff;"> MENU PRINCIPAL</li>
 			<li class=" ">
 				<a href="{{ route('home') }}" title="Dashboard"><i class="fa fa-dashboard"></i> <span>Tablero</span></a>
 			</li>
@@ -73,6 +73,11 @@
                         <li class="provider">
                             <a href="{{ route('nationalities') }}" title="Marca">
                              <span>Nacionalidad</span>
+                            </a>
+                        </li>
+                        <li class="branch">
+                            <a href="{{ route('branch') }}" title="Sucursal">
+                                <span> Sucursal</span>
                             </a>
                         </li>
                         <li class="cliente">

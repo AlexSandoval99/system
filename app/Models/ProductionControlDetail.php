@@ -13,10 +13,11 @@ class ProductionControlDetail extends Model
                             'observation',
                             'quantity',
                             'residue',
-                            'stage',
                             'articulo_id',
                             'production_control_id',
                             'stage_id',
+                            'start_date',
+                            'end_date'
                         ];
     public function setDateAttribute($value)
     {
@@ -35,6 +36,6 @@ class ProductionControlDetail extends Model
     {
         return $this->belongsTo('App\Models\ProductionStage','stage_id');
     }
-    
+
 
 }

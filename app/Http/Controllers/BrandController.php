@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateBrandRequest;
 use App\Models\Brand;
-use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
@@ -26,7 +25,7 @@ class BrandController extends Controller
             'name' => request()->name,
             'status' => 1
         ]);
-        
+
 
         $this->flashMessage('check', 'La Marca fue registrado correctamente', 'success');
 
@@ -42,10 +41,7 @@ class BrandController extends Controller
             $brands->update([
                                 'name'       => request()->name,
                             ]);
-                            
-                                
-                                
-
+        $this->flashMessage('check', 'La Marca fue actualizado correctamente', 'success');
         return redirect('brand');
     }
 }

@@ -10,9 +10,7 @@ use App\Models\ProductionStage;
 use App\Models\Purchase;
 use App\Models\RawMaterial;
 use App\Models\SettingProduct;
-use App\Models\WishPurchase;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ArticuloController extends Controller

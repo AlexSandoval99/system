@@ -126,21 +126,21 @@ class PurchaseMovementsController extends Controller
                             $price_cost_iva = 0;
                             if($purchases_order_detail)
                             {
-                            $price_cost = $purchases_order_detail->amount;
-                            if($purchases_product->type_iva==1)
-                            {
-                                $price_cost_iva = $purchases_order_detail->amount;
-                            }
+                                $price_cost = $purchases_order_detail->amount;
+                                if($purchases_product->type_iva==1)
+                                {
+                                    $price_cost_iva = $purchases_order_detail->amount;
+                                }
 
-                            if($purchases_product->type_iva==2)
-                            {
-                                $price_cost_iva = $purchases_order_detail->amount * 1.05;
-                            }
+                                if($purchases_product->type_iva==2)
+                                {
+                                    $price_cost_iva = $purchases_order_detail->amount * 1.05;
+                                }
 
-                            if($purchases_product->type_iva==3)
-                            {
-                                $price_cost_iva = $purchases_order_detail->amount * 1.1;
-                            }
+                                if($purchases_product->type_iva==3)
+                                {
+                                    $price_cost_iva = $purchases_order_detail->amount * 1.1;
+                                }
                             }
                             $purchases_existence = PurchasesExistence::create([
                                 'deposit_id'           => $request->deposits_id,

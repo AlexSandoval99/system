@@ -125,26 +125,6 @@ class ProveedorController extends Controller
             $results['items'][$key]['phone']               = $purchases_provider->phone1.' '.$purchases_provider->phone2;
             $results['items'][$key]['type_iva']            = $purchases_provider->type_iva ? $purchases_provider->type_iva : 3;
             $results['items'][$key]['bank_account']        = $purchases_provider->bank ? ($purchases_provider->bank->name.' - '.$purchases_provider->bank_account) : '';
-            // $results['items'][$key]['bank_id']             = $purchases_provider->bank_id;
-            // $results['items'][$key]['bank_account_number'] = $purchases_provider->bank_account;
-            // $results['items'][$key]['days_of_grace']       = $purchases_provider->days_of_grace;
-
-            // Buscar el Ultimo Timbrado del Proveedor
-            // $purchases_ringing = Purchase::whereIn('type', [1,4])
-            //                                ->Active()
-            //                                ->orderBy('id', 'desc')
-            //                                ->where('purchases_provider_id', $purchases_provider->id)
-            //                                ->limit(1)
-            //                                ->first();
-            // if($purchases_ringing)
-            // {
-            //     $results['items'][$key]['stamped']          = $purchases_ringing->stamped;
-            //     $results['items'][$key]['stamped_validity'] = $purchases_ringing->stamped_validity->format('d/m/Y');
-            // }else
-            // {
-            //     $results['items'][$key]['stamped']          = '';
-            //     $results['items'][$key]['stamped_validity'] = '';
-            // }
         }
         return response()->json($results);
     }

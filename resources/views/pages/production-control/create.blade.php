@@ -282,6 +282,7 @@
                                 $('#branch').val(element.branch);
                                 $('#date_ped').val(element.date);
                                 $('#client_id').val(element.client_id);
+                                $('#client').val(element.client);
                             });
                         });
                         if(conteo>0)
@@ -337,10 +338,15 @@
                 var observacionValue = $(this).closest(modalClass).find('.observacion-input').val();
                 var cantidadControladaValue = $(this).closest(modalClass).find('.cantidad-controlada-input').val();
                 var isChecked = $(this).closest(modalClass).find('#etapa'+product+'_'+stage).prop('checked');
+                var fechaInicioValue = $(this).closest(modalClass).find('.fecha-inicio-input').val();
+                var fechaFinValue = $(this).closest(modalClass).find('.fecha-fin-input').val();
+
                 // Guarda los valores temporalmente en localStorage
                 localStorage.setItem('checkbox_' + product+'-'+stage, isChecked);
                 localStorage.setItem('observacion_' + product+'-'+stage, observacionValue);
                 localStorage.setItem('cantidad_controlada_' + product+'-'+stage, cantidadControladaValue);
+                localStorage.setItem('fecha_inicio_' + product + '-' + stage, fechaInicioValue);
+                localStorage.setItem('fecha_fin_' + product + '-' + stage, fechaFinValue);
                 $('#observacion' + product + '_' + stage).val(observacionValue);
                 $('#cantidad_controlada' + product + '_' + stage).val(cantidadControladaValue);
                 $('#etapa' + product + '_' + stage).prop('checked', isChecked === 'true');
@@ -349,6 +355,8 @@
                 $('#observacion' + product + '_' + stage).attr('value', observacionValue);
                 $('#cantidad_controlada' + product + '_' + stage).attr('value', cantidadControladaValue);
                 $('#etapa' + product + '_' + stage).attr('value', isChecked);
+                $('#fecha_inicio' + product + '_' + stage).val(fechaInicioValue);
+                $('#fecha_fin' + product + '_' + stage).val(fechaFinValue);
 
                 $(modalClass).modal('hide');
 
@@ -406,6 +414,16 @@
                                             <input type="text" id="cantidad_controlada${product_id}_${stage_id}" name="cantidad_controlada${product_id}_${stage_id}" class="form-control cantidad-controlada-input">
                                         </div>
                                     </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <label for="fecha_inicio">Fecha Inicio:</label>
+                                            <input type="datetime-local" id="fecha_inicio${product_id}_${stage_id}" name="fecha_inicio${product_id}_${stage_id}" class="form-control fecha-inicio-input">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="fecha_fin">Fecha Fin:</label>
+                                            <input type="datetime-local" id="fecha_fin${product_id}_${stage_id}" name="fecha_fin${product_id}_${stage_id}" class="form-control fecha-fin-input">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar</button>
@@ -426,9 +444,10 @@
                     $('#form').append($fieldClone);
                 });
 
-                    // Agregar el modal generado al cuerpo del documento
+                const ahora = new Date().toISOString().slice(0,16); // formato YYYY-MM-DDTHH:mm
+                $(`#fecha_inicio${product_id}_${stage_id}`).val(ahora);
+                // Agregar el modal generado al cuerpo del documento
                 $('body').append(modalHtml);
-
                 // Mostrar el modal
                 $(`.myModal${product_id}_${stage_id}`).modal('show');
             }

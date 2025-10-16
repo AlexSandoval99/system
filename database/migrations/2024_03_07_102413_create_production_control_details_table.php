@@ -18,8 +18,7 @@ class CreateProductionControlDetailsTable extends Migration
             $table->string('observation');
             $table->integer('quantity');
             $table->integer('residue');
-            $table->boolean('stage');
-          
+
             $table->unsignedBigInteger('articulo_id');
             $table->foreign('articulo_id')->references('id')->on('articulo');
 

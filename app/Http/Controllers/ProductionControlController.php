@@ -11,6 +11,7 @@ use App\Models\BudgetProductionDetail;
 use App\Models\Client;
 use App\Models\Presentation;
 use App\Models\ProductionControl;
+use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
 use App\Models\Provider;
@@ -54,6 +55,7 @@ class ProductionControlController extends Controller
             DB::transaction(function() use ($request, & $control)
             {
                 $control = ProductionControl::create([
+                    'production_order_id'       => $request->number_order,
                     'date'                      => $request->date,
                     'status'                    => 1,
                     'client_id'                 => $request->client_id,
@@ -70,10 +72,28 @@ class ProductionControlController extends Controller
                         'quantity'              => $request->{"total$value"} ?? 0,
                         'residue'               => $request->{"cantidad_controlada$value"} ?? 0,
                         'observation'           => $request->{"observacion$value"} ?? '',
-                        'stage'                 => $request->{"etapa$value"} ? 1 : 0,
                         'production_control_id' => $control->id,
+                        'start_date'            => $request->{"fecha_inicio$value"} ?? null,
+                        'end_date'              => $request->{"fecha_fin$value"} ?? null,
                         'stage_id'              => $request->{"stage_id$value"}
                     ]);
+
+                    $cost_product = ProductionCost::where('order_production_id',$request->number_order)->first();
+                    if($cost_product)
+                    {
+                        $startHour = Carbon::createFromFormat('Y-m-d\TH:i', $request->{"fecha_inicio$value"});
+                        $endHour = Carbon::createFromFormat('Y-m-d\TH:i', $request->{"fecha_fin$value"});
+                        $diffInHours = $startHour->diffInHours($endHour);
+                        $cost_product->production_cost_detail()->create([
+                            'articulo_id'           => $articulo[0],
+                            'material_id'           => null,
+                            'quantity'              => $request->{"total$value"},
+                            'production_cost_id'    => $cost_product->id,
+                            'hour_worker'          => $diffInHours,
+                            'price_cost'            => $diffInHours * 15000
+                        ]);
+                    }
+
                 }
             });
 
@@ -95,14 +115,14 @@ class ProductionControlController extends Controller
     {
         if(request()->ajax())
         {
-            $results = [];        
+            $results = [];
             foreach (request()->sesion as $key => $session) {
                 $order_productions = ProductionOrderDetail::with('production_order', 'articulo')
                                                                 ->select("production_order_details.*")
                                                                 ->join('production_orders', 'production_order_details.production_order_id', '=', 'production_orders.id')
                                                                 ->where('production_orders.status', true)
                                                                 ->where('production_orders.id', request()->number_order)
-    
+
                                                                 ->groupBy('production_order_details.articulo_id')
                                                                 ->get();
                 foreach ($order_productions as $key => $order_detail)
@@ -123,12 +143,12 @@ class ProductionControlController extends Controller
                         $results['items'][$session][$key]['stage_id']           = $control->stage_id;
                         $results['items'][$session][$key]['stage_name']         = $control->name;
                     }
-    
-                }         
+
+                }
             }
             return response()->json($results);
         }
         abort(404);
     }
-    
+
 }

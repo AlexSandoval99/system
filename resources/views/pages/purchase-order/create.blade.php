@@ -18,10 +18,6 @@
                                 <label>Solicitado por</label>
                                 <input class="form-control" type="text" name="requested_by" value="{{auth()->user()->name}}" disabled>
                             </div>
-                            {{-- <div class="form-group col-md-2">
-                                <label>Condición</label>
-                                {{ Form::select('condition', config('constants.invoice_condition'), old('condition'), ['class' => 'form-control', 'select2']) }}
-                            </div> --}}
                             <div class="form-group col-md-2">
                                 <label>Sucursal</label>
                                 {{ Form::select('branch_id', $branches, old('branch_id'), ['class' => 'form-control', 'select2', 'id' => 'branch_id']) }}
@@ -30,10 +26,6 @@
                                 <label>Fecha</label>
                                 <input class="form-control" type="text" name="date" value="{{ old('date', date('d/m/Y')) }}"  readonly>
                             </div>
-                            {{-- <div class="form-group col-md-2">
-                                <label>Cambio</label>
-                                <input class="form-control" type="text" name="change" id="change" value="1">
-                            </div> --}}
                         </div>
                     </div>
                 </div>

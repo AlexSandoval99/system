@@ -106,6 +106,13 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('articulo/{articulo}/edit', 'ArticuloController@edit')->name('articulo.edit');
         Route::put('articulo/{articulo}/update', 'ArticuloController@update')->name('articulo.update');
 
+        Route::get('branch', 'BranchController@index')->name('branch');
+        Route::get('branch/create', 'BranchController@create')->name('branch-create');
+        Route::post('branch', 'BranchController@store')->name('branch.store');
+        Route::get('branch/{branches}/edit', 'BranchController@edit')->name('branch.edit');
+        Route::put('branch/{branches}/update', 'BranchController@update')->name('branch.update');
+        Route::get('branch/{branches}', 'BranchController@show')->name('branch.show');
+
         Route::get('cliente', 'ClienteController@index')->name('cliente');
         Route::get('cliente/create', 'ClienteController@create')->name('cliente-create');
         Route::post('cliente', 'ClienteController@store')->name('cliente.store');
@@ -176,6 +183,8 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('ajax/last-cash-balance', 'CashBoxBalancesController@ajax_last_cash_balance')->name('ajax.last-cash-balance');
         Route::post('cash_box_balances/{id}/arqueo', 'CashBoxBalancesController@storeArqueo')->name('cash_box_balances.store_arqueo');
         Route::post('cash_box_balances/{id}/deposito', 'CashBoxBalancesController@storeDeposito')->name('cash_box_balances.store_deposito');
+        Route::get('cash_box_movements', 'CashBoxBalancesController@movements')->name('cashbox.movements');
+        Route::get('cash_box_movements/filter', 'CashBoxBalancesController@filterMovements')->name('cashbox.movements.filter');
 
         Route::get('budget/{purchase_budget}/view-purchase-budgets', 'WishPurchaseController@view_purchase_budgets')->name('wish-purchases.view-purchase-budgets');
 

@@ -4,26 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateMermaRequest;
-use App\Http\Requests\CreateProductionOrderRequest;
-use App\Http\Requests\CreateProductionQualityRequest;
-use App\Models\Articulo;
-use App\Models\Branch;
 use App\Models\CashBox;
-use App\Models\Client;
 use App\Models\Losse;
-use App\Models\Merma;
-use App\Models\Presentation;
-use App\Models\ProductionControl;
 use App\Models\ProductionControlDetail;
-use App\Models\ProductionControlQuality;
-use App\Models\ProductionQualityControl;
-use App\Models\User;
 use App\Models\SettingProduct;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Str;
 
 class CashBoxesController extends Controller
 {

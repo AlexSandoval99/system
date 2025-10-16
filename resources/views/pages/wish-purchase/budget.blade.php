@@ -188,6 +188,7 @@
         // Envía el formulario vía AJAX
         $('#form').submit(function(e) {
             e.preventDefault();
+
             $.ajax({
                 url: $(this).attr('action'),
                 type: 'POST',
@@ -202,15 +203,37 @@
                         window.location.href = "{{ url('/') }}";
                     });
                 },
-                error: function(data) {
-                    swal({
-                        title: "Error",
-                        text: "Hubo un problema al enviar el presupuesto. Por favor, intente nuevamente.",
-                        icon: "error",
-                        button: "OK",
-                    });
+                error: function(xhr) {
+                    console.log(xhr);
+
+                    if (xhr.status === 422)
+                    {
+                        let errors = xhr.responseJSON.errors;
+                        let messages = "";
+
+                        for (let field in errors) {
+                            messages += errors[field].join("\n") + "\n";
+                        }
+
+                        swal({
+                            title: "Errores de validación",
+                            text: messages,
+                            icon: "warning",
+                            button: "OK",
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Hubo un problema al enviar el presupuesto. Por favor, intente nuevamente.",
+                            icon: "error",
+                            button: "OK",
+                        });
+                    }
                 }
             });
         });
+
     </script>
 @endsection
