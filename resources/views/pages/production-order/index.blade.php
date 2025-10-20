@@ -38,12 +38,15 @@
                                 <td>{{ $ord->branch->name }}</td>
                                 <td>{{ $ord->date }}</td>
                                 <td>
-                                    <span class="label label-{{ config('constants.purchase-status-label.' . $ord->status) }}">{{ config('constants.purchase-status.'. $ord->status) }}</span>
+                                    <span class="label label-{{ config('constants.production-order-status-label.' . $ord->status) }}">{{ config('constants.production-order-status.'. $ord->status) }}</span>
                                 </td>
-                                <td class="text-center"><a href="{{ url('production-order/' . $ord->id) }}"><i class="fa fa-info-circle"></i></a>
-                                <a href="{{ url('production-order/' . $ord->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                                <td class="text-center">
+                                    <a href="{{ url('production-order/' . $ord->id) }}"><i class="fa fa-info-circle"></i></a>
+                                    @if(($ord->tiene_control_rechazo || $ord->tiene_calidad_rechazo) && $ord->status == 3 )
+                                        <a href="{{ url('production-order/' . $ord->id . '/generate') }}"title="Re-Work"><i class="fa fa-refresh"></i></a>
+                                    @endif
+                                </td>
 
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>

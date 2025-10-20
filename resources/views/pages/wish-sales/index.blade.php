@@ -36,7 +36,7 @@
                                 <td>{{ $sale->date }}</td>
                                 <td>{{ $sale->client->razon_social }}</td>
                                 <td>
-                                    <span class="label label-{{ config('constants.purchase-status-label.' . $sale->status) }}">{{ config('constants.purchase-status.'. $sale->status) }}</span>
+                                    <span class="label label-{{ config('constants.wish-sales-status-label.' . $sale->status) }}">{{ config('constants.wish-sales-status.'. $sale->status) }}</span>
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ url('wish-sales/' . $sale->id) }}"><i class="fa fa-info-circle"></i></a>

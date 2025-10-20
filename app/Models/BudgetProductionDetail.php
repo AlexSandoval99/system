@@ -10,8 +10,7 @@ class BudgetProductionDetail extends Model
                             'quantity',
                             'amount',
                             'budget_production_id',
-    						'articulo_id',
-                            'wish_sale_id'];
+    						'articulo_id'];
 
     public function budget_production()
     {
@@ -22,10 +21,4 @@ class BudgetProductionDetail extends Model
     {
         return $this->belongsTo('App\Models\Articulo','articulo_id');
     }
-
-    public function wish_production()
-    {
-        return $this->belongsTo('App\Models\WishProduction', 'wish_sale_id');
-    }
-
 }

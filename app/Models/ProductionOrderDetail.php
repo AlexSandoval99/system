@@ -10,7 +10,9 @@ class ProductionOrderDetail extends Model
                            'articulo_id',
                            'material_id',
                            'quantity',
-                           'quantity_material'];
+                           'quantity_material',
+                           'status'
+                        ];
 
     public function production_order()
     {

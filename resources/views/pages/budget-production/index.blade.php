@@ -57,10 +57,15 @@
                                 <td class="text-center"><span class="label label-{{ config('constants.budget_production_status_label.' . $budget_production->status) }}">{{ config('constants.budget_production_status.' . $budget_production->status) }}</span></td>
                                 <td class="text-center">
                                     <a href="{{ url('budget-production/' . $budget_production->id) }}"><i class="fa fa-info-circle"></i></a>
-                                    <a href="{{ url('budget-production/' . $budget_production->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
-                                    {{-- @permission('purchases-movements.delete') --}}
-                                            <a href="{{ url('budget-production/' . $budget_production->id . '/delete') }}"><i class="fa fa-trash"></i></a>
-                                    {{-- @endpermission --}}
+                                    @if($budget_production->status == 1)
+                                        <a href="{{ url('budget-production/' . $budget_production->id . '/edit') }}"target="_blank" data-toggle="tooltip"><i class="fa fa-pencil"></i></a>
+                                        <a href="#" class="btn_confirm" data-url="{{url('budget-production/'.$budget_production->id.'/confirm')}}">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                        <a href="#" class="btn_delete" data-url="{{ url('budget-production/' . $budget_production->id . '/delete') }}">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -71,4 +76,40 @@
         </div>
     </div>
 </div>
+@endsection
+@section('layout_js')
+    <script>
+        $(document).on('click', '.btn_delete', function(e){
+            e.preventDefault();
+            var url = $(this).data('url');
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "¡Una vez anulado, no podrá recuperar este presupuesto de producción!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = url;
+                }
+            });
+        });
+
+        $(document).on('click', '.btn_confirm', function(e){
+            e.preventDefault();
+            var url = $(this).data('url');
+            swal({
+                title: "¿Estás seguro?",
+                text: "¡Una vez confirmado, no podrá modificar este presupuesto de producción!",
+                icon: "warning",
+                buttons: true,
+            })
+            .then((willConfirm) => {
+                if (willConfirm) {
+                    window.location.href = url;
+                }
+            });
+        });
+    </script>
 @endsection

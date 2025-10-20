@@ -20,6 +20,7 @@ use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
 use App\Models\ProductionQualityControl;
+use App\Models\ProductionRejected;
 use App\Models\Provider;
 use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
@@ -68,6 +69,11 @@ class ProductionControlQualityController extends Controller
                     'client_id'                 => $request->client_id,
                     'branch_id'                 => $request->branch_id,
                     'user_id'                   => auth()->user()->id,
+                    'production_control_id'     => $request->number_control
+                ]);
+                $Production = ProductionControl::find($request->number_control);
+                $orden = ProductionOrder::find($Production->production_order_id)->update([
+                    'status'    => 3
                 ]);
 
                 // Grabar los Productos
@@ -85,6 +91,26 @@ class ProductionControlQualityController extends Controller
                         'production_quality_id' => $control->id,
                         'quality_id'              => $request->{"stage_id$value"}
                     ]);
+
+                    if($request->{"total$value"} > $request->{"cantidad_controlada$value"})
+                    {
+                        $existe = ProductionRejected::where('articulo_id',$articulo[0])->where('owner_id',$control->id)->first();
+                        if($existe)
+                        {
+                            $existe->update([
+                                'quantity' => $request->{"total$value"} - $request->{"cantidad_controlada$value"}
+                            ]);
+                        }
+                        else
+                        {
+                            ProductionRejected::create([
+                                'articulo_id'   => $articulo[0],
+                                'quantity'      => $request->{"total$value"} - $request->{"cantidad_controlada$value"},
+                                'owner_id'      => $control->id,
+                                'owner_type'    => "app\Models\ProductionQualityControl",
+                            ]);
+                        }
+                    }
                 }
 
                 $array_products = $control->production_quality_control_details()->orderBy('id','desc')->groupBy('articulo_id')->get();
@@ -156,15 +182,17 @@ class ProductionControlQualityController extends Controller
                                                                 ->join('production_controls', 'production_control_details.production_control_id', '=', 'production_controls.id')
                                                                 ->where('production_controls.status', true)
                                                                 ->where('production_controls.id', request()->number_control)
-
                                                                 ->groupBy('production_control_details.articulo_id')
                                                                 ->get();
                 foreach ($order_productions as $key => $order_detail)
                 {
+                    $new_quantity = ProductionRejected::where('owner_id',request()->number_control)
+                                                        ->where('owner_type', 'app\Models\ProductionControl')
+                                                        ->where('articulo_id',$order_detail->articulo_id)->first();
                     $results['items'][$session][$key]['id']           = $order_detail->id;
                     $results['items'][$session][$key]['product_id']   = $order_detail->articulo_id;
                     $results['items'][$session][$key]['product_name'] = $order_detail->articulo->name;
-                    $results['items'][$session][$key]['quantity']     = $order_detail->quantity;
+                    $results['items'][$session][$key]['quantity']     = $order_detail->quantity - $new_quantity->quantity;
                     $results['items'][$session][$key]['client_id']    = $order_detail->production_control->client_id;
                     $results['items'][$session][$key]['client']       = $order_detail->production_control->client->first_name.' '.$order_detail->production_control->client->last_name;
                     $results['items'][$session][$key]['branch_id']    = $order_detail->production_control->branch_id;

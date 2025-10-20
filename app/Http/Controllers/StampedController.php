@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stamped;
+use App\Models\VoucherBox;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StampedController extends Controller
 {
     public function index()
     {
-        $stampeds = Stamped::get();
+        $stampeds = Stamped::where('status',1);
         $stampeds = $stampeds->paginate(20);
          return view('pages.stamped.index', compact('stampeds'));
     }
@@ -18,35 +21,62 @@ class StampedController extends Controller
     public function create()
     {
         $stampeds  = Stamped::get('number','id');
-        $branches = Branch::pluck('name','id');
-        return view('pages.voucher_box.create', compact('stampeds','branches'));
+        return view('pages.stamped.create', compact('stampeds'));
     }
 
     public function store(Request $request)
     {
-        if(request()->ajax())
+        DB::transaction(function() use ($request, & $control)
         {
-            DB::transaction(function() use ($request, & $control)
-            {
-                $control = VoucherBox::create([
-                    'date'                      => $request->date,
-                    'status'                    => 1,
-                    'client_id'                 => $request->client_id,
-                    'branch_id'                 => $request->branch_id,
-                    'user_id'                   => auth()->user()->id,
-                ]);
+            $start = Carbon::createFromFormat('Y-m-d', $request->from);
+            $end = Carbon::createFromFormat('Y-m-d', $request->end);
 
-            });
-
-            return response()->json([
-                'success'            => true,
+            Stamped::create([
+                'number' => $request->number,
+                'from_date' => $start,
+                'until_date' => $end,
+                'observation' => $request->observation,
+                'user_id' => auth()->user()->id,
+                'status' => 1,
             ]);
-        }
-        abort(404);
+
+        });
+
+        return redirect()->route('stampeds.index')->with('success', 'Timbrado registrada exitosamente.');
+
     }
 
-    public function show(VoucherBox $voucher_box)
+    public function show(Stamped $stamped)
     {
-        return view('pages.voucher_box.show', compact('voucher_box'));
+        return view('pages.stamped.show', compact('stamped'));
+    }
+
+    public function edit($id)
+    {
+        $stamped = Stamped::findOrFail($id);
+        return view('pages.stamped.edit', compact('stamped'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $stamped = Stamped::findOrFail($id);
+
+        DB::transaction(function() use ($request, $stamped)
+        {
+            $start = Carbon::createFromFormat('Y-m-d', $request->from);
+            $end = Carbon::createFromFormat('Y-m-d', $request->end);
+
+            $stamped->update([
+                'number' => $request->number,
+                'from_date' => $start,
+                'until_date' => $end,
+                'observation' => $request->observation,
+                'user_id' => auth()->user()->id,
+                'status' => 1,
+            ]);
+
+        });
+
+        return redirect()->route('stampeds.index')->with('success', 'Timbrado actualizada exitosamente.');
     }
 }

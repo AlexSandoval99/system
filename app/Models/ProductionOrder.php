@@ -16,7 +16,8 @@ class ProductionOrder extends Model
                             'team_work_id',
                             'branch_id',
                             'user_id',
-                            'budget_production_id'
+                            'budget_production_id',
+                            'old_order_id'
                         ];
     public function setDateAttribute($value)
     {
@@ -41,6 +42,16 @@ class ProductionOrder extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User');
+    }
+    public function budget_production()
+    {
+        return $this->belongsTo('App\Models\BudgetProduction');
+    }
+
+    public function production_control()
+    {
+        return $this->belongsTo('App\Models\ProductionControl');
+
     }
 
 }

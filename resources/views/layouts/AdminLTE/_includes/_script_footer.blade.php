@@ -12,8 +12,10 @@
 <!-- Otros scripts (en el orden correcto) -->
 <script src="{{ asset('js/jquery.number.2.1.6.min.js') }}"></script>
 {{-- <script src="{{ asset('assets/adminlte/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script> --}}
-<script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
+{{-- <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script> --}}
 {{-- <script src="{{ asset('js/inputmask.numeric.extensions.min.js') }}"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
 <script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
 
 <!-- Librerías adicionales -->

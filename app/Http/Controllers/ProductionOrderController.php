@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductionOrderRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
+use App\Models\BudgetProduction;
 use App\Models\BudgetProductionDetail;
+use App\Models\Deposit;
 use App\Models\Presentation;
 use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
@@ -16,7 +18,9 @@ use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
 use App\Models\User;
 use App\Models\PurchaseOrder;
+use App\Models\PurchasesExistence;
 use App\Models\SettingProduct;
+use App\Models\TeamWork;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -28,17 +32,36 @@ class ProductionOrderController extends Controller
     public function index()
     {
         $purchases_providers = Provider::Filter();
-        $order           = ProductionOrder::with('branch')
-            ->orderBy('id', 'desc');
 
-        if (request()->o)
-        {
-            $order = $order->where('ruc', 'LIKE', '%' . request()->o . '%')
+        $order = ProductionOrder::with('branch', 'client')
+            ->leftJoin('production_controls', 'production_orders.id', '=', 'production_controls.production_order_id')
+            ->leftJoin('production_quality_controls', 'production_controls.id', '=', 'production_quality_controls.production_control_id')
+            ->leftJoin('production_rejected as control', function ($join) {
+                $join->on('production_controls.id', '=', 'control.owner_id')
+                    ->whereRaw("LOWER(control.owner_type) LIKE '%productioncontrol'");
+            })
+            ->leftJoin('production_rejected as calidad', function ($join) {
+                $join->on('production_quality_controls.id', '=', 'calidad.owner_id')
+                    ->whereRaw("LOWER(calidad.owner_type) LIKE '%productionqualitycontrol'");
+            })
+            ->select(
+                'production_orders.*',
+                DB::raw("MAX(CASE WHEN control.id IS NOT NULL THEN 1 ELSE 0 END) AS tiene_control_rechazo"),
+                DB::raw("MAX(CASE WHEN calidad.id IS NOT NULL THEN 1 ELSE 0 END) AS tiene_calidad_rechazo")
+            )
+            ->groupBy('production_orders.id')
+            ->orderBy('production_orders.id', 'desc');
+
+        if (request()->o) {
+            $order->where(function($q) {
+                $q->where('ruc', 'LIKE', '%' . request()->o . '%')
                 ->orWhere('number', 'LIKE', '%' . request()->o . '%');
+            });
         }
 
-         $order = $order->paginate(20);
-         return view('pages.production-order.index', compact('order', 'purchases_providers'));
+        $order = $order->paginate(20);
+
+        return view('pages.production-order.index', compact('order', 'purchases_providers'));
     }
 
     public function create()
@@ -47,8 +70,9 @@ class ProductionOrderController extends Controller
         $branches               = Branch::where('status', true)->pluck('name', 'id');
         $articulos               = Articulo::Filter();
         $product_presentations  = Presentation::Filter();
+        $team_works             = TeamWork::filter();
         $provider_suggesteds    = NULL;
-        return view('pages.production-order.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds'));
+        return view('pages.production-order.create', compact('users' , 'branches', 'articulos', 'product_presentations','provider_suggesteds','team_works'));
     }
 
     public function store(CreateProductionOrderRequest $request)
@@ -58,12 +82,18 @@ class ProductionOrderController extends Controller
             DB::transaction(function() use ($request, & $production_order)
             {
                 $production_order = ProductionOrder::create([
-                    'date'              => $request->date,
-                    'status'            => 1,
-                    'client_id'         => $request->client_id,
-                    'team_work_id'      => 1,
-                    'branch_id'         => $request->branch_id,
-                    'user_id'           => auth()->user()->id
+                    'date'                  => $request->date,
+                    'status'                => 1,
+                    'client_id'             => $request->client_id,
+                    'team_work_id'          => $request->team_work_id,
+                    'branch_id'             => $request->branch_id,
+                    'user_id'               => auth()->user()->id,
+                    'budget_production_id'  => $request->number_budget
+                ]);
+
+                $budget = BudgetProduction::find($request->number_budget);
+                $budget->update([
+                    'status' => 3
                 ]);
 
                 // Grabar los Productos
@@ -72,12 +102,21 @@ class ProductionOrderController extends Controller
                     foreach ($request->{"selected_materials_$value"} as $key1 => $value1)
                     {
                         $production_order->production_order_details()->create([
-                            'material_id'              => $value1,
-                            'articulo_id'              => $value,
-                            'quantity_material'        => $request->{"selected_materials_quantity_$value"}[$key1],
-                            'quantity'                 => $request->detail_product_quantity[$key],
-                            'production_order_id'      => $production_order->id,
+                            'material_id'               => $value1,
+                            'articulo_id'               => $value,
+                            'quantity_material'         => $request->{"selected_materials_quantity_$value"}[$key1],
+                            'quantity'                  => $request->detail_product_quantity[$key],
+                            'production_order_id'       => $production_order->id,
+                            'status'                    => 1
                         ]);
+                        $deposit = Deposit::where('branch_id',$request->branch_id)->first();
+                        $product_existences = PurchasesExistence::where('residue', '>', 0)
+                                                                ->where('deposit_id', $deposit->id)
+                                                                ->where('raw_material_id', $value1)
+                                                                ->orderBy('id')
+                                                                ->first();
+
+                        $product_existences->update(['residue' => $product_existences->residue - $request->{"selected_materials_quantity_$value"}[$key1]]);
 
                     }
 
@@ -117,52 +156,7 @@ class ProductionOrderController extends Controller
 
     public function show(ProductionOrder $production_order)
     {
-
-
         return view('pages.production-order.show', compact('production_order'));
-    }
-    public function edit(ProductionOrder $production_order)
-    {
-
-        return view('pages.production-order.edit',compact('production_order'));
-    }
-
-    public function update(ProductionOrder $production_order)
-    {
-        if(request()->all())
-        {
-            DB::transaction(function() use ($production_order)
-            {
-
-                $production_order->update([
-                    'date'              => request()->date,
-                    'status'            => 1,
-                    'client_id'         => request()->client_id,
-                    'team_work_id'      => 1,
-                    'branch_id'         => request()->branch_id,
-                    'user_id'           => auth()->user()->id
-                ]);
-
-                // Grabar los Productos
-            $production_order->production_order_details()->delete();
-                foreach(request()->detail_product_id as $key => $value)
-                {
-                    foreach (request()->{"detail_material_id_$value"} as $key1 => $value1)
-                    {
-                        $production_order->production_order_details()->create([
-                            'material_id'              => $value1,
-                            'articulo_id'              => $value,
-                            'quantity_material'        => request()->{"detail_material_quantity_$value"}[$key1],
-                            'quantity'                 => request()->detail_product_quantity[$key],
-                            'production_order_id'      => $production_order->id,
-                        ]);
-                    }
-                }
-            });
-
-            return redirect('production-order');
-
-        }
     }
 
     public function charge_purchase_budgets(PurchaseOrder $wish_purchase)
@@ -178,7 +172,7 @@ class ProductionOrderController extends Controller
             $order_productions = BudgetProductionDetail::with('budget_production', 'articulo')
                                                             ->select("budget_production_details.*")
                                                             ->join('budget_productions', 'budget_production_details.budget_production_id', '=', 'budget_productions.id')
-                                                            ->where('budget_productions.status', true)
+                                                            ->where('budget_productions.status', 2)
                                                             ->where('budget_productions.id', request()->number_budget)
                                                             ->get();
             foreach ($order_productions as $key => $order_detail)
@@ -225,7 +219,7 @@ class ProductionOrderController extends Controller
     }
     public function ajaxByClient($client_id)
     {
-        $orders = ProductionOrder::where('client_id', $client_id)->where('status', 5)->get();
+        $orders = ProductionOrder::where('client_id', $client_id)->where('status', 4)->get();
         $results = [];
         foreach ($orders as $key => $order)
         {
@@ -254,4 +248,81 @@ class ProductionOrderController extends Controller
         }
         return response()->json($results);
     }
+
+    public function reWork(ProductionOrder $production_order)
+    {
+        DB::transaction(function () use ($production_order)
+        {
+
+            $new_order = ProductionOrder::create([
+                'date'                  => now()->format('d/m/Y'),
+                'status'                => 1,
+                'client_id'             => $production_order->client_id,
+                'team_work_id'          => $production_order->team_work_id,
+                'branch_id'             => $production_order->branch_id, // corregido
+                'user_id'               => auth()->user()->id,
+                'budget_production_id'  => $production_order->budget_production_id,
+                'old_order_id'          => $production_order->id
+            ]);
+
+            $rejectedControl = DB::table('production_rejected')
+                ->join('production_controls', 'production_rejected.owner_id', '=', 'production_controls.id')
+                ->where('production_controls.production_order_id', $production_order->id)
+                ->whereRaw("LOWER(production_rejected.owner_type) LIKE '%productioncontrol'")
+                ->select('production_rejected.articulo_id', 'production_rejected.quantity')
+                ->get();
+
+            $rejectedCalidad = DB::table('production_rejected')
+                ->join('production_quality_controls', 'production_rejected.owner_id', '=', 'production_quality_controls.id')
+                ->join('production_controls', 'production_quality_controls.production_control_id', '=', 'production_controls.id')
+                ->where('production_controls.production_order_id', $production_order->id)
+                ->whereRaw("LOWER(production_rejected.owner_type) LIKE '%productionqualitycontrol'")
+                ->select('production_rejected.articulo_id', 'production_rejected.quantity')
+                ->get();
+
+            $rechazos = $rejectedControl->concat($rejectedCalidad);
+
+            $agrupados = $rechazos->groupBy('articulo_id')->map(function ($items) {
+                return [
+                    'articulo_id' => $items->first()->articulo_id,
+                    'quantity' => $items->sum('quantity')
+                ];
+            });
+
+            foreach ($agrupados as $detalle)
+            {
+                $articulo = Articulo::where('id',$detalle['articulo_id'])->first();
+                foreach ($articulo->setting_product as $key => $setting)
+                {
+                    if($setting->raw_materials_id)
+                    {
+                        $new_order->production_order_details()->create([
+                            'articulo_id'         => $detalle['articulo_id'],
+                            'material_id'         => $setting->raw_materials_id,
+                            'quantity'            => $detalle['quantity'],
+                            'quantity_material'   => $setting->quantity * $detalle['quantity'],
+                            'material_id'         => $setting->raw_materials_id,
+                            'status'              => 1
+                        ]);
+
+                        $deposit = Deposit::where('branch_id',$production_order->branch_id)->first();
+                        $product_existences = PurchasesExistence::where('residue', '>', 0)
+                                                                ->where('deposit_id', $deposit->id)
+                                                                ->where('raw_material_id', $setting->raw_materials_id)
+                                                                ->orderBy('id')
+                                                                ->first();
+
+                        $product_existences->update(['residue' => $product_existences->residue - $setting->quantity * $detalle['quantity']]);
+                    }
+                }
+
+            }
+            $production_order->update([
+                'status' => 4
+            ]);
+        });
+
+        return redirect()->back()->with('success', 'Nueva orden generada correctamente a partir de los rechazos.');
+    }
+
 }

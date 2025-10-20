@@ -30,7 +30,13 @@ class CashBoxBalancesController extends Controller
 
         $banks = Bank::where('status',1)->pluck('name', 'id');
 
-        return view('pages.cash_box_balances.index', compact('cash_box_balances','banks'));
+        $cash_boxes = CashBoxUser::where('status', true)
+            ->with('cashBox')
+            ->where('user_id', auth()->user()->id)
+            ->get()
+            ->pluck('cashBox.name', 'cashBox.id');
+
+        return view('pages.cash_box_balances.index', compact('cash_box_balances','banks','cash_boxes'));
     }
 
     public function create()
@@ -43,6 +49,17 @@ class CashBoxBalancesController extends Controller
     {
         if(request()->ajax())
         {
+            $openBox = CashBoxDetail::where('cash_box_id', $request->cash_box_id)
+                ->where('cash_box_concept_id', 1) // concepto de apertura
+                ->where('status', true) // abierta
+                ->first();
+
+            if ($openBox) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ya existe una caja abierta. Debe cerrarla antes de abrir una nueva.'
+                ], 400);
+            }
             DB::transaction(function() use ($request)
             {
                 $date = CashBoxDetail::where(['status'      => true,
@@ -132,11 +149,6 @@ class CashBoxBalancesController extends Controller
                                                            'cash_box_id' => request()->cash_box_id])
                                                 ->whereDate('created_at', $date->created_at->format('Y-m-d'))
                                                 ->get();
-
-                $small_cash_box_detail = CashBoxDetail::with('cash_box_concept', 'voucher', 'payment', 'user')
-                ->where('cash_box_id',request()->cash_box_id)
-                ->where('status',1)
-                ->get();
 
                 foreach($cash_box_details AS $cash_box_detail)
                 {

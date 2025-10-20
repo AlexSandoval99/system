@@ -1,6 +1,7 @@
 <?php
 
 return [
+    //estados
     'status' => [
         0 => 'Inactivo',
         1 => 'Activo'
@@ -8,10 +9,6 @@ return [
     'status-label' => [
         0 => 'danger',
         1 => 'primary'
-    ],
-    'invoice_condition' => [
-        1 => 'Contado',
-        2 => 'Crédito'
     ],
     'purchase-status' =>[
         1 => 'Activo',
@@ -22,6 +19,73 @@ return [
     'purchase-status-label' =>[
         1 => 'success',
         2 => 'danger'
+    ],
+    'wish-purchase-status' =>[
+        0 => 'Anulado',
+        1 => 'Pendiente de Presupuesto',
+        2 => 'Confirmado'
+    ],
+    'wish-purchase-status-label' =>[
+        0 => 'danger',
+        1 => 'warning',
+        2 => 'success'
+    ],
+    'budget_purchase_status' =>[
+        1 => 'Pendiente',
+        2 => 'Aprobado',
+        2 => 'Cargado'
+    ],
+    'purchase_order_status' =>[
+        1 => 'Pendiente de Recepcion',
+        2 => 'Recepcionado'
+    ],
+    'purchase_order_status_label' =>[
+        1 => 'warning',
+        2 => 'success'
+    ],
+    'budget_production_status' =>[
+        0 => 'Anulado',
+        1 => 'Pendiente',
+        2 => 'Aprobado',
+        3 => 'Orden Generado'
+    ],
+    'budget_production_status_label' =>[
+        0 => 'danger',
+        1 => 'warning',
+        2 => 'success',
+        3 => 'success'
+    ],
+    'wish-sales-status' =>[
+        1 => 'Pendiente de Presupuesto',
+        2 => 'Confirmado'
+    ],
+    'wish-sales-status-label' =>[
+        1 => 'warning',
+        2 => 'success'
+    ],
+    'invoice_status' =>[
+        1 => 'Activo',
+        2 => 'Anulado'
+    ],
+    'invoice_status_label' =>[
+        1 => 'success',
+        2 => 'danger'
+    ],
+    'production-order-status' =>[
+        1 => 'Activo',
+        2 => 'Control Produccion',
+        3 => 'Finalizado',
+        4 => 'Re-Work'
+    ],
+    'production-order-status-label' =>[
+        1 => 'success',
+        2 => 'success',
+        3 => 'success',
+        4 => 'success'
+    ],
+    'invoice_condition' => [
+        1 => 'Contado',
+        2 => 'Crédito'
     ],
 
     'presentation' =>[
@@ -52,18 +116,6 @@ return [
         2 => 'Nota de Remision',
         4 => 'Nota Credito',
     ],
-
-    'wish-purchase-status' =>[
-        0 => 'Anulado',
-        1 => 'Pendiente de Presupuesto',
-        2 => 'Confirmado'
-    ],
-    'wish-purchase-status-label' =>[
-        0 => 'danger',
-        1 => 'warning',
-        2 => 'success'
-    ],
-
     'gender' =>[
         1 => 'Masculino',
         2 => 'Femenino'
@@ -71,27 +123,6 @@ return [
     'civil_status' =>[
         1 => 'Casado/a',
         2 => 'Soltero/a'
-    ],
-    'budget_purchase_status' =>[
-        1 => 'Pendiente',
-        2 => 'Aprobado',
-        2 => 'Cargado'
-    ],
-    'purchase_order_status' =>[
-        1 => 'Pendiente de Recepcion',
-        2 => 'Recepcionado'
-    ],
-    'purchase_order_status_label' =>[
-        1 => 'warning',
-        2 => 'success'
-    ],
-    'invoice_status' =>[
-        1 => 'Activo',
-        2 => 'Anulado'
-    ],
-    'invoice_status_label' =>[
-        1 => 'success',
-        2 => 'danger'
     ],
     'denominaciones_number' =>[
         1 => 100,
@@ -120,16 +151,6 @@ return [
     'cash_box_detail_type_label' => [
         1 => 'success',
         2 => 'danger'
-    ],
-    'budget_production_status' =>[
-        0 => 'Anulado',
-        1 => 'Pendiente',
-        2 => 'Aprobado'
-    ],
-    'budget_production_status_label' =>[
-        0 => 'danger',
-        1 => 'warning',
-        2 => 'success'
     ]
 ]
 ?>

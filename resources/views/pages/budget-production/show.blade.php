@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">                        
+                <div class="row">
                     <div class="col-md-12">
                         <div class="ibox-content">
                             <div class="row">
@@ -33,7 +33,7 @@
                             <div class="row">
                                 <div class="col-md-3"><b>Fecha:</b></div>
                                 <div class="col-md-9">{{ $budget_production->date}}</div>
-                            </div>                                
+                            </div>
                             <div class="row">
                                 <div class="col-md-3"><b>Fecha Creación:</b></div>
                                 <div class="col-md-9">{{ $budget_production->created_at->format('d/m/Y H:m:s') }}</div>
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div class="row">                
+    <div class="row">
         <div class="col-md-12">
             <div class="ibox-content table-responsive no-padding">
                 <table class="table table-hover table-striped mb-0">
@@ -61,12 +61,13 @@
                                 <td class="text-center"> {{ $details->articulo->name }}</td>
                                 <td class="text-center">{{ $details->description ?? '' }}</td>
                                 <td class="text-center">{{ number_format($details->quantity, 0, ',', '.') }}</td>
+                                <td class="text-center">{{ number_format($details->amount, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>        
+    </div>
 </div>
 @endsection

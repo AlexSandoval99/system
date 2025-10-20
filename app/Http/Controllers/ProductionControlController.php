@@ -14,6 +14,7 @@ use App\Models\ProductionControl;
 use App\Models\ProductionCost;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
+use App\Models\ProductionRejected;
 use App\Models\Provider;
 use App\Models\PurchaseBudget;
 use App\Models\RawMaterial;
@@ -62,7 +63,9 @@ class ProductionControlController extends Controller
                     'branch_id'                 => $request->branch_id,
                     'user_id'                   => auth()->user()->id,
                 ]);
-
+                $orden = ProductionOrder::find($request->number_order)->update([
+                    'status'    => 2
+                ]);
                 // Grabar los Productos
                 foreach($request->detail_stage_id as $key => $value)
                 {
@@ -92,6 +95,57 @@ class ProductionControlController extends Controller
                             'hour_worker'          => $diffInHours,
                             'price_cost'            => $diffInHours * 15000
                         ]);
+                    }
+
+                    // $array_products = $control->production_control_details()->orderBy('id','desc')->groupBy('articulo_id')->get();
+                    // foreach ($array_products as $key => $product)
+                    // {
+                    //     if($request->input("total{$product->articulo_id}_{$product->quality_id}") > $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"))
+                    //     {
+                    //         $losse = Losse::where('control_quality_id',$control->id)->first();
+                    //         if(!$losse)
+                    //         {
+                    //             $losse = Losse::create([
+                    //                 'status'            => 1,
+                    //                 'date'               => $request->date,
+                    //                 'user_id'            => auth()->user()->id,
+                    //                 'branch_id'          => $request->branch_id,
+                    //                 'control_quality_id' => $control->id
+                    //             ]);
+                    //         }
+
+                    //         $materials = SettingProduct::where('articulo_id',$product->articulo_id)->whereNotNull('raw_materials_id')->get();
+                    //         foreach ($materials as $key => $material)
+                    //         {
+                    //             $losse->losse_detail()->create([
+                    //                 'articulo_id'   => $product->articulo_id,
+                    //                 'reason'        => $request->input("observacion{$product->articulo_id}_{$product->quality_id}"),
+                    //                 'material_id'   => $material->raw_material->id,
+                    //                 'quantity'      => $request->input("total{$product->articulo_id}_{$product->quality_id}")  - $request->input("cantidad_controlada{$product->articulo_id}_{$product->quality_id}"),
+                    //                 'losse_id'      => $losse->id
+                    //             ]);
+                    //         }
+                    //     }
+                    // }
+
+                    if($request->{"total$value"} > $request->{"cantidad_controlada$value"})
+                    {
+                        $existe = ProductionRejected::where('articulo_id',$articulo[0])->where('owner_id',$control->id)->first();
+                        if($existe)
+                        {
+                            $existe->update([
+                                'quantity' => $request->{"total$value"} - $request->{"cantidad_controlada$value"}
+                            ]);
+                        }
+                        else
+                        {
+                            ProductionRejected::create([
+                                'articulo_id'   => $articulo[0],
+                                'quantity'      => $request->{"total$value"} - $request->{"cantidad_controlada$value"},
+                                'owner_id'      => $control->id,
+                                'owner_type'    => "app\Models\ProductionControl",
+                            ]);
+                        }
                     }
 
                 }

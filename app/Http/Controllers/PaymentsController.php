@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\CashBox;
+use App\Models\CashBoxDetail;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
 use App\Models\Voucher;
@@ -11,6 +12,7 @@ use App\Models\VoucherCollect;
 use App\Models\VoucherCollectPayment;
 use App\Models\VoucherPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentsController extends Controller
 {
@@ -34,54 +36,68 @@ class PaymentsController extends Controller
 
     public function store(Request $request)
     {
-        $payments = Voucher::create([
-            'date' => $request->fecha,
-            'branch_id' => $request->branch_id,
-            'voucher_box_id' => $request->expedicion,
-            'voucher_number' => $request->voucher_number,
-            'voucher_condition' => 1,
-            'expiration' => null,
-            'client_id' => $request->cliente_id,
-            'razon_social' => $request->razon_social,
-            'ruc' => $request->ruc,
-            'phone' => null,
-            'address' => null,
-            'voucher_type' =>3,
-            'observation' => $request->observacion,
-            'amount' => sum_array($request->monto_cuota),
-            'total_excenta' => 0,
-            'total_iva5' => 0,
-            'total_iva10' => 0,
-            'status' => 1,
-            'user_id' => auth()->user()->id,
-            'stamped_id' => $request->expedicion
-        ]);
+        DB::transaction(function () use ($request) {
 
-        foreach($request->cuota_nro as $key => $cuota)
-        {
-            VoucherCollectPayment::create([
+            $payments = Voucher::create([
+                'date' => $request->fecha,
+                'branch_id' => $request->branch_id,
+                'voucher_box_id' => $request->expedicion,
+                'voucher_number' => $request->voucher_number,
+                'voucher_condition' => 1,
+                'expiration' => null,
+                'client_id' => $request->cliente_id,
+                'razon_social' => $request->razon_social,
+                'ruc' => $request->ruc,
+                'phone' => null,
+                'address' => null,
+                'voucher_type' =>3,
+                'observation' => $request->observacion,
+                'amount' => sum_array($request->monto_cuota),
+                'total_excenta' => 0,
+                'total_iva5' => 0,
+                'total_iva10' => 0,
+                'status' => 1,
+                'user_id' => auth()->user()->id,
+                'stamped_id' => $request->expedicion
+            ]);
+
+            foreach($request->cuota_nro as $key => $cuota)
+            {
+                VoucherCollectPayment::create([
+                    'voucher_id' => $payments->id,
+                    'voucher_collect_id' => $request->cuota_id[$key],
+                    'amount' => $request->monto_cuota[$key]
+                ]);
+
+                $cuota = VoucherCollect::find($request->cuota_id[$key]);
+                $cuota->update([
+                    'residue' => $cuota->residue - $request->monto_cuota[$key]
+                ]);
+            }
+
+            foreach($request->forma_pago as $key1 => $forma_pago)
+            {
+                VoucherPayment::create([
+                    'voucher_id' => $payments->id,
+                    'payment_method_id' => $forma_pago,
+                    'amount' => $request->monto_pago[$key1],
+                    'check_number' => $request->nro_cheque[$key1] ?? null,
+                    'check_expiration' => $request->vencimiento_cheque[$key1] ?? null,
+                    'status' => 1
+                ]);
+            }
+
+            CashBoxDetail::create([
+                'cash_box_id' => $request->caja_id, // Debe venir del formulario o sesión
+                'cash_box_concept_id' => 3, // Concepto: Cobro de cliente
                 'voucher_id' => $payments->id,
-                'voucher_collect_id' => $request->cuota_id[$key],
-                'amount' => $request->monto_cuota[$key]
+                'type' => 1,
+                'amount' => sum_array($request->monto_cuota),
+                'observation' => 'Cobro a cliente: ' . $request->razon_social,
+                'status' => 1,
+                'user_id' => auth()->user()->id
             ]);
-
-            $cuota = VoucherCollect::find($request->cuota_id[$key]);
-            $cuota->update([
-                'residue' => $cuota->residue - $request->monto_cuota[$key]
-            ]);
-        }
-
-        foreach($request->forma_pago as $key1 => $forma_pago)
-        {
-            VoucherPayment::create([
-                'voucher_id' => $payments->id,
-                'payment_method_id' => $forma_pago,
-                'amount' => $request->monto_pago[$key1],
-                'check_number' => $request->nro_cheque[$key1] ?? null,
-                'check_expiration' => $request->vencimiento_cheque[$key1] ?? null,
-                'status' => 1
-            ]);
-        }
+        });
 
         return response()->json([
             'message' => 'Cobro registrado correctamente.',

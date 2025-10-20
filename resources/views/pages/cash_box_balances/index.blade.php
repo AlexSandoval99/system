@@ -6,7 +6,9 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <div class="ibox-tools">
-                    <a href="{{ url('cash_box_balances/create') }}" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Agregar</a>
+                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modalAperturaCaja">
+                        <i class="fa fa-plus"></i> Agregar
+                    </button>
                 </div>
             </div>
             <div class="ibox-content table-responsive no-padding">
@@ -181,6 +183,52 @@
         </div>
     </div>
 </div>
+<!-- Modal Apertura de Caja -->
+<div class="modal fade" id="modalAperturaCaja" tabindex="-1" role="dialog" aria-labelledby="modalAperturaCajaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="modalAperturaCajaLabel">
+                <i class="fa fa-cash-register"></i> Agregar Saldo Inicial de Caja
+            </h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <form id="formApertura">
+            @csrf
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label>Caja</label>
+                        {{ form::select('cash_box_id', $cash_boxes, old('cash_box_id'), ['class' => 'form-control selectpicker','placeholder'=>'Seleccione una Caja', 'data-live-search'=> 'true', 'id' => 'cash_box_id_modal']) }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Último Saldo Caja</label>
+                        <input type="text" name="last_cash_balance" class="form-control" id="last_cash_balance_modal" disabled>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Monto Saldo Inicial</label>
+                        <input type="text" name="amount" class="form-control" id="amount_modal" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Observación</label>
+                    <textarea class="form-control" name="observation" id="observation_modal" rows="2"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
 
 @endsection
 @section('layout_js')
@@ -304,6 +352,54 @@
                 error: function(){
                     swal("Error", "No se pudo guardar el depósito", "error");
                 }
+            });
+        });
+
+        $(document).ready(function () {
+            // Al cambiar la caja, obtiene el último saldo
+            $('#cash_box_id_modal').on('change', function(){
+                const id = $(this).val();
+                if(id) {
+                    $.get('{{ url("ajax/last-cash-balance") }}', { cash_box_id: id }, function(data) {
+                        if(data.count > 0) {
+                            $('#last_cash_balance_modal').val(data.date+' - '+$.number(data.residue, 0, ',', '.'));
+                        } else {
+                            $('#last_cash_balance_modal').val('Sin movimientos');
+                        }
+                        $('#amount_modal').val(data.residue);
+                    });
+                }
+            });
+
+            // Guardar el formulario
+            $('#formApertura').on('submit', function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    url: '{{ route("cash_box_balances.store") }}',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        $('#modalAperturaCaja').modal('hide');
+                        swal({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: data.message || 'Apertura de caja registrada correctamente',
+                            confirmButtonColor: '#28a745'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr) {
+                        var mensaje = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : '';
+                        swal({
+                            icon: 'error',
+                            title: 'Error',
+                            text: mensaje ?? 'No se pudo guardar la apertura de caja',
+                            confirmButtonColor: '#dc3545'
+                        });
+                    }
+                });
             });
         });
     </script>

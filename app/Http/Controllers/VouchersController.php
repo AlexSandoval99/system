@@ -121,6 +121,16 @@ class VouchersController extends Controller
                 ]);
             }
         }
+        else
+        {
+            VoucherCollect::create([
+                    'voucher_id' => $factura->id,
+                    'number' => 1,
+                    'expiration' => now(),
+                    'amount' => round($factura->amount),
+                    'residue' => round($factura->amount)
+                ]);
+        }
 
         return response()->json([
             'success' => true,

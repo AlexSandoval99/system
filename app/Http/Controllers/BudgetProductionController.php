@@ -7,6 +7,7 @@ use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\BudgetProduction;
 use App\Models\BudgetProductionDetail;
+use App\Models\WishSale;
 use App\Models\WishSaleDetail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -16,7 +17,6 @@ class BudgetProductionController extends Controller
     public function index()
     {
         $budget_productions = BudgetProduction::with('branch')
-                                                ->Active()
                                                 ->orderBy('id', 'desc');
         $branches = Branch::where('status',1)->pluck('name','id');
         if(request()->s)
@@ -71,6 +71,13 @@ class BudgetProductionController extends Controller
     						'articulo_id'           => $product_id
                     ]);
                 }
+                if($request->wish_sale_id)
+                {
+                    $wish_sale = WishSale::findOrFail($request->wish_sale_id);
+                    $wish_sale->update([
+                        'status' => 2
+                    ]);
+                }
 
                 toastr()->success('Agregado exitosamente');
             });
@@ -83,33 +90,32 @@ class BudgetProductionController extends Controller
     }
 
     public function edit(BudgetProduction $budget_production)
-
     {
         $articulos       = Articulo::Filter();
 
         return view('pages.budget-production.edit',compact('budget_production','articulos'));
     }
 
-    public function update(BudgetProduction $request, $id)
+    public function update(CreateBudgetProductionRequest $request)
     {
-        if($request->ajax())
+        DB::transaction(function() use ($request)
         {
-            DB::transaction(function() use ($request, $id)
+            $budget_production = BudgetProduction::findOrFail($request->id_presupuesto);
+            $budget_production->budget_production_details()->delete();
+
+            foreach ($request->detail_product_id as $key => $product_id)
             {
-                $detail = BudgetProductionDetail::findOrFail($id);
-
-                $detail->update([
-                                  'articulo_id'              => $request->detail_product_id,
-                                  'quantity'                 => $request->detail_product_quantity,
-                                  'quantity'                 => $request->quantity_product,
-                                  'amount'                   => $request->detail_product_amount,
-                                  'wish_sale_id'       => $request->wish_sale_id,
-                                  'articulo_id'              => $request->product_id,
+                $budget_production->budget_production_details()->create([
+                    'articulo_id' => $product_id,
+                    'quantity'    => str_replace('.', '', $request->quantity_product[$key]),
+                    'amount'      => str_replace('.', '', $request->detail_product_amount[$key]),
                 ]);
-            });
+            }
+        });
 
-            return response()->json(['success' => true]);
-        }
+        toastr()->success('Presupuesto de producción actualizado exitosamente');
+        return redirect()->route('budget-production');
+
     }
 
     public function show(BudgetProduction $budget_production)
@@ -163,6 +169,25 @@ class BudgetProductionController extends Controller
             $total += intVal(str_replace(',', '.',str_replace('.', '', $value)));
         }
         return $total;
+    }
+
+    public function confirm_budget_production(BudgetProduction $budget_production)
+    {
+        $budget_production->update([
+            'status' => 2
+        ]);
+
+        toastr()->success('Presupuesto de producción confirmado exitosamente');
+        return redirect()->back();
+    }
+
+    public function delete(BudgetProduction $budget_production)
+    {
+        $budget_production->update([
+            'status' => 0
+        ]);
+        toastr()->success('Presupuesto de producción anulado exitosamente');
+        return redirect()->back();
     }
 
 }

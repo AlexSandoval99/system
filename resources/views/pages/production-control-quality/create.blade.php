@@ -69,8 +69,7 @@
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
                                                     <th>Calidad</th>
-                                                    <th>OBS:</th>
-                                                    <th class="text-center">Acciones</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_detail1"></tbody>
@@ -88,8 +87,7 @@
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
                                                     <th>Calidad</th>
-                                                    <th>OBS:</th>
-                                                    <th class="text-center">Acciones</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_detail2"></tbody>
@@ -108,8 +106,7 @@
                                                     <th>Articulo</th>
                                                     <th>Cantidad</th>
                                                     <th>Calidad</th>
-                                                    <th>OBS:</th>
-                                                    <th class="text-center">Acciones</th>
+                                                    <th>Acciones</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_detail3"></tbody>
@@ -128,19 +125,6 @@
         {{ Form::close() }}
 </div>
 @endsection
-@section('layout_css')
-<style>
-    #div_provider_data, #div_invoice_detail, #div_invoice_header, #div_image, #div_note_credits{
-            position: relative;
-            margin: auto;
-            width: 100%;
-            border: 3px solid #C8C4C4;
-            padding: 10px;
-            border-radius: 5px;
-        }
-</style>
-@endsection
-
 @section('layout_js')
     <script>
         var invoice_items_array = [];
@@ -209,6 +193,12 @@
                 var stageName = $(this).data('stage');
                 var stageId = $(this).data('stage_id');
                 var quantity = $(this).data('quantity');
+                let stagaIdOld = $(this).data('stage_id') - 1;
+                if(localStorage.getItem('cantidad_controlada_' + productId + '-' + stagaIdOld) && stageId != 1)
+                {
+                    let cantidadVerif = localStorage.getItem('cantidad_controlada_' + productId + '-' + stagaIdOld);
+                    quantity = cantidadVerif;
+                }
                 generarModal(productId, stageName, stageId, quantity);
             });
 
@@ -274,8 +264,7 @@
                                         '<td>' + element.product_name + '</td>' +
                                         '<td>' + $.number(element.quantity, 0, ',', '.') + '</td>' +
                                         '<td>' + element.qualities_name + '</td>' +
-                                        '<td></td>' +
-                                        '<td><button type="button" class="open-modal-btn btn btn-primary recuperar' + element.product_id + '_' + element.production_qualities_id + '" data-product="' + element.product_id + '" data-stage="' + element.qualities_name + '" data-stage_id="' + element.production_qualities_id + '" data-quantity="' + element.quantity + '"><i class="fa fa-info-circle"></i></button></td>' +
+                                        '<td><a class="open-modal-btn recuperar' + element.product_id + '_' + element.production_qualities_id + '" data-product="' + element.product_id + '" data-stage="' + element.qualities_name + '" data-stage_id="' + element.production_qualities_id + '" data-quantity="' + element.quantity + '"><i class="fa fa-info-circle"></i></a></td>' +
                                         '<input type="hidden" name="detail_id[]" value="' + element.id + '">' +
                                         '<input type="hidden" name="detail_product_id[]" value="' + element.product_id + '">' +
                                         '<input type="hidden" name="detail_stage_id[]" value="' + element.product_id+'_'+element.production_qualities_id + '">' +
@@ -295,14 +284,12 @@
                             $("#div_details, #div_footer").show();
                             $("#number_ped").prop("readonly", true);
                             $("#button_search").hide();
-                            // $("[select2]").select2({
-                            //     language: 'es'
-                            // });
-                        }else
+                        }
+                        else
                         {
                             swal({
                                 title: "SISTEMA",
-                                text: "No existe Pedido!!",
+                                text: "No existe control!!",
                                 icon: "info",
                                 button: "OK",
                             });
@@ -354,6 +341,16 @@
                 $('#observacion' + product + '_' + stage).attr('value', observacionValue);
                 $('#cantidad_controlada' + product + '_' + stage).attr('value', cantidadControladaValue);
                 $('#etapa' + product + '_' + stage).attr('value', isChecked);
+
+                $(modalClass).modal('hide');
+
+                swal({
+                    title: "Guardado exitosamente",
+                    text: "Los datos se han guardado correctamente.",
+                    icon: "success",
+                    buttons: false,
+                    timer: 1500
+                })
             });
 
         }
@@ -397,12 +394,12 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label for="cantidad_controlada">Cantidad Controlada:</label>
-                                            <input type="text" id="cantidad_controlada${product_id}_${stage_id}" name="cantidad_controlada${product_id}_${stage_id}" class="form-control cantidad-controlada-input">
+                                            <input type="number" id="cantidad_controlada${product_id}_${stage_id}" max="${quantity}" name="cantidad_controlada${product_id}_${stage_id}" class="form-control cantidad-controlada-input">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar Temporalmente</button>
+                                    <button type="button" class="btn btn-primary guardar-temporal" onclick="guardarTemporal(${product_id}, ${stage_id})">Guardar</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
@@ -427,6 +424,26 @@
                 $(`.myModal${product_id}_${stage_id}`).modal('show');
             }
         }
+        $(document).on('input', '.cantidad-controlada-input', function() {
+            let maximo = parseFloat($(this).attr('max')) || 0;
+            let valor = parseFloat($(this).val()) || 0;
+
+            // Si el valor supera el máximo
+            if (valor > maximo) {
+                $(this).val(maximo); // corrige automáticamente
+                swal({
+                    icon: 'warning',
+                    title: 'Valor excedido',
+                    text: `No puede ingresar más de ${maximo}.`,
+                    confirmButtonText: 'Entendido'
+                });
+            }
+
+            // Evita valores negativos o vacíos
+            if (valor < 0) {
+                $(this).val(0);
+            }
+        });
     </script>
 @endsection
 

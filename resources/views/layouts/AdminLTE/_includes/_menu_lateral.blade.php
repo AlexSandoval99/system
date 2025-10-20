@@ -115,6 +115,11 @@
                                 <span>Apertura de Caja</span>
                             </a>
                         </li>
+                        <li class="provider">
+                            <a href="{{ route('cashbox.movements') }}" title="Marca">
+                                <span>Movimiento de Caja</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">

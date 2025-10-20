@@ -47,6 +47,12 @@
                             <input class="form-control" type="hidden" name="total_amount" id="total" readonly>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label for="">Equipo Trabajo</label>
+                            {{ Form::select('team_work_id', $team_works, old('team_work_id'), ['id' => 'team_work_id', 'placeholder' => 'Seleccione Equipo', 'class' => 'form-control', 'select2']) }}
+                        </div>
+                    </div>
                 </div><br><br>
                 <div class="ibox-title">
                     <h3>Items a Fabricar</h3>
@@ -65,7 +71,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="ibox-footer" id="div_footer">
                 <input type="submit" class="btn btn-sm btn-success" value="Guardar">
                 <a href="{{ url('budget-production') }}" class="btn btn-sm btn-danger">Cancelar</a>
@@ -192,7 +198,7 @@
                             var modalBody = $('#modalBody');
 
                             modalBody.empty();
-                   
+
                             response.items.forEach(function(item) {
                                 console.log(item);
                                 var rowHtml = '<tr>';
@@ -379,9 +385,9 @@
                             $('#client_id').val(element.client_id);
                             $('#client').val(element.client);
 
-                            var selectedMaterials = []; 
-                            var selectedProducts = element.product_id; 
-                
+                            var selectedMaterials = [];
+                            var selectedProducts = element.product_id;
+
                             $.ajax({
                                 url: '{{ route('ajax.modal-material') }}',
                                 method: 'GET',
@@ -402,7 +408,7 @@
 
                         if(conteo>0)
                         {
-                            
+
                             $("#div_details, #div_footer").show();
                             $("#number_ped").prop("readonly", true);
                             $("#button_search").hide();

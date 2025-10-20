@@ -170,9 +170,10 @@ Route::middleware(['auth', '2fa'])->group(function () {
 
         Route::get('stampeds', 'StampedController@index')->name('stampeds.index');
         Route::get('stampeds/create', 'StampedController@create')->name('stampeds.create');
-        Route::get('stampeds/{id}/edit', 'StampedController@edit')->name('stampeds.edit');
-        Route::get('stampeds/{id}', 'StampedController@show')->name('stampeds.show');
         Route::post('stampeds', 'StampedController@store')->name('stampeds.store');
+        Route::get('stampeds/{id}/edit', 'StampedController@edit')->name('stampeds.edit');
+        Route::put('stampeds/{id}/update', 'StampedController@update')->name('stampeds.update');
+        Route::get('stampeds/{stamped}', 'StampedController@show')->name('stampeds.show');
 
         Route::get('cash_box_balances', 'CashBoxBalancesController@index')->name('cash_box_balances.index');
         Route::get('cash_box_balances/create', 'CashBoxBalancesController@create')->name('cash_box_balances.create');
@@ -260,10 +261,12 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('budget-production/create', 'BudgetProductionController@create')->name('budget-production-create');
         Route::get('budget-production/{budget_production}', 'BudgetProductionController@show')->name('budget-production-show');
         Route::post('budget-production', 'BudgetProductionController@store')->name('budget-production-store');
-        Route::get('ajax/budget-production', 'BudgetProductionController@ajax_budget_production')->name('ajax.budget-production');
-        Route::get('ajax/articulo', 'ArticuloController@ajax_articulo')->name('ajax.articulo');
         Route::get('budget-production/{budget_production}/edit', 'BudgetProductionController@edit')->name('budget-production.edit');
-        Route::put('budget-production/{budget_production}/update', 'BudgetProductionController@update')->name('budget-production.update');
+        Route::put('budget-production/update', 'BudgetProductionController@update')->name('budget-production.update');
+        Route::get('budget-production/{budget_production}/confirm', 'BudgetProductionController@confirm_budget_production')->name('budget-production.confirm');
+        Route::get('ajax/budget-production', 'BudgetProductionController@ajax_budget_production')->name('ajax.budget-production');
+        Route::get('budget-production/{budget_production}/delete', 'BudgetProductionController@delete')->name('budget-production.delete');
+        Route::get('ajax/articulo', 'ArticuloController@ajax_articulo')->name('ajax.articulo');
 
         Route::get('production-order', 'ProductionOrderController@index')->name('production-order');
         Route::get('production-order/create', 'ProductionOrderController@create')->name('production-order-create');
@@ -273,6 +276,7 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('ajax/modal-material', 'ProductionOrderController@ajax_modal_material')->name('ajax.modal-material');
         Route::get('production-order/{production_order}/edit', 'ProductionOrderController@edit')->name('production-order.edit');
         Route::put('production-order/{production_order}/update', 'ProductionOrderController@update')->name('production-order.update');
+        Route::get('production-order/{production_order}/generate', 'ProductionOrderController@reWork')->name('production-order.generate');
 
         Route::get('production-control', 'ProductionControlController@index')->name('production-control');
         Route::get('production-control/create', 'ProductionControlController@create')->name('production-control-create');

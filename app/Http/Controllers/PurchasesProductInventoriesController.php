@@ -136,16 +136,16 @@ class PurchasesProductInventoriesController extends Controller
                     $price_cost_iva = $detail->old_cost - ($detail->old_cost / $dividendo);
 
                     $purchases_existence = PurchasesExistence::create([ 'deposit_id'           => $purchases_product_inventory->deposit_id,
-                                                                        'raw_material_id' => $detail->material_id,
+                                                                        'raw_material_id'      => $detail->material_id,
                                                                         'quantity'             => $quantity_final,
                                                                         'residue'              => $quantity_final,
                                                                         'price_cost'           => $price_cost_iva,
-                                                                        'price_cost_iva'       => $detail->old_cost
+                                                                        'price_cost_iva'       => $detail->old_cost,
+                                                                        'type'                 => 1
                                                                     ]);
                 }
 
                 // Salida de Producto
-                $transfers_sending = NULL;
                 if($detail->quantity < $detail->existence)
                 {
                     $quantity_final = $detail->existence - $detail->quantity;

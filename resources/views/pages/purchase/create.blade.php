@@ -1118,8 +1118,6 @@
                             $("#branch_id").val(data.invoice_branch_id);
                             $("#stamped").val(data.invoice_stamped);
                             $("#stamped_validity").val(data.invoice_stamp_validity);
-
-                            $('.selectpicker').selectpicker('refresh');
                         }
                     },
                     error: function(data){
@@ -1181,40 +1179,13 @@
             var total_iva5    = 0;
             var total_iva10   = 0;
 
-            subtotal = quantity * amount;
-
+            subtotal = parseFloat((quantity + '').replace('.', '').replace(',', '.')) * parseFloat((amount + '').replace('.', '').replace(',', '.') );
             invoice_items_array.push(id);
 
-            if(($("#type").val() == 2) || ($("#type").val() == 3))
-            {
-                total_excenta = subtotal;
-                total_iva5    = 0;
-                total_iva10   = 0;
-            }
-            else
-            {
-                // Evaluar el IVA para insertar en el Detalle
-                if(type_iva==1)
-                {
-                    total_excenta = subtotal;
-                    total_iva5    = 0;
-                    total_iva10   = 0;
-                }
-
-                if(type_iva==2)
-                {
-                    total_excenta = 0;
-                    total_iva5    = subtotal;
-                    total_iva10   = 0;
-                }
-
-                if(type_iva==3)
-                {
-                    total_excenta = 0;
-                    total_iva5    = 0;
-                    total_iva10   = subtotal;
-                }
-            }//aca
+            total_excenta = 0;
+            total_iva5    = 0;
+            total_iva10   = subtotal;
+            console.log(total_iva10);
             $('#tbody_detail').append('<tr>' +
                 '<td width="5%">' + counter + '</td>' +
                 '<td width="5%" class="text-right">' + id + '<input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
@@ -1230,12 +1201,6 @@
                 '<td with="5%" class="text-right"><a href="javascript:;" onClick="removeRow(this, '+ id +');"><i style="font-size:17px;" class="fa fa-times"></i></a></td>' +
                 '<input type="hidden" name="detail_type_iva[]" value="' + type_iva + '">' +
             '</tr>');
-            $("#select_"+counter).select2({
-                                    language: 'es'
-                                });
-            $("#select2_"+counter).select2({
-                                    language: 'es'
-                                });
             calculateGrandTotal();
             changeReCalculo()
         }
@@ -1267,27 +1232,9 @@
 
                 subtotal = quantity * amount;
 
-                // Evaluar el IVA para insertar en el Detalle
-                if(type_iva==1)
-                {
-                    total_excenta = subtotal;
-                    total_iva5    = 0;
-                    total_iva10   = 0;
-                }
-
-                if(type_iva==2)
-                {
-                    total_excenta = 0;
-                    total_iva5    = subtotal;
-                    total_iva10   = 0;
-                }
-
-                if(type_iva==3)
-                {
-                    total_excenta = 0;
-                    total_iva5    = 0;
-                    total_iva10   = subtotal;
-                }
+                total_excenta = 0;
+                total_iva5    = 0;
+                total_iva10   = subtotal;
 
                 in_detail_total_excenta.val($.number(total_excenta, 2,',', '.'));
                 in_detail_total_iva5.val($.number(total_iva5, 2,',', '.'));
