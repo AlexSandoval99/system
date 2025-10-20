@@ -192,7 +192,7 @@ class ProductionControlQualityController extends Controller
                     $results['items'][$session][$key]['id']           = $order_detail->id;
                     $results['items'][$session][$key]['product_id']   = $order_detail->articulo_id;
                     $results['items'][$session][$key]['product_name'] = $order_detail->articulo->name;
-                    $results['items'][$session][$key]['quantity']     = $new_quantity->id ? $order_detail->quantity - $new_quantity->quantity : $order_detail->quantity;
+                    $results['items'][$session][$key]['quantity']     = ($new_quantity && $new_quantity->id) ? $order_detail->quantity - $new_quantity->quantity : $order_detail->quantity;
                     $results['items'][$session][$key]['client_id']    = $order_detail->production_control->client_id;
                     $results['items'][$session][$key]['client']       = $order_detail->production_control->client->first_name.' '.$order_detail->production_control->client->last_name;
                     $results['items'][$session][$key]['branch_id']    = $order_detail->production_control->branch_id;
