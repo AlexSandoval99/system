@@ -66,7 +66,7 @@ class BudgetProductionController extends Controller
                 {
                     $budget_proction_details        = $budget_production->budget_production_details()->create([
                             'quantity'              => $request->quantity_product[$key],
-                            'amount'                => $request->detail_product_amount[$key],
+                            'amount'                => str_replace('.', '', $request->detail_product_amount[$key]),
                             'budget_production_id'  => $budget_production->id,
     						'articulo_id'           => $product_id
                     ]);

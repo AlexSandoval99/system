@@ -18,7 +18,9 @@ class VouchersController extends Controller
 {
     public function index()
     {
-        $vouchers = Voucher::with('branch')->get();
+        $vouchers = Voucher::with('branch')->orderBy('id','DESC');
+
+        $vouchers = $vouchers->paginate(20);
         return view('pages.vouchers.index', compact('vouchers'));
     }
 
@@ -92,7 +94,7 @@ class VouchersController extends Controller
             VoucherDetail::create([
                 'voucher_id' => $factura->id,
                 'articulo_id' => $value,
-                'description' => $request->observacion,
+                'description' => $request->observacion ?? 'vacio',
                 'quantity' => $request->quantity[$key],
                 'amount' => $request->precio[$key],
                 'iva5'  => 0,

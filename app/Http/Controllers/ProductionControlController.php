@@ -86,7 +86,10 @@ class ProductionControlController extends Controller
                     {
                         $startHour = Carbon::createFromFormat('Y-m-d\TH:i', $request->{"fecha_inicio$value"});
                         $endHour = Carbon::createFromFormat('Y-m-d\TH:i', $request->{"fecha_fin$value"});
-                        $diffInHours = $startHour->diffInHours($endHour);
+
+                        $diffInMinutes = $startHour->diffInMinutes($endHour);
+                        $diffInHours = $diffInMinutes / 60;
+
                         $cost_product->production_cost_detail()->create([
                             'articulo_id'           => $articulo[0],
                             'material_id'           => null,

@@ -75,7 +75,7 @@ return [
         1 => 'Activo',
         2 => 'Control Produccion',
         3 => 'Finalizado',
-        4 => 'Re-Work'
+        4 => 'Finalizado con Re-Work'
     ],
     'production-order-status-label' =>[
         1 => 'success',
@@ -96,13 +96,14 @@ return [
     'type_purchases' => [
         1 => 'Factura',
         2 => 'Nota Credito',
+        3 => 'Recibos',
         4 => 'Nota de Remision',
     ],
 
     'type_purchases_label' => [
         1 => 'primary',
         2 => 'warning',
-        3 => 'danger',
+        3 => 'warning',
         4 => 'info',
         6 => 'info'
     ],

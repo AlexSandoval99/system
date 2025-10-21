@@ -85,18 +85,45 @@ class PaymentsController extends Controller
                     'check_expiration' => $request->vencimiento_cheque[$key1] ?? null,
                     'status' => 1
                 ]);
+                if($forma_pago == 1 || $forma_pago == 2)
+                {
+                    CashBoxDetail::create([
+                        'cash_box_id' => $request->caja_id, // Debe venir del formulario o sesión
+                        'cash_box_concept_id' => 3, // Concepto: Cobro de cliente
+                        'voucher_id' => $payments->id,
+                        'type' => 1,
+                        'amount' => $request->monto_pago[$key1],
+                        'observation' => 'Cobro a cliente: ' . $request->razon_social,
+                        'status' => 1,
+                        'user_id' => auth()->user()->id
+                    ]);
+                }
+                else if($forma_pago == 3 || $forma_pago == 4)
+                {
+                    CashBoxDetail::create([
+                        'cash_box_id' => $request->caja_id, // Debe venir del formulario o sesión
+                        'cash_box_concept_id' => 3, // Concepto: Cobro de cliente
+                        'voucher_id' => $payments->id,
+                        'type' => 1,
+                        'amount' => $request->monto_pago[$key1],
+                        'observation' => 'Cobro a cliente: ' . $request->razon_social,
+                        'status' => 1,
+                        'user_id' => auth()->user()->id
+                    ]);
+
+                    CashBoxDetail::create([
+                        'cash_box_id' => $request->caja_id, // Debe venir del formulario o sesión
+                        'cash_box_concept_id' => 3, // Concepto: Cobro de cliente
+                        'voucher_id' => $payments->id,
+                        'type' => 2,
+                        'amount' => $request->monto_pago[$key1],
+                        'observation' => 'Egreso - Cobro a cliente: ' . $request->razon_social,
+                        'status' => 1,
+                        'user_id' => auth()->user()->id
+                    ]);
+                }
             }
 
-            CashBoxDetail::create([
-                'cash_box_id' => $request->caja_id, // Debe venir del formulario o sesión
-                'cash_box_concept_id' => 3, // Concepto: Cobro de cliente
-                'voucher_id' => $payments->id,
-                'type' => 1,
-                'amount' => sum_array($request->monto_cuota),
-                'observation' => 'Cobro a cliente: ' . $request->razon_social,
-                'status' => 1,
-                'user_id' => auth()->user()->id
-            ]);
         });
 
         return response()->json([

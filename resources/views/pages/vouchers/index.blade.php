@@ -1,7 +1,6 @@
 @extends('layouts.AdminLTE.index')
 @section('title', 'Ventas')
 @section('content')
-
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox">
@@ -47,13 +46,11 @@
                                 </td>
                             </tr>
                             @endforeach
-                            {{-- <tr>
-                                <td colspan="9" class="text-center">No hay ventas registradas</td>
-                            </tr> --}}
                         </tbody>
                     </table>
                 </div>
             </div>
+            {{-- {{ $vouchers->appends(request()->query())->links() }} --}}
         </div>
     </div>
 </div>

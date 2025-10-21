@@ -93,7 +93,7 @@ class ReportsController extends Controller
             return $purchases_existences->whereHas('articulo', function ($query)
             {
                 $query->where('status', true);
-            })->where('type', request()->product_id)->groupBy('articulo_id');
+            })->where('type', request()->product_id)->groupBy('articulo_id')->groupBy('price_cost');
         }
     }
 

@@ -219,7 +219,7 @@ class ProductionOrderController extends Controller
     }
     public function ajaxByClient($client_id)
     {
-        $orders = ProductionOrder::where('client_id', $client_id)->where('status', 4)->get();
+        $orders = ProductionOrder::where('client_id', $client_id)->whereIn('status', [3,4])->get();
         $results = [];
         foreach ($orders as $key => $order)
         {
@@ -315,7 +315,30 @@ class ProductionOrderController extends Controller
                         $product_existences->update(['residue' => $product_existences->residue - $setting->quantity * $detalle['quantity']]);
                     }
                 }
+                $cost_product = ProductionCost::where('order_production_id',$new_order->id)->first();
+                if(!$cost_product)
+                {
+                    $cost_product = ProductionCost::create([
+                        'date'                  => now()->format('d/m/Y'),
+                        'status'                => 1,
+                        'branch_id'             => $new_order->branch_id,
+                        'user_id'               => auth()->user()->id,
+                        'order_production_id'   => $new_order->id
+                    ]);
+                }
 
+                $materials = SettingProduct::where('articulo_id',$detalle['articulo_id'])->whereNotNull('raw_materials_id')->get();
+                $cantidadOrden = $detalle['quantity'];
+                foreach ($materials as $key => $material)
+                {
+                    $cost_product->production_cost_detail()->create([
+                        'articulo_id'           => $detalle['articulo_id'],
+                        'material_id'           => $material->raw_material->id,
+                        'quantity'              => $material->quantity * $cantidadOrden,
+                        'production_cost_id'    => $cost_product->id,
+                        'price_cost'            => $cantidadOrden * $material->raw_material->average_cost
+                    ]);
+                }
             }
             $production_order->update([
                 'status' => 4

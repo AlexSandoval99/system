@@ -1173,6 +1173,7 @@
 
         function addToTable(id, name, amount, quantity, type_iva, number_orders, id_orders, accounting_plan, emergency_mobile, emergency_mobile_id, emergency_mobile_name, stockeable, baccounting_plan)
         {
+            console.log(quantity);
             counter++;
             var subtotal      = 0;
             var total_excenta = 0;
@@ -1185,7 +1186,6 @@
             total_excenta = 0;
             total_iva5    = 0;
             total_iva10   = subtotal;
-            console.log(total_iva10);
             $('#tbody_detail').append('<tr>' +
                 '<td width="5%">' + counter + '</td>' +
                 '<td width="5%" class="text-right">' + id + '<input type="hidden" name="detail_product_id[]" value="' + id + '"></td>' +
