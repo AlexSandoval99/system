@@ -91,6 +91,38 @@ class PurchasesService
                 $invoice->update(['status' => 3]); // NC Parcial
             }
 
+            if($invoice)
+            {
+                $amount = cleartStringNumber($request->total_product);
+                $collects = PurchasesCollect::where('purchase_id', $invoice->id)
+                            ->where('residue', '>', 0)
+                            ->orderBy('id')
+                            ->get();
+
+                foreach ($collects as $collect) {
+                    if ($amount <= 0) break;
+
+                    $residue = $collect->residue;
+
+                    if ($amount >= $residue)
+                    {
+                        $amount -= $residue;
+                        $collect->update([
+                            'residue' => 0,
+                            'status' => 2
+                        ]);
+                    }
+                    else
+                        {
+                        $collect->update([
+                            'residue' => $residue - $amount,
+                            'status' => 1
+                        ]);
+                        $amount = 0;
+                    }
+                }
+            }
+
             foreach ($request->detail_product_id as $key => $product_id)
             {
                 $quantity = $request->detail_product_quantity[$key];

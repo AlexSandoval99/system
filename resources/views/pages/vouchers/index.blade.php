@@ -40,9 +40,9 @@
                                 <td><span class="label label-{{ config('constants.invoice_status_label.' . $voucher->status) }}">{{ config('constants.invoice_status.'. $voucher->status) }}</span></td>
                                 <td>{{ number_format($voucher->amount, 0, ',', '.') }}</td>
                                 <td>
-                                    <a href="#"><i class="fa fa-info-circle"></i></a>
-                                    <a href="#"><i class="fa fa-file"></i></a>
-                                    <a href="#"><i class="fa fa-times"></i></a>
+                                    <a href="{{ route('voucher.pdf', $voucher->id) }}" target="_blank" title="Imprimir factura">
+                                        <i class="fa fa-file-pdf"></i>
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach

@@ -4,29 +4,29 @@
 
 @section('title', 'Edit User')
 
-@section('menu_pagina')	
-		
+@section('menu_pagina')
+
 	<li role="presentation">
 		<a href="{{ route('user') }}" class="link_menu_page">
 			<i class="fa fa-user"></i> Users
-		</a>								
+		</a>
 	</li>
 
 @endsection
 
-@section('content')    
-    @if ($user->id != 1)     
+@section('content')
+    @if ($user->id != 1)
         <div class="box box-primary">
     		<div class="box-body">
     			<div class="row">
-    				<div class="col-md-12">	
+    				<div class="col-md-12">
     					 <form action="{{ route('user.update',$user->id) }}" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="_method" value="put">
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                                        <label for="nome">Name</label>
+                                        <label for="nome">Nombre</label>
                                         <input type="text" name="name" class="form-control" maxlength="30" minlength="4" placeholder="Name" required="" autofocus value="{{$user->name}}">
                                         @if($errors->has('name'))
                                             <span class="help-block">
@@ -46,9 +46,11 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-lg-12">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <div class="form-group {{ $errors->has('roles') ? 'has-error' : '' }}">
-                                        <label for="nome">Permission Group</label>
+                                        <label for="nome">Rol</label>
                                         <select name="roles[]" class="form-control select2" multiple="multiple" data-placeholder="Permission Group">
                                             @foreach($roles as $role)
                                                 @if($role->id != 1)
@@ -56,8 +58,8 @@
                                                         <option value="{{ $role->id}}" selected="true"> {{ $role->name}} </option>
                                                     @else
                                                         <option value="{{ $role->id}}"> {{ $role->name}} </option>
-                                                    @endif                                             
-                                                @endif                                             
+                                                    @endif
+                                                @endif
                                             @endforeach
                                         </select>
                                         @if($errors->has('roles'))
@@ -68,35 +70,43 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group">                                    
+                                    <label for="">Equipo</label>
+                                    {{ Form::select('team_id', $teams ,$user->team_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione un equipo']) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label>
                                             <input type="hidden" name="active" value="0">
-                                            <input type="checkbox" name="active" value="1" class="minimal" id="icheck" 
+                                            <input type="checkbox" name="active" value="1" class="minimal" id="icheck"
                                             @if($user->active == true)
                                                 checked
                                             @endif
                                             >
-                                            Active
+                                            Activo
                                         </label>
                                     </div>
-                                </div> 
+                                </div>
+                            </div>
+
                                 <div class="col-lg-6">
-                                   <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-save"></i> Save</button>
+                                   <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-fw fa-save"></i> Guardar</button>
                                 </div>
                             </div>
                         </form>
     				</div>
     			</div>
     		</div>
-    	</div>    
+    	</div>
     @endif
 
 @endsection
 
-@section('layout_js')    
+@section('layout_js')
 
-    <script> 
-        $(function(){             
+    <script>
+        $(function(){
             $('.select2').select2({
                 "language": {
                     "noResults": function(){
@@ -104,12 +114,12 @@
                     }
                 }
             });
-            
+
             $('#icheck').iCheck({
               checkboxClass: 'icheckbox_square-blue',
               radioClass: 'iradio_square-blue'
             });
-        }); 
+        });
 
     </script>
 

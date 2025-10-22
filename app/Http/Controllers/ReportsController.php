@@ -10,8 +10,10 @@ use App\Models\Branch;
 use App\Models\Deposit;
 use App\Models\Inventory;
 use App\Models\PriceUpdateLog;
+use App\Models\Provider;
 use App\Models\Purchase;
 use App\Models\PurchaseMovement;
+use App\Models\PurchasesCollect;
 use App\Models\PurchasesExistence;
 use App\Models\PurchasesMovement;
 use App\Models\PurchasesOrderDetail;
@@ -20,6 +22,7 @@ use App\Models\PurchasesProductBrand;
 use App\Models\RawMaterial;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -140,7 +143,7 @@ class ReportsController extends Controller
     {
         $purchases  = Purchase::with('branch','note_credits')
                                 ->where('type', '<', 5)
-                                ->where('status', '<', 2);
+                                ->where('status', '<', 4);
 
         if(request()->date_range)
         {
@@ -219,5 +222,22 @@ class ReportsController extends Controller
 
         $pdf = Pdf::loadView('pages.reports.book_purchase_pdf', compact('purchases', 'purchase_counted', 'purchase_counted_total', 'purchase_credit', 'purchase_credit_total','credit_notes', 'purchases_sum'))->setPaper('A4','portrait');
         return $pdf->stream();
+    }
+
+    public function purchaseCollect(Request $request)
+    {
+        $providers = Provider::orderBy('name')->pluck('name', 'id');
+
+        $collects = PurchasesCollect::with(['purchase.provider'])
+            ->when($request->provider_id, function ($query) use ($request) {
+                $query->whereHas('purchase', function ($q) use ($request) {
+                    $q->where('provider_id', $request->provider_id);
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(20);
+
+
+        return view('pages.reports.collect',compact('collects','providers'));
     }
 }

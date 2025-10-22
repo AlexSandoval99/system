@@ -61,7 +61,7 @@
                         @foreach($production_cost->production_cost_detail as $detail)
                             <tr>
                                 <td>{{$detail->articulo->name}}</td>
-                                <td>{{$detail->material_id ? $detail->material->description : 'Mano de Obra'}}</td>
+                                <td>{{$detail->material_id ? $detail->material->description : ( $detail->articulo_id == 8 || $detail->articulo_id == 9 || $detail->articulo_id == 10 ? 'Servicios Basicos': 'Mano de Obra')}}</td>
                                 <td>{{$detail->material_id ? $detail->quantity : $detail->hour_worker." (Hrs)"}}</td>
                                 <td>{{$detail->material_id ? number_format(($detail->price_cost / $detail->quantity),0,',','.') : number_format(($detail->price_cost),0,',','.') }}</td>
                                 <td>{{number_format($detail->price_cost,0,',','.')}}</td>

@@ -66,6 +66,29 @@ class ProductionControlController extends Controller
                 $orden = ProductionOrder::find($request->number_order)->update([
                     'status'    => 2
                 ]);
+
+                $cost_product = ProductionCost::where('order_production_id',$request->number_order)->first();
+
+                if ($cost_product)
+                {
+                    $basicCosts = [
+                        ['id' => 8,'descripcion' => 'Luz eléctrica', 'monto' => (50000 / 30)],
+                        ['id' => 9,'descripcion' => 'Agua corriente', 'monto' => (30000 / 30)],
+                        ['id' => 10,'descripcion' => 'Inmueble (alquiler)', 'monto' => (100000 / 30)],
+                    ];
+
+                    foreach ($basicCosts as $key => $cost) {
+                        $cost_product->production_cost_detail()->create([
+                            'articulo_id'         => $cost['id'],
+                            'material_id'         => null,
+                            'quantity'            => 1,
+                            'production_cost_id'  => $cost_product->id,
+                            'hour_worker'         => 0,
+                            'price_cost'          => $cost['monto'],
+                            'observation'         => $cost['descripcion'],
+                        ]);
+                    }
+                }
                 // Grabar los Productos
                 foreach($request->detail_stage_id as $key => $value)
                 {

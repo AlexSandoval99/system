@@ -97,7 +97,7 @@ return [
         1 => 'Factura',
         2 => 'Nota Credito',
         3 => 'Recibos',
-        4 => 'Nota de Remision',
+        // 4 => 'Nota de Remision',
     ],
 
     'type_purchases_label' => [
@@ -150,6 +150,14 @@ return [
         2 => 'Egreso'
     ],
     'cash_box_detail_type_label' => [
+        1 => 'success',
+        2 => 'danger'
+    ],
+    'collect_status' => [
+        1 => 'Activo',
+        2 => 'Cancelado'
+    ],
+    'collect_status_label' => [
         1 => 'success',
         2 => 'danger'
     ]

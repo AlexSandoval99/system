@@ -81,8 +81,8 @@ class PaymentsController extends Controller
                     'voucher_id' => $payments->id,
                     'payment_method_id' => $forma_pago,
                     'amount' => $request->monto_pago[$key1],
-                    'check_number' => $request->nro_cheque[$key1] ?? null,
-                    'check_expiration' => $request->vencimiento_cheque[$key1] ?? null,
+                    'check_number' => $request->nro_comprobante[$key1] ?? null,
+                    'check_expiration' => $request->vto_check[$key1] ?? null,
                     'status' => 1
                 ]);
                 if($forma_pago == 1 || $forma_pago == 2)

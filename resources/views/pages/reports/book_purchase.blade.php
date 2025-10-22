@@ -126,12 +126,12 @@
                                         <td>{{ $purchase->number }}</td>
                                         <td>{{ $purchase->ruc }}</td>
                                         <td>{{ $purchase->provider->name }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->total_excenta, 0, ',', '.') : 0 }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->total_iva5, 0, ',', '.') : 0 }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->amount_iva5, 0, ',', '.') : 0 }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->total_iva10, 0, ',', '.') : 0 }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->amount_iva10, 0, ',', '.') : 0 }}</td>
-                                        <td class="text-right">{{ $purchase->status==1 ? number_format($purchase->amount, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->total_excenta, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->total_iva5, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->amount_iva5, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->total_iva10, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->amount_iva10, 0, ',', '.') : 0 }}</td>
+                                        <td class="text-right">{{ $purchase->status==1 || $purchase->status==3 ? number_format($purchase->amount, 0, ',', '.') : 0 }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

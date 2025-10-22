@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label>Marca</label>
-                        {{ Form::select('brand_id', $brand ,request()->brand_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione un equipo']) }}
+                        {{ Form::select('brand_id', $brand ,request()->brand_id, ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder'  => 'Seleccione una marca']) }}
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>                                               
+                            </div>
                             <div id="tab2" class="tab-pane fade">
                                 <div class="row">
                                     <div class="form-group col-md-6">

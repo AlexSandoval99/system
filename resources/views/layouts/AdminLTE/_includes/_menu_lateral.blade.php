@@ -174,6 +174,9 @@
                             <a href="{{ route('reports.purchases_report') }}" title="Libro Compra">
                                 <span>Libro Compra</span>
                             </a>
+                            <a href="{{ route('purchases_collect') }}" title="Cuentas a Cobrar">
+                                <span>Cuentas a Cobrar</span>
+                            </a>
                         </li>
                     </ul>
                 </li>

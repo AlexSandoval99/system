@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Requests\User\UpdatePasswordUserRequest;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\TeamWork;
 
 class UserController extends Controller
 {
@@ -67,7 +68,7 @@ class UserController extends Controller
     	$user = User::find($id);
 
     	if(!$user){
-        	$this->flashMessage('warning', 'User not found!', 'danger');
+        	$this->flashMessage('warning', 'Usuario NO existe', 'danger');
             return redirect()->route('user');
         }
 
@@ -75,7 +76,9 @@ class UserController extends Controller
 
 		$roles_ids = Role::rolesUser($user);
 
-        return view('users.edit',compact('user', 'roles', 'roles_ids'));
+        $teams = TeamWork::filter();
+
+        return view('users.edit',compact('user', 'roles', 'roles_ids','teams'));
     }
 
     public function update(UpdateUserRequest $request,$id)

@@ -56,6 +56,8 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('/voucher', 'VouchersController@index')->name('voucher');
         Route::get('/voucher/create', 'VouchersController@create')->name('voucher.create');
         Route::post('voucher/store', 'VouchersController@store')->name('voucher.store');
+        Route::get('/voucher/{id}/pdf', 'VouchersController@imprimirFactura')->name('voucher.pdf');
+
         Route::get('/remission-note', 'RemissionNotesController@index')->name('remission-note');
         Route::get('/remission-note/create','RemissionNotesController@create')->name('remission-note.create');
         Route::get('ajax/production-orders/{client_id}', 'ProductionOrderController@ajaxByClient');
@@ -234,6 +236,8 @@ Route::middleware(['auth', '2fa'])->group(function () {
         Route::get('purchase/{purchase}/edit', 'PurchaseController@edit')->name('purchase.edit');
         Route::put('purchase/{purchase}/update', 'PurchaseController@update')->name('purchase.update');
 
+        Route::get('purchases_collect', 'ReportsController@purchaseCollect')->name('purchases_collect');
+
         Route::get('ajax/purchases_products_orders', 'RawMaterialsController@ajax_purchases_orders')->name('ajax.products-purchases-orders');
         Route::get('ajax/raw-material', 'RawMaterialsController@ajax_purchases_products')->name('ajax.purchases-products');
         Route::get('ajax/purchases/note-credits', 'PurchaseController@ajax_purchases_note_credits')->name('ajax.invoices-purchases');
@@ -321,6 +325,9 @@ Route::middleware(['auth', '2fa'])->group(function () {
             Route::get('/ventas', 'ReportController@ventas')->name('reportes.ventas');
 
             Route::post('reportes/compras/{submodulo}/excel', 'ReportController@exportComprasExcel')->name('reportes.compras.excel');
+            Route::get('ajax/report-compras', 'ReportController@ajaxCompras')->name('reportes.ajax-compras');
+            Route::get('/reportes/exportar', 'ReportController@exportar')->name('reportes.exportar');
+
 
         });
     });

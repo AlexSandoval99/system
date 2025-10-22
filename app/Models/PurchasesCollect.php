@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchasesCollect extends Model
 {
-    protected $fillable = ['purchase_id',
-                           'number',
-                           'expiration',
-                           'amount',
-                           'residue'];
+    protected $fillable = [ 'purchase_id',
+                            'number',
+                            'expiration',
+                            'amount',
+                            'residue',
+                            'status'
+                        ];
 
     protected $dates = ['expiration'];
 

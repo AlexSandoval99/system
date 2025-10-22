@@ -99,7 +99,7 @@
             <div class="card-header">Formas de Pago</div>
             <div class="card-body p-2">
                 <div class="row mb-2">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label>Forma de Pago</label>
                         {{ Form::select('forma_pago', $payment_methods, null, ['class' => 'form-control', 'placeholder' => 'Seleccione metodo de pago', 'id' => 'forma_pago']) }}
                     </div>
@@ -108,10 +108,14 @@
                         <input type="text" id="nro_comprobante" class="form-control">
                     </div>
                     <div class="col-md-3">
+                        <label>Vencimiento</label>
+                        <input type="date" id="vencimiento" class="form-control">
+                    </div>
+                    <div class="col-md-2">
                         <label>Monto</label>
                         <input type="number" id="monto_pago" class="form-control">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label>&nbsp;</label><br>
                         <button type="button" class="btn btn-success" onclick="agregarFormaPago()">Agregar</button>
                     </div>
@@ -121,6 +125,7 @@
                         <tr>
                             <th>Forma</th>
                             <th>Comprobante</th>
+                            <th>Vencimiento</th>
                             <th>Monto</th>
                             <th>Acción</th>
                         </tr>
@@ -390,6 +395,7 @@
         let forma = $("#forma_pago").val();
         let formaText = $("#forma_pago option:selected").text();
         let nro = $("#nro_comprobante").val();
+        let vto = $("#vencimiento").val();
         let monto = $("#monto_pago").val();
 
         if(!monto || monto <= 0){
@@ -406,6 +412,10 @@
                 <td>
                     ${nro}
                     <input type="hidden" name="nro_comprobante[]" value="${nro}">
+                </td>
+                <td>
+                    ${vto}
+                    <input type="hidden" name="vto_check[]" value="${vto}">
                 </td>
                 <td>
                     ${monto}

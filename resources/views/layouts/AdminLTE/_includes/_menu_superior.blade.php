@@ -9,6 +9,11 @@
       </a>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+            <li>
+                <a href="{{ asset('Manual.pdf') }}" target="_blank" title="Abrir manual de usuario">
+                    <i class="fa fa-book"></i> <span class="hidden-xs">Manual</span>
+                </a>
+            </li>
           @auth
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -30,12 +35,12 @@
                 @endif
                 <p>
                   {{ Auth::user()->name }}
-                  <small>Member Since {{ Auth::user()->created_at->format('M Y') }}</small>
+                  <small>Usuario Creacion {{ Auth::user()->created_at->format('M Y') }}</small>
                 </p>
               </li>
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ route('profile') }}" class="btn btn-default btn-flat">Perfil</a>
                 </div>
                 <div class="pull-right">
                   <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>

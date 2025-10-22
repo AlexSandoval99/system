@@ -6,13 +6,16 @@ use App\Http\Requests\CreateVoucherRequest;
 use App\Models\Articulo;
 use App\Models\Branch;
 use App\Models\CashBoxUser;
+use App\Models\PurchasesExistence;
 use App\Models\Stamped;
 use App\Models\Voucher;
 use App\Models\VoucherBox;
 use App\Models\VoucherCollect;
 use App\Models\VoucherDetail;
 use App\Models\VoucherNoteCredit;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VouchersController extends Controller
 {
@@ -33,112 +36,136 @@ class VouchersController extends Controller
 
     public function store(CreateVoucherRequest $request)
     {
-        if(request()->tipoDocumento == 1)
-        {
-            $factura = Voucher::create([
-                'date' => $request->date,
-                'branch_id' => $request->branch_id,
-                'voucher_box_id' => $request->expedicion,
-                'voucher_number' => $request->voucher_number,
-                'voucher_condition' => $request->condicion,
-                'expiration' => $request->vig_timbrado,
-                'client_id' => $request->client_id,
-                'razon_social' => $request->razon_social,
-                'ruc' => $request->ruc,
-                'phone' => null,
-                'address' => null,
-                'voucher_type' =>1,
-                'observation' => $request->observacion,
-                'amount' => 0,
-                'total_excenta' => 0,
-                'total_iva5' => 0,
-                'total_iva10' => 0,
-                'status' => 1,
-                'user_id' => auth()->user()->id,
-                'stamped_id' => $request->id_timb
-            ]);
-        }
-        else if(request()->tipoDocumento == 2)
-        {
-            $factura = Voucher::create([
-                'date' => $request->date,
-                'branch_id' => $request->branch_id,
-                'voucher_box_id' => $request->expedicion,
-                'voucher_number' => $request->voucher_number,
-                'voucher_condition' => $request->condicion,
-                'expiration' => $request->vig_timbrado,
-                'client_id' => $request->client_id,
-                'razon_social' => $request->razon_social,
-                'ruc' => $request->ruc,
-                'phone' => null,
-                'address' => null,
-                'voucher_type' => 2,
-                'observation' => $request->observacion,
-                'amount' => 0,
-                'total_excenta' => 0,
-                'total_iva5' => 0,
-                'total_iva10' => 0,
-                'status' => 1,
-                'user_id' => auth()->user()->id,
-                'stamped_id' => $request->id_timb
-            ]);
+        DB::transaction(function () use ($request) {
 
-            $nota = VoucherNoteCredit::create([
-                'voucher_id' => $factura->id,
-                'invoice_id' => $request->invoice_id,
-            ]);
-        }
-
-        foreach ($request->articulo as $key => $value)
-        {
-            VoucherDetail::create([
-                'voucher_id' => $factura->id,
-                'articulo_id' => $value,
-                'description' => $request->observacion ?? 'vacio',
-                'quantity' => $request->quantity[$key],
-                'amount' => $request->precio[$key],
-                'iva5'  => 0,
-                'iva10' => round($request->precio[$key] * 10 / 110, 0)
-            ]);
-            $factura->update([
-                'amount' => $factura->amount += ($request->precio[$key] * $request->quantity[$key])
-            ]);
-        }
-
-        $iva10 = $factura->amount / 11;
-        $factura->update([
-            'total_iva10' => $iva10
-        ]);
-
-        if($request->condicion == 2)
-        {
-            for ($i=0; $i < $request->intervalo ; $i++)
+            if(request()->tipoDocumento == 1)
             {
-                VoucherCollect::create([
-                    'voucher_id' => $factura->id,
-                    'number' => $i + 1,
-                    'expiration' => now()->addMonths($i + 1),
-                    'amount' => round($factura->amount / $request->intervalo, 0),
-                    'residue' => round($factura->amount / $request->intervalo, 0)
+                $factura = Voucher::create([
+                    'date' => $request->date,
+                    'branch_id' => $request->branch_id,
+                    'voucher_box_id' => $request->expedicion,
+                    'voucher_number' => $request->voucher_number,
+                    'voucher_condition' => $request->condicion,
+                    'expiration' => $request->vig_timbrado,
+                    'client_id' => $request->client_id,
+                    'razon_social' => $request->razon_social,
+                    'ruc' => $request->ruc,
+                    'phone' => null,
+                    'address' => null,
+                    'voucher_type' =>1,
+                    'observation' => $request->observacion,
+                    'amount' => 0,
+                    'total_excenta' => 0,
+                    'total_iva5' => 0,
+                    'total_iva10' => 0,
+                    'status' => 1,
+                    'user_id' => auth()->user()->id,
+                    'stamped_id' => $request->id_timb
                 ]);
             }
-        }
-        else
-        {
-            VoucherCollect::create([
-                    'voucher_id' => $factura->id,
-                    'number' => 1,
-                    'expiration' => now(),
-                    'amount' => round($factura->amount),
-                    'residue' => round($factura->amount)
+            else if(request()->tipoDocumento == 2)
+            {
+                $factura = Voucher::create([
+                    'date' => $request->date,
+                    'branch_id' => $request->branch_id,
+                    'voucher_box_id' => $request->expedicion,
+                    'voucher_number' => $request->voucher_number,
+                    'voucher_condition' => $request->condicion,
+                    'expiration' => $request->vig_timbrado,
+                    'client_id' => $request->client_id,
+                    'razon_social' => $request->razon_social,
+                    'ruc' => $request->ruc,
+                    'phone' => null,
+                    'address' => null,
+                    'voucher_type' => 2,
+                    'observation' => $request->observacion,
+                    'amount' => 0,
+                    'total_excenta' => 0,
+                    'total_iva5' => 0,
+                    'total_iva10' => 0,
+                    'status' => 1,
+                    'user_id' => auth()->user()->id,
+                    'stamped_id' => $request->id_timb
                 ]);
-        }
+
+                $nota = VoucherNoteCredit::create([
+                    'voucher_id' => $factura->id,
+                    'invoice_id' => $request->invoice_id,
+                ]);
+            }
+
+            foreach ($request->articulo as $key => $value)
+            {
+                VoucherDetail::create([
+                    'voucher_id' => $factura->id,
+                    'articulo_id' => $value,
+                    'description' => $request->observacion ?? 'vacio',
+                    'quantity' => $request->quantity[$key],
+                    'amount' => $request->precio[$key],
+                    'iva5'  => 0,
+                    'iva10' => round($request->precio[$key] * 10 / 110, 0)
+                ]);
+                $factura->update([
+                    'amount' => $factura->amount += ($request->precio[$key] * $request->quantity[$key])
+                ]);
+
+                if(request()->tipoDocumento == 1)
+                {
+                    $existance = PurchasesExistence::where('articulo_id',$value)->where('residue','>=',$request->quantity[$key])->first();
+
+                    $existance->decrement('residue',$request->quantity[$key]);
+                }
+                else if(request()->tipoDocumento == 2)
+                {
+                    $existance = PurchasesExistence::where('articulo_id',$value)->first();
+                    $existance->increment('residue',$request->quantity[$key]);
+                }
+            }
+
+            $iva10 = $factura->amount / 11;
+            $factura->update([
+                'total_iva10' => $iva10
+            ]);
+
+            if($request->condicion == 2)
+            {
+                for ($i=0; $i < $request->intervalo ; $i++)
+                {
+                    VoucherCollect::create([
+                        'voucher_id' => $factura->id,
+                        'number' => $i + 1,
+                        'expiration' => now()->addMonths($i + 1),
+                        'amount' => round($factura->amount / $request->intervalo, 0),
+                        'residue' => round($factura->amount / $request->intervalo, 0)
+                    ]);
+                }
+            }
+            else
+            {
+                VoucherCollect::create([
+                        'voucher_id' => $factura->id,
+                        'number' => 1,
+                        'expiration' => now(),
+                        'amount' => round($factura->amount),
+                        'residue' => round($factura->amount)
+                    ]);
+            }
+        });
+
 
         return response()->json([
             'success' => true,
             'redirect' => route('voucher'),
             'message' => 'Comprobante registrado correctamente'
         ]);
+    }
+
+    public function imprimirFactura($id)
+    {
+        $voucher = Voucher::with(['branch', 'voucher_details', 'user'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('pages.vouchers.pdf', compact('voucher'))->setPaper('a4');
+        return $pdf->stream('Factura_'.$voucher->voucher_fullnumber.'.pdf');
     }
 
     public function ajaxExpedicion()
